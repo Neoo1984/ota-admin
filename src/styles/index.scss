@@ -1,0 +1,140 @@
+@import './variables.scss';
+@import './mixin.scss';
+@import './transition.scss';
+@import './element-ui.scss';
+@import './sidebar.scss';
+
+body {
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+
+label {
+  font-weight: 700;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+.filter-container {
+  padding-bottom: 10px;
+
+  .filter-item {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 10px;
+  }
+}
+// main-container global css
+.app-container {
+  padding: 20px;
+}
+.el-drawer__body {
+  overflow: auto;
+}
+//sub页面css
+.box-content {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-items: center;
+  align-items: center;
+  height: 800px;
+  width: 90%;
+  flex-wrap: wrap;
+  margin-right: 20%;
+  margin-left: 6%;
+  margin-bottom: 30px;
+}
+
+.box-item {
+  position: relative;
+  height: 180px;
+  margin: 8px;
+  border-radius: 6px;
+  box-shadow: rgba(17, 17, 26, 0.05) 0 4px 16px, rgba(17, 17, 26, 0.05) 0 8px 32px;
+}
+.check-list {
+  padding: 6px;
+  position: absolute;
+  color: #5e6d82;
+  font-size: 14px;
+  bottom: 0;
+  right: 4px;
+}
+
+.box-main {
+  display: flex;
+  flex-direction: row;
+}
+.right {
+  position: fixed;
+  right: 16px;
+  cursor: pointer;
+  top: 48%;
+}
+.right:hover i {
+  color: #5cb6ff;
+}
+
+.arrow {
+  font-size: 36px;
+  color: #606266;
+}
+/*
+菜单border 高度满屏幕
+*/
+.el-scrollbar__view {
+  height: 100%;
+}
+/*
+drawer的margin
+*/
+.el-drawer__header {
+  margin-bottom: 16px;
+  color: #409EFF;
+}
+.el-dropdown-menu__item--divided {
+  border: none;
+}
