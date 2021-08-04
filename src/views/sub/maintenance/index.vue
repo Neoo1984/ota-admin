@@ -240,13 +240,12 @@ export default {
         let factory = []
         let hardVersion = []
         let productModel = []
-        const elementsAreEqual = array => array.every(el => el === array[0])
+        const elementsAreEqual = array => !array.every(el => el === array[0])
         this.checkList.forEach(item => {
           factory.push(this.cpData[item - 1].deviceInfoVo.factoryName)
           hardVersion.push(this.cpData[item - 1].deviceInfoVo.hardVersion)
           productModel.push(this.cpData[item - 1].deviceInfoVo.productModel)
         })
-        console.log(this.cpData)
         switch (true) {
           case elementsAreEqual(factory):
             this.$message({
@@ -293,9 +292,9 @@ export default {
         )
         //吧勾选的deviceNames
         this.checkList.forEach((item, index, arr) => {
-          this.otaTemp.subDeviceNames += this.cpData[item - 1].batteryDataRecord.batSn + '; '
+          this.otaTemp.subDeviceNames += this.cpData[item - 1].batteryDataRecord.batSn + ','
         })
-        console.log(this.otaTemp.subDeviceNames)
+        this.otaTemp.subDeviceNames = this.otaTemp.subDeviceNames.substring(0, this.otaTemp.subDeviceNames.lastIndexOf(','));
         this.otaDialogVisible = true
 
         this.$nextTick(() => {
@@ -313,6 +312,9 @@ export default {
     ota() {
       this.$refs['otaRef'].validate((valid) => {
         if (valid) {
+          let sub = []
+          sub = this.otaTemp.subDeviceNames.split(',')
+          this.otaTemp.subDeviceNames = sub
           this.otaTemp.deviceNames.push(this.deviceInfo.deviceName)
           otaSend(this.otaTemp).then(res => {
             if (res.data.success) {
@@ -329,6 +331,8 @@ export default {
               })
             }
           })
+          this.otaDialogVisible = false
+
         }
       })
 
@@ -343,12 +347,8 @@ export default {
         }
       })
       this.isIndeterminate = false
-      // for (let i=0;i<this.cpData.length;i++){
-      //   this.checkList.push(i+1)
-      // }
       this.checkList = val ? this.checkList : []
-      console.log(this.disableCheck)
-      console.log(this.checkList)
+
     },
     //单选
     handleCheckedBox(val) {
