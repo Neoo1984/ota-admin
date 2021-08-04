@@ -48,7 +48,7 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    menu:'1',
+    menu: '1',
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
@@ -91,7 +91,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/main/product/index'),
         name: 'Product',
-        meta: { title: '产品管理', icon: 'product', affix: true,state: '1'}
+        meta: { title: '产品管理', icon: 'product', affix: true, state: '1' }
       }
     ]
   },
@@ -134,22 +134,22 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/user',
-    component: Layout,
-    redirect: '/user',
-    meta: { title: '用户管理',icon: 'user' },
-    name:'User',
-    children: [
-      {
-        path: 'managerUser',
-        component: () => import('@/views/main/user/item/managerUser/index'),
-        name: 'ManagerUser',
-        meta: { title: '后台用户管理', icon: 'user', affix: true, state: '1' }
-      },
-    ]
-
-  },
+  // {
+  //   path: '/user',
+  //   component: Layout,
+  //   redirect: '/user',
+  //   meta: { title: '用户管理', icon: 'user' },
+  //   name: 'User',
+  //   children: [
+  //     {
+  //       path: 'managerUser',
+  //       component: () => import('@/views/main/user/item/managerUser/index'),
+  //       name: 'ManagerUser',
+  //       meta: { title: '后台用户管理', icon: 'user', affix: true, state: '1' }
+  //     }
+  //   ]
+  //
+  // },
   {
     path: '/detail',
     component: () => import('@/views/sub/detail/index'),
@@ -187,45 +187,44 @@ export const constantRoutes = [
     component: SubLayout,
     meta: { title: '电池包数据', state: '2' },
 
-        children: [
-          {
-            path: 'version',
-            component: () => import('@/views/sub/battery/item/factory/index'),
-            name: 'FactoryVersion',
-            meta: { title: '厂家版本',state:'2' }
-          },
-          {
-            path: 'bms',
-            component: () => import('@/views/sub/battery/item/bmsCode/index'),
-            name: 'Bms',
-            meta: { title: 'BMS编码',state:'2' }
-          },
-          {
-            path: 'batteryCode',
-            component: () => import('@/views/sub/battery/item/batteryCode/index'),
-            name: 'BatteryCode',
-            meta: { title: '电池编码',state:'2' }
-          },
-          {
-            path: 'soc',
-            component: () => import('@/views/sub/battery/item/soc/index'),
-            name: 'Soc',
-            meta: { title: 'soc',state:'2' }
-          },
-          {
-            path: 'volState',
-            component: () => import('@/views/sub/battery/item/volState/index'),
-            name: 'volState',
-            meta: { title: '组电状态',state:'2' }
-          },
-          {
-            path: 'singleVol',
-            component: () => import('@/views/sub/battery/item/singleVol/index'),
-            name: 'SingleVol',
-            meta: { title: '单体电压',state:'2' }
-          },
-          ]
-
+    children: [
+      {
+        path: 'version',
+        component: () => import('@/views/sub/battery/item/factory/index'),
+        name: 'FactoryVersion',
+        meta: { title: '厂家版本', state: '2' }
+      },
+      {
+        path: 'bms',
+        component: () => import('@/views/sub/battery/item/bmsCode/index'),
+        name: 'Bms',
+        meta: { title: 'BMS编码', state: '2' }
+      },
+      {
+        path: 'batteryCode',
+        component: () => import('@/views/sub/battery/item/batteryCode/index'),
+        name: 'BatteryCode',
+        meta: { title: '电池编码', state: '2' }
+      },
+      {
+        path: 'soc',
+        component: () => import('@/views/sub/battery/item/soc/index'),
+        name: 'Soc',
+        meta: { title: 'soc', state: '2' }
+      },
+      {
+        path: 'volState',
+        component: () => import('@/views/sub/battery/item/volState/index'),
+        name: 'volState',
+        meta: { title: '组电状态', state: '2' }
+      },
+      {
+        path: 'singleVol',
+        component: () => import('@/views/sub/battery/item/singleVol/index'),
+        name: 'SingleVol',
+        meta: { title: '单体电压', state: '2' }
+      }
+    ]
 
   },
   {
@@ -262,28 +261,26 @@ export const constantRoutes = [
  * asyncRoutes
  * 动态权限路由
  */
-export const asyncRoutes = [
-  {
-    path: '/user',
-    component: Layout,
-    redirect: '/user',
-    name:'User',
-    meta: { title: '用户管理',icon: 'user' ,role:['1'] },
-
-    children: [
-      {
-        path: 'managerUser',
-        component: () => import('@/views/main/user/item/managerUser/index'),
-        name: 'ManagerUser',
-        meta: { title: '后台用户管理', icon: 'user', affix: true, state: '1' }
-      }
-    ]
-  },
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
-
-];
-
+// export const asyncRoutes = [
+//   {
+//     path: '/user',
+//     component: Layout,
+//     redirect: '/user',
+//     meta: { title: '用户管理', icon: 'user'},
+//
+//     children: [
+//       {
+//         path: 'index',
+//         component: () => import('@/views/main/user/item/managerUser/index'),
+//         name: 'ManagerUser',
+//         meta: { title: '后台用户管理', icon: 'user', affix: true, state: '1',role: ['1'] }
+//       }
+//     ]
+//   },
+//   // 404 page must be placed at the end !!!
+//   { path: '*', redirect: '/404', hidden: true }
+//
+// ]
 
 const createRouter = () => new Router({
   mode: 'hash',
@@ -294,12 +291,10 @@ const createRouter = () => new Router({
 
 const router = createRouter()
 
-
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }
-
 
 export default router
