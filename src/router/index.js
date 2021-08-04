@@ -134,22 +134,22 @@ export const constantRoutes = [
       }
     ]
   },
-  // {
-  //   path: '/user',
-  //   component: Layout,
-  //   redirect: '/user',
-  //   meta: { title: '用户管理', icon: 'user' },
-  //   name: 'User',
-  //   children: [
-  //     {
-  //       path: 'managerUser',
-  //       component: () => import('@/views/main/user/item/managerUser/index'),
-  //       name: 'ManagerUser',
-  //       meta: { title: '后台用户管理', icon: 'user', affix: true, state: '1' }
-  //     }
-  //   ]
-  //
-  // },
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user',
+    meta: { title: '用户管理', icon: 'user' },
+    name: 'User',
+    children: [
+      {
+        path: 'managerUser',
+        component: () => import('@/views/main/user/item/managerUser/index'),
+        name: 'ManagerUser',
+        meta: { title: '后台用户管理', icon: 'user', affix: true, state: '1' }
+      }
+    ]
+
+  },
   {
     path: '/detail',
     component: () => import('@/views/sub/detail/index'),

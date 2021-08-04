@@ -25,26 +25,24 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      const hasRoles = store.getters.userRole && store.getters.userRole.length > 0
-      console.log('hasrole:'+store.getters.userRole)
-      if (hasRoles){
+      const hasGetUserInfo = store.getters.token
+      if (hasGetUserInfo) {
         next()
-      }else {
+      }
+/*      else {
         try {
-          const roles = JSON.parse(sessionStorage.getItem('userInfo')).userRole;
-          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
-          console.log(accessRoutes)
-          router.addRoutes(accessRoutes)
-          next({...to,replace: true})
-        }catch (e) {
+          // get user info
+          // await store.dispatch('user/getInfo')
+
+          next()
+        } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
           Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)
           NProgress.done()
         }
-      }
-
+      }*/
     }
   } else {
     /* has no token*/

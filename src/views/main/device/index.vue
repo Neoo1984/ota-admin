@@ -1272,6 +1272,7 @@ export default {
       this.otaTemp.productModels = []
       this.otaTemp.factoryNames = []
       this.otaTemp.hardVersions = []
+      this.otaTemp.deviceNames = []
       console.log(selection)
       selection.forEach((item, index) => {
         this.otaTemp.deviceNames.push(item.deviceName)
@@ -1373,6 +1374,7 @@ export default {
             }
           })
           this.softVersion = []
+          this.lookOtaTable = true
         }
       })
 
