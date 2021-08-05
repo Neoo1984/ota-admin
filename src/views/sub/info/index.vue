@@ -74,32 +74,33 @@
 
       <el-table
         :data="statusData"
-        v-loading="statusLoading"
+        :loading="statusLoading"
+        style="width: 90%"
       >
-        <el-table-column label="设备编号" align="center" width="150">
+        <el-table-column label="设备编号" align="center" >
           <template slot-scope="scope">
             {{ scope.row.deviceName }}
           </template>
         </el-table-column>
-        <el-table-column label="是否在线" align="center" width="100" :formatter="renderIsOnline">
+        <el-table-column label="是否在线" align="center" :formatter="renderIsOnline">
         </el-table-column>
-        <el-table-column label="最后在线时间" align="center" width="150" :formatter="renderOnlineTime">
+        <el-table-column label="最后在线时间" align="center" :formatter="renderOnlineTime">
         </el-table-column>
-        <el-table-column label="最后离线时间" align="center" width="150" :formatter="renderOfflineTime">
+        <el-table-column label="最后离线时间" align="center"  :formatter="renderOfflineTime">
         </el-table-column>
-        <el-table-column label="OTA版本" align="center" width="100">
+        <el-table-column label="OTA版本" align="center" >
           <template slot-scope="scope">
             {{ scope.row.otaSoftVersion || '--' }}
           </template>
         </el-table-column>
-        <el-table-column label="OTA状态" align="center" width="100" :formatter="renderOtaStatus">
+        <el-table-column label="OTA状态" align="center"  :formatter="renderOtaStatus">
         </el-table-column>
-        <el-table-column label="刷新时间" align="center" width="150" :formatter="renderRefreshTime">
+        <el-table-column label="刷新时间" align="center" :formatter="renderRefreshTime">
         </el-table-column>
-        <el-table-column label="安装进度" align="center" width="100" :formatter="renderUpdateProgress">
+        <el-table-column label="安装进度" align="center"  :formatter="renderUpdateProgress">
 
         </el-table-column>
-        <el-table-column label="下载进度" align="center" width="100" :formatter="renderDownloadProgress">
+        <el-table-column label="下载进度" align="center"  :formatter="renderDownloadProgress">
 
         </el-table-column>
 
@@ -153,9 +154,9 @@ export default {
   methods: {
     // 状态
     handleStatus() {
+      this.statusLoading = true
       const query = JSON.parse(sessionStorage.getItem('infoQuery'))
       this.statusData = []
-      this.statusLoading = true
       queryDeviceStatus(query).then(res => {
         if (res.data != null) {
           if (res.data.success) {

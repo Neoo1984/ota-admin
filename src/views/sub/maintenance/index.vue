@@ -19,7 +19,8 @@
     </el-form>
     <div style="position: relative">
       <el-checkbox :indeterminate="isIndeterminate" v-model="allChecked" @change="handleCheckAllChange"
-                   style="position: absolute;left: 8%">选择所有格口
+                   style="position: absolute;left: 8%"
+      >选择所有格口
       </el-checkbox>
     </div>
     <div class="box-main">
@@ -31,8 +32,48 @@
           </el-checkbox-group>
           <!--          电池-->
           <div class="battery">
-            <img class="icon_battery" alt="电池" :src='icon_battery_route[index]'>
-            <img class="icon_battery" alt="电池" v-if="iconIsLocked" :src='iconLock'>
+
+            <el-popover
+              placement="right"
+              width="800"
+              :disabled="hasStatus[index]"
+              trigger="click"
+            >
+              <el-table
+                :data="statusData"
+                :loading="statusLoading"
+              >
+                <el-table-column label="设备编号" align="center" width="150">
+                  <template slot-scope="scope">
+                    {{ scope.row.deviceName }}
+                  </template>
+                </el-table-column>
+                <el-table-column prop="otaStatus" label="OTA状态" align="center" width="100" :formatter="renderOtaStatus">
+                </el-table-column>
+                <el-table-column label="OTA版本" align="center" width="100">
+                  <template slot-scope="scope">
+                    {{ scope.row.otaSoftVersion || '--' }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="是否在线" align="center" width="100" :formatter="renderIsOnline">
+                </el-table-column>
+                <el-table-column label="下载进度" align="center" width="100" :formatter="renderDownloadProgress">
+                </el-table-column>
+                <el-table-column label="安装进度" align="center" width="100" :formatter="renderUpdateProgress">
+                </el-table-column>
+                <el-table-column label="最后在线时间" align="center" width="150" :formatter="renderOnlineTime">
+                </el-table-column>
+                <el-table-column label="最后离线时间" align="center" width="150" :formatter="renderOfflineTime">
+                </el-table-column>
+                <el-table-column label="刷新时间" align="center" width="150" :formatter="renderRefreshTime">
+                </el-table-column>
+              </el-table>
+
+              <el-tooltip :disabled="hasStatus[index]" slot="reference" effect="dark" content="查看电池状态" placement="top">
+                <img class="icon_battery" @click="handleStatus(index)" alt="电池" :src="icon_battery_route[index]">
+                <img class="icon_battery" alt="电池" v-if="iconIsLocked" :src="iconLock">
+              </el-tooltip>
+            </el-popover>
           </div>
           <div class="errors">
             <div v-for="(item,index) in iconError[index]" class="icon_battery_error"> {{ item }}</div>
@@ -52,7 +93,8 @@
       >
         <el-form-item label="设备编码" prop="subDeviceNames">
           <el-input type="textarea" :rows="2" v-model="otaTemp.subDeviceNames" disabled style="width: 80%"
-                    class="filter-item"/>
+                    class="filter-item"
+          />
         </el-form-item>
         <el-form-item label="软件版本" prop="packageId">
           <el-select v-model="otaTemp.packageId" placeholder="请选择软件版本" style="width: 80%" class="filter-item">
@@ -89,13 +131,21 @@
 <script>
 
 import Comm from '@/views/sub/comm'
-import {commandResult, deviceData, otaSend, querySoftVersion, refreshDevice} from "@/api/operation"
-import {global} from "@/common"
-import {batteryError, iconBattery, isLocked, renderTime} from "@/utils";
+import { commandResult, deviceData, otaSend, queryDeviceStatus, querySoftVersion, refreshDevice } from '@/api/operation'
+import { global } from '@/common'
+import {
+  batteryError,
+  iconBattery,
+  isLocked,
+  renderIsOnline,
+  renderOtaStatus,
+  renderProgress,
+  renderTime
+} from '@/utils'
 
 export default {
   name: 'Maintenance',
-  components: {Comm},
+  components: { Comm },
   data() {
     return {
       labelPosition: 'right',
@@ -117,8 +167,8 @@ export default {
       },
       softVersion: [],
       otaRules: {
-        packageId: [{required: true, message: '请选择软件版本', trigger: 'blur'}],
-        updateType: [{required: true, message: '请选择升级方式', trigger: 'blur'}]
+        packageId: [{ required: true, message: '请选择软件版本', trigger: 'blur' }],
+        updateType: [{ required: true, message: '请选择升级方式', trigger: 'blur' }]
       },
       deviceInfo: JSON.parse(sessionStorage.getItem('infoQuery')),
       //格口数据
@@ -131,7 +181,13 @@ export default {
       icon_battery_route: [],
       iconError: [],
       iconIsLocked: false,
-      iconLock: require('@/assets/battery/lock.svg')
+      iconLock: require('@/assets/battery/lock.svg'),
+      //状态
+      hasStatus: [],
+      statusData: null,
+      statusLoading:false,
+      renderIsOnline: renderIsOnline,
+      renderOtaStatus: renderOtaStatus
     }
   },
   created() {
@@ -145,7 +201,7 @@ export default {
         text: 'Loading',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
-      });
+      })
       let res = await deviceData(this.deviceInfo.deviceName)
       if (res.data.success && res.data.data !== null) {
         this.dataTime = renderTime(res.data.data.dataTime)
@@ -156,11 +212,13 @@ export default {
         this.cpData.forEach((item, index, arr) => {
           if (item.batteryDataRecord !== null) {
             let res = iconBattery(item)
+            this.hasStatus[index] = false
             this.icon_battery_route[index] = res.route
             this.disableCheck[index] = res.check
             this.iconError.push(batteryError(item))
             this.iconIsLocked = isLocked(item)
           } else {
+            this.hasStatus[index] = true
             this.icon_battery_route[index] = require('@/assets/battery/empty.svg')
             this.disableCheck[index] = true
           }
@@ -172,9 +230,8 @@ export default {
           type: 'error'
         })
       }
-      loading.close();
+      loading.close()
     },
-
 
     //刷新数据
     async handleRefresh() {
@@ -189,7 +246,7 @@ export default {
         if (idRes.data.success) {
           messageId = idRes.data.data.messageId
 
-          interval = setInterval(function () {
+          interval = setInterval(function() {
             if (i === 4) {
               that.refreshLoading = false
               clearInterval(interval)
@@ -275,7 +332,7 @@ export default {
         const query = {
           factoryName: factory[0],
           hardVersion: hardVersion[0],
-          productModel: productModel[0],
+          productModel: productModel[0]
         }
         this.softVersion = []
         this.otaTemp.subDeviceNames = []
@@ -284,7 +341,7 @@ export default {
               if (res.data.data !== null) {
                 let data = res.data.data
                 data.forEach((item, value) => {
-                  this.softVersion.push({softVersion: item.softVersion, objectId: item.objectId})
+                  this.softVersion.push({ softVersion: item.softVersion, objectId: item.objectId })
                 })
               }
             }
@@ -294,7 +351,7 @@ export default {
         this.checkList.forEach((item, index, arr) => {
           this.otaTemp.subDeviceNames += this.cpData[item - 1].batteryDataRecord.batSn + ','
         })
-        this.otaTemp.subDeviceNames = this.otaTemp.subDeviceNames.substring(0, this.otaTemp.subDeviceNames.lastIndexOf(','));
+        this.otaTemp.subDeviceNames = this.otaTemp.subDeviceNames.substring(0, this.otaTemp.subDeviceNames.lastIndexOf(','))
         this.otaDialogVisible = true
 
         this.$nextTick(() => {
@@ -305,7 +362,7 @@ export default {
           title: '警告',
           message: '请先勾选要OTA的格口！',
           type: 'warning'
-        });
+        })
       }
     },
 
@@ -364,12 +421,53 @@ export default {
       this.isIndeterminate = this.checkList.length > 0 && this.checkList.length < i
       console.log(this.checkList)
     },
+    // 状态
+    handleStatus(index) {
+      if (this.cpData[index].deviceInfo !== null && this.cpData[index].batteryDataRecord !== null) {
+        let battery = this.cpData[index].batteryDataRecord
+        let device = this.cpData[index].deviceInfoVo
+        const query = {
+          deviceName: battery.batSn,
+          deviceType: '1',
+          factoryName: device.factoryName,
+          hardVersion: device.hardVersion,
+          productModel: device.productModel
+        }
+        this.statusData = []
+        this.statusLoading = true
+        queryDeviceStatus(query).then(res => {
+            if (res.data.success) {
+              if (res.data.data !== null) {
+                this.statusData.push(res.data.data)
+              }
+            }
+        })
+        this.statusLoading = false
+      }
+
+    },
+
+    renderOnlineTime(row) {
+      return renderTime(row.onlineTime)
+    },
+    renderOfflineTime(row) {
+      return renderTime(row.offlineTime)
+    },
+    renderRefreshTime(row) {
+      return renderTime(row.refreshTime)
+    },
+    renderUpdateProgress(row) {
+      return renderProgress(row)
+    },
+    renderDownloadProgress(row) {
+      return renderProgress(row)
+    }
   }
 
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 .icon_battery_error {
   width: 22px;
@@ -388,6 +486,10 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100%;
+
+  .icon_battery {
+    cursor: pointer;
+  }
 }
 
 .errors {
@@ -398,5 +500,8 @@ export default {
   position: absolute;
   bottom: 0;
   padding-top: 10px;
+}
+.warning-row {
+  background: oldlace;
 }
 </style>

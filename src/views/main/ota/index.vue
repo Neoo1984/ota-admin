@@ -349,8 +349,17 @@
                       class="filter-item"></el-input>
           </el-form-item>
           <el-form-item label="设备类型">
-            <el-input v-model="taskForm.mainDeviceType" disabled style="width: 200px"
-                      class="filter-item"></el-input>
+            <el-select v-model="taskForm.mainDeviceType" disabled
+                       style="width: 80%" class="filter-item">
+              <el-option
+                v-for="item in taskDeviceType"
+                :key="item.index"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.value !== '1'"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="产品型号">
             <el-input v-model="taskForm.mainProductModel" disabled style="width: 200px"
@@ -568,7 +577,7 @@
 
           </el-form-item>
           <el-form-item label="主设备编码" :label-width="formLabelWidth">
-            <el-link type="success" @click="handleExTable">已选择 {{ detailForm.mainDeviceCount }} 个 主设备，查看升级详情...
+            <el-link type="success" @click="handleExTable">已选择 {{ detailForm.mainDeviceCount}} 个 主设备，查看升级详情...
             </el-link>
           </el-form-item>
 
@@ -1266,6 +1275,12 @@ export default {
             mainHardVersion: this.taskForm.mainHardVersion,
             mainDeviceNames: this.taskForm.mainDeviceNames,
           }
+
+          this.taskSoftVersion.forEach((item,index) => {
+            if (item.packageId === this.taskForm.softVersion) {
+              query.upSoftVersion = item.softVersion
+            }
+          })
           this.creatingTask = true
           otaTask(query).then(res => {
             this.$message({
@@ -1274,6 +1289,7 @@ export default {
               type: res.data.success ? 'success' : 'error'
             })
             this.otaDialogVisible = !res.data.success
+            this.getList()
           })
           this.isPop = false
           this.creatingTask = false
@@ -1457,6 +1473,7 @@ export default {
 
       })
       this.detailForm = Object.assign({}, row)
+      console.log(this.detailForm)
       switch (this.detailForm.taskStatus) {
         case 0 || 2:
           this.canOperate = true
