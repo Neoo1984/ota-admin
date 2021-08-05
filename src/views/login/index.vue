@@ -143,7 +143,6 @@ export default {
             if (response.data.success){
               sessionStorage.setItem('userInfo',JSON.stringify(response.data.data.userInfo))
               this.$router.push({path: this.redirect || '/'})
-              //TODO 保存userInfo
               this.loading = false
             }else {
               this.$notify({

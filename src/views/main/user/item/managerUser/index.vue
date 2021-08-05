@@ -266,6 +266,7 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+    //删除temp中除了 userId之外的未改动值
     compareTemp() {
       for (let key in this.temp) {
         if (key !== 'userId') {
@@ -284,6 +285,10 @@ export default {
             if (res.data != null) {
               const message = res.data.message
               if (res.data.success) {
+                if (this.userInfo.userId === this.temp.userId) {
+                  this.$store.commit('user/SET_USERNAME',this.temp.userName)
+                }
+
                 this.getList()
                 this.$message({
                   showClose: true,

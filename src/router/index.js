@@ -261,26 +261,25 @@ export const constantRoutes = [
  * asyncRoutes
  * 动态权限路由
  */
-// export const asyncRoutes = [
-//   {
-//     path: '/user',
-//     component: Layout,
-//     redirect: '/user',
-//     meta: { title: '用户管理', icon: 'user'},
-//
-//     children: [
-//       {
-//         path: 'index',
-//         component: () => import('@/views/main/user/item/managerUser/index'),
-//         name: 'ManagerUser',
-//         meta: { title: '后台用户管理', icon: 'user', affix: true, state: '1',role: ['1'] }
-//       }
-//     ]
-//   },
-//   // 404 page must be placed at the end !!!
-//   { path: '*', redirect: '/404', hidden: true }
-//
-// ]
+export const asyncRoutes = [
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user',
+    meta: { title: '用户管理', icon: 'user',role: ['1']},
+
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/main/user/item/managerUser/index'),
+        name: 'ManagerUser',
+        meta: { title: '后台用户管理', icon: 'user', affix: true, state: '1',role: ['1'] }
+      }
+    ]
+  },
+  { path: '*', redirect: '/404', hidden: true }
+
+]
 
 const createRouter = () => new Router({
   mode: 'hash',

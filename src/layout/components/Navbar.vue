@@ -8,7 +8,7 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <!--          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">-->
-          <div class="user-avatar">你好, <span class="helloName">{{userInfo.userName}} </span> <i class="el-icon-arrow-down"></i></div>
+          <div class="user-avatar">你好, <span class="helloName">{{userName}} </span> <i class="el-icon-arrow-down"></i></div>
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <!--          <router-link to="/">-->
@@ -74,6 +74,7 @@ export default {
     ...mapGetters([
       'sidebar',
       'avatar',
+      'userName'
     ])
 
   },

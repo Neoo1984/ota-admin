@@ -33,6 +33,7 @@ const mutations = {
   },
   SET_USERNAME: (state, userName) => {
     state.userName = userName
+    sessionStorage.setItem('userName',userName)
   },
   SET_LOGINTYPE: (state, loginType) => {
     state.loginType = loginType
@@ -62,6 +63,7 @@ const actions = {
           const data = response.data.data.userInfo
           commit('SET_TOKEN', token)
           commit('SET_ROLE',data.userRole)
+          commit('SET_USERNAME',data.userName)
           setToken(token)
           resolve(response)
         }else {

@@ -38,7 +38,6 @@ export default {
   },
   methods:{
     handleSelect(index){
-      console.log(index)
       sessionStorage.setItem('path',index)
       this.menu = index
     },
