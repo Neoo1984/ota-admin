@@ -190,13 +190,13 @@ export default {
           messageId = idRes.data.data.messageId
 
           interval = setInterval(function () {
-            console.log(i)
             if (i === 4) {
               that.refreshLoading = false
               clearInterval(interval)
+              console.log('刷新失败' + cmdRes)
               that.$message({
                 showClose: true,
-                message: '刷新失败：' + cmdRes,
+                message: '刷新失败，请重试！',
                 type: 'error'
               })
             } else {
@@ -313,6 +313,7 @@ export default {
       this.$refs['otaRef'].validate((valid) => {
         if (valid) {
           let sub = []
+          this.otaTemp.deviceNames = []
           sub = this.otaTemp.subDeviceNames.split(',')
           this.otaTemp.subDeviceNames = sub
           this.otaTemp.deviceNames.push(this.deviceInfo.deviceName)

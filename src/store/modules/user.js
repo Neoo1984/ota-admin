@@ -27,6 +27,7 @@ const mutations = {
   },
   SET_ROLE:(state,userRole) => {
     state.userRole = userRole
+    sessionStorage.setItem('userRole',userRole)
   },
   SET_USERTYPE:(state,userType) => {
     state.userType = userType
