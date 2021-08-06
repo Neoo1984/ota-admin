@@ -235,16 +235,12 @@ export function renderCmdType(row, column, cellValue) {
 */
 export function renderTaskStatus(taskStatus) {
   switch (taskStatus) {
-    case 0:
-      return '任务开始'
     case 1:
-      return '任务中止'
+      return '执行中'
     case 2:
-      return '任务恢复'
+      return '已中止'
     case 3:
-      return '任务删除'
-    case 4:
-      return '任务结束'
+      return '已结束'
     default:
       return '--'
   }

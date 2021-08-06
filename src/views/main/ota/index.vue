@@ -8,48 +8,56 @@
               v-for="item in deviceType"
               :key="item.index"
               :label="item.label"
-              :value="item.value">
+              :value="item.value"
+            >
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="厂商">
           <el-select filterable @focus="getFactoryName" @change="getList" v-model="listQuery.factoryName"
                      placeholder="请选择厂商名称"
-                     style="width: 200px" class="filter-item">
+                     style="width: 200px" class="filter-item"
+          >
             <el-option
               v-for="item in listFactoryName"
               :key="item.index"
               :label="item.label"
-              :value="item.value">
+              :value="item.value"
+            >
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="产品型号">
           <el-select @focus="getProduct" @change="getList" v-model="listQuery.productModel" placeholder="请选择产品型号"
-                     style="width: 200px" class="filter-item">
+                     style="width: 200px" class="filter-item"
+          >
             <el-option
               v-for="item in listProductModel"
               :key="item.index"
               :label="item.label"
-              :value="item.value">
+              :value="item.value"
+            >
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="硬件版本">
           <el-select v-model="listQuery.hardVersion" @focus="getHard" @change="getList" placeholder="请选择产品型号"
                      style="width: 200px"
-                     class="filter-item">
+                     class="filter-item"
+          >
             <el-option
               v-for="item in listHardVersion"
               :key="item.index"
               :label="item.label"
-              :value="item.value">
+              :value="item.value"
+            >
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="任务编号">
           <el-input v-model="listQuery.taskId" placeholder="设备编码" style="width: 200px"
-                    class="filter-item"></el-input>
+                    class="filter-item"
+          ></el-input>
         </el-form-item>
 
         <el-button type="primary" @click="getList" icon="el-icon-search" size="small">查询</el-button>
@@ -60,16 +68,17 @@
     </div>
     <el-table
       ref="multipleTable"
-      v-loading="listLoading"
+      :loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
       border
-      fit
+      :default-sort="{prop: 'date', order: 'descending'}"
       highlight-current-row
     >
       <el-table-column
         type="selection"
-        width="40">
+        width="40"
+      >
       </el-table-column>
       <el-table-column type="index" align="center" label="序号" width="50" fixed="left"></el-table-column>
 
@@ -104,12 +113,13 @@
       </el-table-column>
       <el-table-column label="任务状态" align="center" width="150" :formatter="renderTaskStatus">
       </el-table-column>
+      <el-table-column sortable label="创建时间" align="center" width="150" :formatter="renderCreateTime">
+      </el-table-column>
       <el-table-column label="任务开始时间" align="center" width="150" :formatter="renderBeginTime">
       </el-table-column>
       <el-table-column label="任务结束时间" align="center" width="150" :formatter="renderEndTime">
       </el-table-column>
-      <el-table-column label="创建时间" align="center" width="150" :formatter="renderCreateTime">
-      </el-table-column>
+
       <el-table-column label="创建者" align="center" width="150">
         <template slot-scope="scope">
           {{ scope.row.createUserName || '--' }}
@@ -127,14 +137,16 @@
           <el-button
             size="mini"
             type="text"
-            @click="handleDetail(scope.$index, scope.row)">详情
+            @click="handleDetail(scope.$index, scope.row)"
+          >详情
           </el-button>
 
         </template>
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.current" :limit.sync="listQuery.size"
-                @pagination="getList"/>
+                @pagination="getList"
+    />
     <!--    新建OTA任务-->
     <el-drawer
       :with-header=true
@@ -150,11 +162,13 @@
     >
       <div class="drawer-content">
         <el-form v-if="otaDialogVisible" ref="taskForm" :model="taskForm" style="flex: 1" size="small"
-                 :rules="createTaskRules">
+                 :rules="createTaskRules"
+        >
           <el-form-item label="厂商" :label-width="formLabelWidth" prop="factoryName">
             <el-select @focus="getFactoryName" v-model="taskForm.factoryName" @change="getFormProduct(false)"
                        placeholder="请选择厂商名称" style="width: 80%"
-                       class="filter-item">
+                       class="filter-item"
+            >
               <el-option
                 v-for="item in tempFactoryName"
                 :key="item.index"
@@ -166,7 +180,8 @@
           </el-form-item>
           <el-form-item label="设备类型" :label-width="formLabelWidth" prop="deviceType">
             <el-select v-model="taskForm.deviceType" @change="getFormProduct(false)" placeholder="请选择设备类型"
-                       style="width: 80%" class="filter-item">
+                       style="width: 80%" class="filter-item"
+            >
               <el-option
                 v-for="item in taskDeviceType"
                 :key="item.index"
@@ -178,11 +193,13 @@
             </el-select>
           </el-form-item>
           <el-form-item label="产品型号" :label-width="formLabelWidth" v-if="taskForm.factoryName && taskForm.deviceType"
-                        prop="productModel">
+                        prop="productModel"
+          >
             <el-select v-model="taskForm.productModel"
                        @change="getFormHard(false)"
                        placeholder="请选择产品型号" style="width: 80%"
-                       class="filter-item">
+                       class="filter-item"
+            >
               <el-option
                 v-for="item in taskProductModel"
                 :key="item.index"
@@ -194,7 +211,8 @@
           </el-form-item>
           <el-form-item label="硬件版本" :label-width="formLabelWidth" v-if="taskForm.productModel" prop="hardVersion">
             <el-select v-model="taskForm.hardVersion" @change="getFormSoft" placeholder="请选择硬件版本" style="width: 80%"
-                       class="filter-item">
+                       class="filter-item"
+            >
               <el-option
                 v-for="item in taskHardVersion"
                 :key="item.index"
@@ -206,7 +224,8 @@
           </el-form-item>
           <el-form-item label="软件版本" :label-width="formLabelWidth" v-if="taskForm.hardVersion" prop="softVersion">
             <el-select v-model="taskForm.softVersion" placeholder="请选择软件版本" style="width: 80%"
-                       class="filter-item">
+                       class="filter-item"
+            >
               <el-option
                 v-for="item in taskSoftVersion"
                 :key="item.index"
@@ -225,7 +244,8 @@
               value-format="yyyy/MM/dd HH:mm:ss"
               range-separator="至"
               start-placeholder="开始日期"
-              end-placeholder="结束日期">
+              end-placeholder="结束日期"
+            >
             </el-date-picker>
           </el-form-item>
           <el-form-item style="text-align: center">
@@ -235,7 +255,8 @@
             <el-select v-model="taskForm.mainFactoryName" @focus="getFactoryName" @change="getFormProduct(true)"
                        placeholder="请选择主设备厂商名称"
                        style="width: 80%"
-                       class="filter-item">
+                       class="filter-item"
+            >
               <el-option
                 v-for="item in tempFactoryName"
                 :key="item.index"
@@ -247,7 +268,8 @@
           </el-form-item>
           <el-form-item label="主设备类型" :label-width="formLabelWidth" prop="mainDeviceType">
             <el-select v-model="taskForm.mainDeviceType" placeholder="请选择主设备类型" @change="getFormProduct(true)"
-                       style="width: 80%" class="filter-item">
+                       style="width: 80%" class="filter-item"
+            >
               <el-option
                 v-for="item in taskDeviceType"
                 :key="item.index"
@@ -259,12 +281,14 @@
             </el-select>
           </el-form-item>
           <el-form-item label="主设备产品型号" :label-width="formLabelWidth"
-                        v-if="taskForm.mainDeviceType && taskForm.mainFactoryName" prop="mainProductModel">
+                        v-if="taskForm.mainDeviceType && taskForm.mainFactoryName" prop="mainProductModel"
+          >
             <el-select v-model="taskForm.mainProductModel"
                        @change="getFormHard(true)"
                        placeholder="请选择主设备产品型号"
                        style="width: 80%"
-                       class="filter-item">
+                       class="filter-item"
+            >
               <el-option
                 v-for="item in taskMainProductModel"
                 :key="item.index"
@@ -275,9 +299,11 @@
             </el-select>
           </el-form-item>
           <el-form-item label="主设备硬件版本" :label-width="formLabelWidth" v-if="taskForm.mainProductModel"
-                        prop="mainHardVersion">
+                        prop="mainHardVersion"
+          >
             <el-select v-model="taskForm.mainHardVersion" placeholder="请选择主设备硬件版本" style="width: 80%"
-                       class="filter-item">
+                       class="filter-item"
+            >
               <el-option
                 v-for="item in taskMainHard"
                 :key="item.index"
@@ -288,7 +314,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="主设备编码" :label-width="formLabelWidth">
-            <el-link type="primary" @click="mainDeviceList">已选择 {{ taskForm.mainDeviceCount }} 个主设备，选择当前筛选条件下的主设备...
+            <el-link type="primary" :disabled="taskForm.mainHardVersion === undefined" @click="mainDeviceList">已选择 {{ taskForm.mainDeviceCount }} 个主设备，选择当前筛选条件下的主设备...
             </el-link>
           </el-form-item>
           <el-form-item :label-width="formLabelWidth">
@@ -306,11 +332,12 @@
           <div style="text-align: right;padding-right: 8px">
             <el-button style="width: 40%" @click="cancelOta" size="small">取 消</el-button>
           </div>
-          <div v-if='taskForm.mainDeviceCount === 0' style="text-align: left;padding-left: 8px">
+          <div v-if="taskForm.mainDeviceCount === 0" style="text-align: left;padding-left: 8px">
             <el-popover
               placement="top"
               width="160"
-              v-model="isPop">
+              v-model="isPop"
+            >
               <p>未选择主设备,将升级所有当前条件下的设备！</p>
               <div style="text-align: right; margin: 0">
                 <el-button size="mini" type="text" @click="isPop = false">取消</el-button>
@@ -323,7 +350,8 @@
           </div>
           <div v-else style="text-align: center;padding-right: 8px">
             <el-button @click="createTask" slot="reference" style="width: 40%" type="primary" size="small"
-                       :loading="creatingTask">{{ creatingTask ? '提交中 ...' : '开始升级' }}
+                       :loading="creatingTask"
+            >{{ creatingTask ? '提交中 ...' : '开始升级' }}
             </el-button>
           </div>
 
@@ -346,11 +374,13 @@
         <el-form :inline="true" :label-position="labelPosition" size="small" class="detail-form">
           <el-form-item label="厂商">
             <el-input v-model="taskForm.mainFactoryName" disabled style="width: 200px"
-                      class="filter-item"></el-input>
+                      class="filter-item"
+            ></el-input>
           </el-form-item>
           <el-form-item label="设备类型">
             <el-select v-model="taskForm.mainDeviceType" disabled
-                       style="width: 80%" class="filter-item">
+                       style="width: 80%" class="filter-item"
+            >
               <el-option
                 v-for="item in taskDeviceType"
                 :key="item.index"
@@ -363,15 +393,18 @@
           </el-form-item>
           <el-form-item label="产品型号">
             <el-input v-model="taskForm.mainProductModel" disabled style="width: 200px"
-                      class="filter-item"></el-input>
+                      class="filter-item"
+            ></el-input>
           </el-form-item>
           <el-form-item label="硬件版本">
             <el-input v-model="taskForm.mainHardVersion" disabled style="width: 200px"
-                      class="filter-item"></el-input>
+                      class="filter-item"
+            ></el-input>
           </el-form-item>
           <el-form-item label="主设备编码">
             <el-input v-model="taskForm.searchDevice" clearable placeholder="主设备编码" style="width: 200px"
-                      class="filter-item"></el-input>
+                      class="filter-item"
+            ></el-input>
 
           </el-form-item>
 
@@ -381,7 +414,7 @@
 
         </el-form>
         <el-table
-          v-loading="mainDeviceLoading"
+          :loading="mainDeviceLoading"
           :data="mainDeviceData"
           @select="selectMain"
           @select-all="selectMain"
@@ -424,7 +457,8 @@
         </el-table>
         <pagination v-show="mainDeviceTotal>0" :total="mainDeviceTotal" :page.sync="taskForm.current"
                     :limit.sync="taskForm.size"
-                    @pagination="mainDeviceList"/>
+                    @pagination="mainDeviceList"
+        />
 
         <!-- 已选的主设备，第三层drawer-->
         <el-drawer
@@ -484,7 +518,8 @@
           </el-table>
           <pagination v-show="chosenDeviceTotal>0" :total="chosenDeviceTotal" :page.sync="chosenMain.current"
                       :limit.sync="chosenMain.size"
-                      @pagination="chosenMainList"/>
+                      @pagination="chosenMainList"
+          />
 
         </el-drawer>
 
@@ -554,12 +589,14 @@
           </el-form-item>
           <el-form-item label="主设备类型" :label-width="formLabelWidth">
             <el-select v-model="detailForm.mainDeviceType" :disabled="detailDisabled" style="width: 80%"
-                       class="filter-item">
+                       class="filter-item"
+            >
               <el-option
                 v-for="item in deviceType"
                 :key="item.index"
                 :label="item.label"
-                :value="item.value">
+                :value="item.value"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -577,7 +614,7 @@
 
           </el-form-item>
           <el-form-item label="主设备编码" :label-width="formLabelWidth">
-            <el-link type="success" @click="handleExTable">已选择 {{ detailForm.mainDeviceCount}} 个 主设备，查看升级详情...
+            <el-link type="success" @click="handleExTable">已选择 {{ detailForm.mainDeviceCount }} 个 主设备，查看升级详情...
             </el-link>
           </el-form-item>
 
@@ -611,7 +648,8 @@
                 v-for="item in exDeviceName"
                 :key="item.index"
                 :label="item.label"
-                :value="item.value">
+                :value="item.value"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -621,7 +659,8 @@
                 v-for="item in taskStatus"
                 :key="item.index"
                 :label="item.label"
-                :value="item.value">
+                :value="item.value"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -637,7 +676,6 @@
           :data="exData"
           element-loading-text="加载中..."
           border
-          fit
           highlight-current-row
           class="detail-table"
         >
@@ -652,6 +690,11 @@
           </el-table-column>
           <el-table-column label="升级任务状态" align="center" :formatter="renderExStatus">
           </el-table-column>
+          <el-table-column label="详情" align="center">
+            <template slot-scope="scope">
+              {{ scope.row.sendDetails }}
+            </template>
+          </el-table-column>
 
           <el-table-column label="更新结束时间" align="center" :formatter="renderExEndTime">
           </el-table-column>
@@ -660,7 +703,8 @@
               <el-button
                 size="mini"
                 type="text"
-                @click="handleExDetail(scope.$index, scope.row)">详情
+                @click="handleExDetail(scope.$index, scope.row)"
+              >详情
               </el-button>
 
             </template>
@@ -668,7 +712,8 @@
         </el-table>
         <pagination v-show="exTotal>0" :total="exTotal" :page.sync="exQuery.current"
                     :limit.sync="exQuery.size"
-                    @pagination="exSearch"/>
+                    @pagination="exSearch"
+        />
         <!--        第三层-->
         <el-drawer
           :title="subDrawerTitle"
@@ -688,13 +733,15 @@
                   v-for="item in mainDeviceName"
                   :key="item.index"
                   :label="item.label"
-                  :value="item.value">
+                  :value="item.value"
+                >
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="从设备编码">
               <el-input v-model="detailQuery.subDeviceName" placeholder="从设备编码" style="width: 200px"
-                        class="filter-item"></el-input>
+                        class="filter-item"
+              ></el-input>
 
             </el-form-item>
             <el-form-item label="升级状态">
@@ -703,7 +750,8 @@
                   v-for="item in otaStatus"
                   :key="item.index"
                   :label="item.label"
-                  :value="item.value">
+                  :value="item.value"
+                >
                 </el-option>
               </el-select>
             </el-form-item>
@@ -748,7 +796,8 @@
                 <el-button
                   size="mini"
                   type="text"
-                  @click="handleItemDetail(scope.$index, scope.row)">详情
+                  @click="handleItemDetail(scope.$index, scope.row)"
+                >详情
                 </el-button>
 
               </template>
@@ -756,7 +805,8 @@
           </el-table>
           <pagination v-show="detailTotal>0" :total="detailTotal" :page.sync="detailQuery.current"
                       :limit.sync="detailQuery.size"
-                      @pagination="detailSearch"/>
+                      @pagination="detailSearch"
+          />
 
           <!--        详情，第三层drawer-->
           <el-drawer
@@ -780,12 +830,14 @@
                 </el-form-item>
                 <el-form-item label="设备类型" :label-width="formLabelWidth">
                   <el-select v-model="itemForm.deviceType" :disabled="detailDisabled" style="width: 80%"
-                             class="filter-item">
+                             class="filter-item"
+                  >
                     <el-option
                       v-for="item in deviceType"
                       :key="item.index"
                       :label="item.label"
-                      :value="item.value">
+                      :value="item.value"
+                    >
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -834,7 +886,7 @@
 
 <script>
 import Pagination from '@/components/Pagination'
-import {getDevice, getExDetail, getOtaDetail, getOtaList, getSubDevice} from "@/api/table";
+import { getDevice, getExDetail, getOtaDetail, getOtaList, getSubDevice } from '@/api/table'
 import {
   exportExcel,
   getFactoryNameList,
@@ -842,18 +894,17 @@ import {
   otaTask,
   queryProductModelList,
   querySoftVersion
-} from "@/api/operation";
-import {renderOtaStatus, renderProgress, renderSendStatus, renderTaskStatus, renderTime, renderType} from '@/utils'
-import {global} from "@/common";
-
+} from '@/api/operation'
+import { renderOtaStatus, renderProgress, renderSendStatus, renderTaskStatus, renderTime, renderType } from '@/utils'
+import { global } from '@/common'
 
 export default {
   name: 'Ota',
-  components: {Pagination},
+  components: { Pagination },
   data() {
     return {
       //全局
-      labelPosition: "left",
+      labelPosition: 'left',
       formLabelWidth: '130px',
       drawerSize: '50%',
       tempFactoryName: [],
@@ -920,13 +971,13 @@ export default {
         mainProductModel: undefined,
         mainDeviceType: undefined,
         mainFactoryName: undefined,
-        time: undefined,
+        time: undefined
       },
       isPop: false,
       pickerOptions1: {
         disabledDate(time) {
-          return time.getTime() < Date.now() - 8.64e7;
-        },
+          return time.getTime() < Date.now() - 8.64e7
+        }
       },
       //OTA任务查看主设备（第2层drawer）
       taskMainDeviceVisible: false,
@@ -952,9 +1003,9 @@ export default {
       canOperateText: '中止',
       detailForm: {
         deviceType: '',
-        factoryName: "",
-        productModel: "",
-        hardVersion: "",
+        factoryName: '',
+        productModel: '',
+        hardVersion: '',
         upSoftVersion: undefined,
         mainDeviceNames: '',
         mainHardVersion: '',
@@ -963,7 +1014,7 @@ export default {
         mainFactoryName: '',
         mainDeviceCount: 0,
         taskStatus: '',
-        time: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
+        time: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)]
       },
       //ex新增table
       exDetailVisible: false,
@@ -1006,21 +1057,21 @@ export default {
         productModel: undefined,
         hardVersion: undefined,
         softVersion: undefined,
-        mainDeviceName: undefined,
+        mainDeviceName: undefined
       },
       updateType: global.updateType,
       createTaskRules: {
-        deviceType: [{required: true, message: '请选择设备类型', trigger: 'blur'}],
-        factoryName: [{required: true, message: '请选择厂商名称', trigger: 'blur'}],
-        productModel: [{required: true, message: '请选择产品型号', trigger: 'blur'}],
-        hardVersion: [{required: true, message: '请选择硬件版本', trigger: 'blur'}],
-        softVersion: [{required: true, message: '请选择软件版本', trigger: 'blur'}],
-        mainFactoryName: [{required: true, message: '请选择主设备厂商', trigger: 'blur'}],
-        mainDeviceType: [{required: true, message: '请选择主设备类型', trigger: 'blur'}],
-        mainProductModel: [{required: true, message: '请选择主设备型号', trigger: 'blur'}],
-        mainHardVersion: [{required: true, message: '请选择主设备硬件版本', trigger: 'blur'}],
-        time: [{required: true, message: '请选择任务时间', trigger: 'blur'}],
-      },
+        deviceType: [{ required: true, message: '请选择设备类型', trigger: 'blur' }],
+        factoryName: [{ required: true, message: '请选择厂商名称', trigger: 'blur' }],
+        productModel: [{ required: true, message: '请选择产品型号', trigger: 'blur' }],
+        hardVersion: [{ required: true, message: '请选择硬件版本', trigger: 'blur' }],
+        softVersion: [{ required: true, message: '请选择软件版本', trigger: 'blur' }],
+        mainFactoryName: [{ required: true, message: '请选择主设备厂商', trigger: 'blur' }],
+        mainDeviceType: [{ required: true, message: '请选择主设备类型', trigger: 'blur' }],
+        mainProductModel: [{ required: true, message: '请选择主设备型号', trigger: 'blur' }],
+        mainHardVersion: [{ required: true, message: '请选择主设备硬件版本', trigger: 'blur' }],
+        time: [{ required: true, message: '请选择任务时间', trigger: 'blur' }]
+      }
     }
   },
 
@@ -1052,7 +1103,7 @@ export default {
             if (this.otaDialogVisible) {
               this.tempFactoryName = []
               data.forEach((item, index) => {
-                this.tempFactoryName.push({value: item, label: item})
+                this.tempFactoryName.push({ value: item, label: item })
               })
             } else {
               this.listFactoryName = [
@@ -1062,7 +1113,7 @@ export default {
                 }
               ]
               data.forEach((item, index) => {
-                this.listFactoryName.push({value: item, label: item})
+                this.listFactoryName.push({ value: item, label: item })
               })
             }
 
@@ -1101,7 +1152,7 @@ export default {
               if (item.hardVersions.length !== 0) {
                 this.hard.push(item.hardVersions)
               }
-              this.listProductModel.push({value: item.productModel, label: item.productModel})
+              this.listProductModel.push({ value: item.productModel, label: item.productModel })
             })
           }
         } catch (err) {
@@ -1113,7 +1164,7 @@ export default {
           message: '请先选择设备类型和厂商！',
           type: 'warning',
           duration: 2000
-        });
+        })
       }
     },
     //下拉硬件
@@ -1134,7 +1185,7 @@ export default {
         })
         if (this.hard.length !== 0 && this.hard[modelIndex].length !== 0) {
           this.hard[modelIndex].forEach((item, index) => {
-            this.listHardVersion.push({value: item, label: item})
+            this.listHardVersion.push({ value: item, label: item })
           })
         }
       } else {
@@ -1186,7 +1237,7 @@ export default {
               if (item.hardVersions.length !== 0) {
                 this.hard.push(item.hardVersions)
               }
-              list.push({value: item.productModel, label: item.productModel})
+              list.push({ value: item.productModel, label: item.productModel })
             })
           }
 
@@ -1216,7 +1267,7 @@ export default {
       })
       if (this.hard.length !== 0 && this.hard[modelIndex].length !== 0) {
         this.hard[modelIndex].forEach((item, index) => {
-          list.push({value: item, label: item})
+          list.push({ value: item, label: item })
         })
       }
       return list
@@ -1238,7 +1289,7 @@ export default {
         if (res.data.data.length !== 0) {
           let data = res.data.data
           data.forEach((item, value) => {
-            this.taskSoftVersion.push({softVersion: item.softVersion, packageId: item.objectId})
+            this.taskSoftVersion.push({ softVersion: item.softVersion, packageId: item.objectId })
           })
         }
       } else {
@@ -1273,10 +1324,10 @@ export default {
             mainDeviceType: this.taskForm.mainDeviceType,
             mainProductModel: this.taskForm.mainProductModel,
             mainHardVersion: this.taskForm.mainHardVersion,
-            mainDeviceNames: this.taskForm.mainDeviceNames,
+            mainDeviceNames: this.taskForm.mainDeviceNames
           }
 
-          this.taskSoftVersion.forEach((item,index) => {
+          this.taskSoftVersion.forEach((item, index) => {
             if (item.packageId === this.taskForm.softVersion) {
               query.upSoftVersion = item.softVersion
             }
@@ -1306,7 +1357,7 @@ export default {
         factoryName: this.taskForm.mainFactoryName,
         hardVersion: this.taskForm.mainHardVersion,
         productModel: this.taskForm.mainProductModel,
-        isShowMain: true,
+        isShowMain: true
       }
       this.taskMainDeviceVisible = true
       getDevice(query).then(res => {
@@ -1349,7 +1400,7 @@ export default {
           message: '最多选择50台设备！',
           type: 'warning',
           duration: 2000
-        });
+        })
       } else {
         this.chosenDeviceData = []
         this.taskForm.mainDeviceNames = ''
@@ -1360,7 +1411,7 @@ export default {
           this.taskForm.mainDeviceNames += item + ','
           this.taskForm.mainDeviceCount++
         })
-        this.taskForm.mainDeviceNames = this.taskForm.mainDeviceNames.substring(0, this.taskForm.mainDeviceNames.lastIndexOf(','));
+        this.taskForm.mainDeviceNames = this.taskForm.mainDeviceNames.substring(0, this.taskForm.mainDeviceNames.lastIndexOf(','))
         this.$message({
           showClose: true,
           message: '添加设备成功！',
@@ -1400,7 +1451,7 @@ export default {
           this.taskForm.mainDeviceNames += item.deviceName + ','
         })
         this.taskForm.mainDeviceCount = this.chosenDeviceData.length
-        this.taskForm.mainDeviceNames = this.taskForm.mainDeviceNames.substring(0, this.taskForm.mainDeviceNames.lastIndexOf(','));
+        this.taskForm.mainDeviceNames = this.taskForm.mainDeviceNames.substring(0, this.taskForm.mainDeviceNames.lastIndexOf(','))
         this.$message({
           showClose: true,
           message: '删除设备成功！',
@@ -1455,12 +1506,13 @@ export default {
 
     //第一个drawer表单详情
     handleDetail(index, row) {
+
       this.taskDetailVisible = true
       this.detailQuery.taskId = row.taskId
       this.exQuery.taskId = row.taskId
       this.exDeviceName = []
       this.mainDeviceName = []
-      let names = row.mainDeviceNames.split(",");
+      let names = row.mainDeviceNames.split(',')
       names.forEach((item, index) => {
         this.exDeviceName.push({
           label: item,
@@ -1473,7 +1525,7 @@ export default {
 
       })
       this.detailForm = Object.assign({}, row)
-      console.log(this.detailForm)
+      this.detailForm.mainDeviceCount = names.length
       switch (this.detailForm.taskStatus) {
         case 0 || 2:
           this.canOperate = true
@@ -1498,7 +1550,7 @@ export default {
       let query = {
         taskId: this.detailForm.taskId,
         operateType: operateType,
-        currentUser: JSON.parse(sessionStorage.getItem('userInfo')).userId,
+        currentUser: JSON.parse(sessionStorage.getItem('userInfo')).userId
       }
       operateTask(query).then(res => {
         if (res.data.success) {
@@ -1532,7 +1584,7 @@ export default {
           if (response.data.data.records != null) {
             if (response.data.data.records.length !== 0) {
               this.exData = response.data.data.records
-              this.detailTotal = response.data.data.total
+              this.exTotal = response.data.data.total
             }
           }
         } else {
@@ -1573,6 +1625,7 @@ export default {
         if (response.data.data !== null) {
           if (response.data.data.records !== null) {
             this.detailData = response.data.data.records
+            this.detailTotal = response.data.data.total
           }
         } else {
           this.$message({
@@ -1634,7 +1687,6 @@ export default {
       this.taskForm.productModel = ''
     },
 
-
     //渲染
     renderTaskStatus(row) {
       return renderTaskStatus(row.taskStatus)
@@ -1670,9 +1722,9 @@ export default {
     handleExcel(ex) {
       this.getExcel = true
       let query = ''
-      ex ? query = {taskId: this.exQuery.taskId} : query = {taskId: this.detailQuery.taskId}
+      ex ? query = { taskId: this.exQuery.taskId } : query = { taskId: this.detailQuery.taskId }
       exportExcel(query, ex).then(res => {
-        const blob = new Blob([res.data], {type: 'application/vnd.ms-excel;charset=utf-8'})
+        const blob = new Blob([res.data], { type: 'application/vnd.ms-excel;charset=utf-8' })
         const fileName = ex ? '子设备任务表.xlsx' : '子设备OTA表.xlsx'
         if ('download' in document.createElement('a')) { // 非IE下载
           const elink = document.createElement('a')
@@ -1689,7 +1741,7 @@ export default {
       })
       this.getExcel = false
 
-    },
+    }
   }
 }
 </script>
