@@ -1526,13 +1526,13 @@ export default {
       this.detailForm = Object.assign({}, row)
       this.detailForm.mainDeviceCount = names.length
       switch (this.detailForm.taskStatus) {
-        case 0 || 2:
+        case 2:
           this.canOperate = true
-          this.canOperateText = '中止'
+          this.canOperateText = '恢复'
           break
         case 1:
           this.canOperate = true
-          this.canOperateText = '恢复'
+          this.canOperateText = '中止'
           break
         default:
           this.canOperate = false
@@ -1541,10 +1541,10 @@ export default {
     //操作任务
     operate() {
       let operateType = ''
-      if (this.detailForm.taskStatus === 0 || this.detailForm.taskStatus === 2) {
-        operateType = '1'
-      } else if (this.detailForm.taskStatus === 1) {
+      if (this.detailForm.taskStatus === 2) {
         operateType = '2'
+      } else if (this.detailForm.taskStatus === 1) {
+        operateType = '1'
       }
       let query = {
         taskId: this.detailForm.taskId,
