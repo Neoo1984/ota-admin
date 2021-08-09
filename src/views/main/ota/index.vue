@@ -894,7 +894,15 @@ import {
   queryProductModelList,
   querySoftVersion
 } from '@/api/operation'
-import { renderOtaStatus, renderProgress, renderSendStatus, renderTaskStatus, renderTime, renderType } from '@/utils'
+import {
+  renderExTaskStatus,
+  renderOtaStatus,
+  renderProgress,
+  renderSendStatus,
+  renderTaskStatus,
+  renderTime,
+  renderType
+} from '@/utils'
 import { global } from '@/common'
 
 export default {
@@ -1598,7 +1606,7 @@ export default {
       this.exSearch()
     },
     renderExStatus(row) {
-      return renderTaskStatus(row.taskStatus)
+      return renderExTaskStatus(row.taskStatus)
     },
     renderExSend(row) {
       return renderSendStatus(row.sendStatus)

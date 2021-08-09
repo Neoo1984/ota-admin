@@ -245,6 +245,30 @@ export function renderTaskStatus(taskStatus) {
       return '--'
   }
 }
+/*
+任务状态
+1 已创建
+2 创建失败（设备响应）
+3 执行中
+4 已中止
+5 已结束
+*/
+export function renderExTaskStatus(taskStatus) {
+  switch (taskStatus) {
+    case 1:
+      return '已创建'
+    case 2:
+      return '创建失败'
+    case 3:
+      return '执行中'
+    case 4:
+      return '已中止'
+    case 5:
+      return '已结束'
+    default:
+      return '--'
+  }
+}
 
 export function renderSendStatus(sendStatus) {
   switch (sendStatus) {
