@@ -55,12 +55,12 @@
           </el-select>
         </el-form-item>
         <el-form-item label="任务编号">
-          <el-input v-model="listQuery.taskId" placeholder="设备编码" style="width: 200px"
+          <el-input prefix-icon="el-icon-search" clearable @input="getList" v-model="listQuery.taskId"
+                    placeholder="设备编码" style="width: 200px"
                     class="filter-item"
           ></el-input>
         </el-form-item>
 
-        <el-button type="primary" @click="getList" icon="el-icon-search" size="small">查询</el-button>
         <el-button type="primary" @click="reSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
         <el-button type="primary" @click="handleOtaCreate" icon="el-icon-plus" size="small">新建OTA任务</el-button>
 
@@ -314,7 +314,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="主设备编码" :label-width="formLabelWidth">
-            <el-link type="primary" :disabled="taskForm.mainHardVersion === undefined" @click="mainDeviceList">已选择 {{ taskForm.mainDeviceCount }} 个主设备，选择当前筛选条件下的主设备...
+            <el-link type="primary" :disabled="taskForm.mainHardVersion === undefined" @click="mainDeviceList">已选择
+              {{ taskForm.mainDeviceCount }} 个主设备，选择当前筛选条件下的主设备...
             </el-link>
           </el-form-item>
           <el-form-item :label-width="formLabelWidth">
@@ -475,7 +476,7 @@
             </el-form-item>
           </el-form>
           <el-table
-            v-loading="mainDeviceLoading"
+            :loading="mainDeviceLoading"
             :data="chosenDeviceData"
             @select="selectChosen"
             @select-all="selectChosen"
@@ -643,7 +644,7 @@
       >
         <el-form :inline="true" size="small" class="detail-form">
           <el-form-item label="主设备编码">
-            <el-select filterable v-model="exQuery.mainDeviceName" placeholder="请选择主设备编码">
+            <el-select @change="exSearch" filterable v-model="exQuery.mainDeviceName" placeholder="请选择主设备编码">
               <el-option
                 v-for="item in exDeviceName"
                 :key="item.index"
@@ -654,7 +655,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="任务状态">
-            <el-select v-model="exQuery.taskStatus" placeholder="请选择升级状态" style="width: 200px" class="filter-item">
+            <el-select v-model="exQuery.taskStatus" @change="exSearch" placeholder="请选择升级状态" style="width: 200px" class="filter-item">
               <el-option
                 v-for="item in taskStatus"
                 :key="item.index"
@@ -665,14 +666,13 @@
             </el-select>
           </el-form-item>
 
-          <el-button type="primary" @click="exSearch" icon="el-icon-search" size="small">查 询</el-button>
           <el-button type="primary" @click="reExSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
           <el-button type="primary" @click="handleExcel(true)" icon="el-icon-plus" size="small">导出表格</el-button>
           <el-button type="primary" @click="handleDetailTable" icon="el-icon-tickets" size="small">子设备升级详情</el-button>
 
         </el-form>
         <el-table
-          v-loading="exLoading"
+          :loading="exLoading"
           :data="exData"
           element-loading-text="加载中..."
           border
@@ -728,7 +728,7 @@
 
           <el-form :inline="true" size="small" class="detail-form">
             <el-form-item label="主设备编码">
-              <el-select filterable v-model="detailQuery.mainDeviceName" placeholder="请选择主设备编码">
+              <el-select filterable v-model="detailQuery.mainDeviceName" @change="detailSearch" placeholder="请选择主设备编码">
                 <el-option
                   v-for="item in mainDeviceName"
                   :key="item.index"
@@ -739,13 +739,13 @@
               </el-select>
             </el-form-item>
             <el-form-item label="从设备编码">
-              <el-input v-model="detailQuery.subDeviceName" placeholder="从设备编码" style="width: 200px"
+              <el-input   clearable prefix-icon="el-icon-search" v-model="detailQuery.subDeviceName" @input="detailSearch" placeholder="从设备编码" style="width: 200px"
                         class="filter-item"
               ></el-input>
 
             </el-form-item>
             <el-form-item label="升级状态">
-              <el-select v-model="detailQuery.otaStatus" placeholder="请选择升级状态" style="width: 200px" class="filter-item">
+              <el-select v-model="detailQuery.otaStatus" @change="detailSearch" placeholder="请选择升级状态" style="width: 200px" class="filter-item">
                 <el-option
                   v-for="item in otaStatus"
                   :key="item.index"
@@ -756,7 +756,6 @@
               </el-select>
             </el-form-item>
 
-            <el-button type="primary" @click="detailSearch" icon="el-icon-search" size="small">查询</el-button>
             <el-button type="primary" @click="reDetailSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
             <el-button type="primary" @click="handleExcel(false)" :loading="getExcel" icon="el-icon-plus" size="small">
               导出表格
@@ -764,7 +763,7 @@
 
           </el-form>
           <el-table
-            v-loading="detailLoading"
+            :loading="detailLoading"
             :data="detailData"
             element-loading-text="加载中..."
             border
@@ -1581,12 +1580,8 @@ export default {
       this.exDetailLoading = true
       getExDetail(this.exQuery).then(response => {
         if (response.data.data !== null) {
-          if (response.data.data.records != null) {
-            if (response.data.data.records.length !== 0) {
-              this.exData = response.data.data.records
-              this.exTotal = response.data.data.total
-            }
-          }
+          this.exData = response.data.data.records
+          this.exTotal = response.data.data.total
         } else {
           this.$message({
             showClose: true,

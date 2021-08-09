@@ -15,7 +15,7 @@
       <el-button type="primary" icon="el-icon-plus" size="small" @click="handleCreate">新增用户</el-button>
     </el-form>
     <el-table
-      v-loading="listLoading"
+      :loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
       border
@@ -114,7 +114,7 @@
     >
       <el-form
         ref="dataForm"
-        v-loading="submitLoading"
+        :loading="submitLoading"
         :rules="rules"
         :model="temp"
         class="form-inline"

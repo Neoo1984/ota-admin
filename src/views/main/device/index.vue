@@ -64,26 +64,24 @@
         </el-form-item>
 
         <el-form-item label="设备编码">
-          <el-input @change="getList" v-model="listQuery.deviceName" :disabled=slaveDisabled placeholder="请输入设备编码"
+          <el-input @change="getList" prefix-icon="el-icon-search" clearable v-model="listQuery.deviceName" :disabled=slaveDisabled placeholder="请输入设备编码"
                     style="width: 80%"
                     class="filter-item"
           ></el-input>
         </el-form-item>
 
-        <el-button type="primary" @click="getList" icon="el-icon-search" size="small">查询</el-button>
         <el-button type="primary" @click="handleMainCreate" icon="el-icon-plus" size="small">新建主设备</el-button>
         <el-button type="primary" @click="handleSlaveCreate" icon="el-icon-plus" size="small">新建从设备</el-button>
         <el-button type="primary" @click="handleUploadMain" icon="el-icon-document-add" size="small">批量导入</el-button>
         <el-tooltip class="item" effect="dark" content="请选择相同设备类型，厂家，硬件和产品型号的主设备！" placement="bottom-start">
           <el-button type="primary" @click="handleOta" icon="el-icon-thumb" size="small">批量OTA</el-button>
         </el-tooltip>
-        <!--        <el-button type="primary" @click="handleOtaCreate" icon="el-icon-thumb" size="small">新建OTA任务</el-button>-->
       </el-form>
     </div>
     <el-table
       ref="multipleTable"
       @select="selectOta"
-      v-loading="listLoading"
+      :loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
       border
@@ -335,7 +333,7 @@
           <el-upload
             class="upload-demo"
             ref="upload"
-            v-loading="uploadLoading"
+            :loading="uploadLoading"
             element-loading-text="上传中..."
             action=""
             :on-success="handleSuccess"
@@ -367,7 +365,7 @@
         >
           <el-table
             :data="commandList"
-            v-loading="cmdLoading"
+            :loading="cmdLoading"
             style="width: 100%"
           >
             <el-table-column label="指令内容" align="center" width="150">

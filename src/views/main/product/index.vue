@@ -2,19 +2,20 @@
   <div class="app-container">
     <el-form :inline="true" class="demo-form-inline" size="small">
       <el-form-item label="厂商名称">
-        <el-input v-model="listQuery.factoryName" placeholder="厂商名称" style="width: 200px"
+        <el-input  clearable v-model="listQuery.factoryName" placeholder="厂商名称" style="width: 200px"
                   class="filter-item"></el-input>
       </el-form-item>
       <el-form-item label="产品型号">
-        <el-input v-model="listQuery.productModel" placeholder="产品型号" style="width: 200px"
+        <el-input clearable v-model="listQuery.productModel" placeholder="产品型号" style="width: 200px"
                   class="filter-item"></el-input>
       </el-form-item>
 
       <el-button type="primary" @click="search" icon="el-icon-search" size="small">查询</el-button>
+      <el-button type="primary" @click="clearSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
       <el-button type="primary" @click="handleCreate" icon="el-icon-plus" size="small">新增</el-button>
     </el-form>
     <el-table
-      v-loading="listLoading"
+      :loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
       border
@@ -83,13 +84,13 @@
       :title="textMap[dialogStatus]"
       :visible.sync="dialogVisible"
       :show-close="false"
-      v-loading='submitLoading'
+      :loading='submitLoading'
       element-loading-text="提交中..."
       width="60%">
       <el-form ref="dataForm" :rules="rules" :model="temp" class="demo-form-inline" :label-position="labelPosition"
                label-width="100px">
         <el-form-item label="产品名称" prop="productName">
-          <el-input v-model="temp.productName" placeholder="请输入产品名称" style="width: 80%" class="filter-item"></el-input>
+          <el-input clearable v-model="temp.productName" placeholder="请输入产品名称" style="width: 80%" class="filter-item"></el-input>
         </el-form-item>
         <el-form-item label="厂商名称" prop="factoryName">
           <el-select v-model="temp.factoryName" placeholder="请选择厂商名称" style="width: 80%" class="filter-item">
@@ -112,7 +113,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="产品型号" prop="productModel">
-          <el-input v-model="temp.productModel" placeholder="请输入产品型号" style="width: 80%" class="filter-item"></el-input>
+          <el-input clearable v-model="temp.productModel" placeholder="请输入产品型号" style="width: 80%" class="filter-item"></el-input>
         </el-form-item>
         <el-form-item label="硬件版本" prop="hardVersion">
           <el-tag
@@ -150,10 +151,10 @@
       :show-close="false"
       element-loading-text="提交中..."
       width="60%">
-      <el-form v-loading='submitLoading' ref="updateForm" :rules="rules" :model="updateTemp" class="demo-form-inline"
+      <el-form :loading='submitLoading' ref="updateForm" :rules="rules" :model="updateTemp" class="demo-form-inline"
                :label-position="labelPosition" label-width="100px">
         <el-form-item label="产品名称" prop="details" label-width="25%">
-          <el-input v-model="updateTemp.productName" placeholder="请输入产品名称" style="width: 80%"
+          <el-input clearable v-model="updateTemp.productName" placeholder="请输入产品名称" style="width: 80%"
                     class="filter-item"></el-input>
         </el-form-item>
         <el-form-item label="厂商名称" prop="details" label-width="25%">
@@ -198,11 +199,11 @@
           <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 硬件版本</el-button>
         </el-form-item>
         <el-form-item label="产品型号" prop="details" label-width="25%">
-          <el-input v-model="updateTemp.productModel" placeholder="请输入产品型号" style="width: 80%"
+          <el-input clearable v-model="updateTemp.productModel" placeholder="请输入产品型号" style="width: 80%"
                     class="filter-item"></el-input>
         </el-form-item>
         <el-form-item label="产品型号描述" prop="details" label-width="25%">
-          <el-input v-model="updateTemp.details" type="textarea" style="width: 80%" class="filter-item"></el-input>
+          <el-input clearable v-model="updateTemp.details" type="textarea" style="width: 80%" class="filter-item"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -213,31 +214,12 @@
   </div>
 </template>
 
-<style>
-.el-tag + .el-tag {
-  margin-left: 10px;
-}
-
-.button-new-tag {
-  margin-left: 10px;
-  height: 32px;
-  line-height: 30px;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-.input-new-tag {
-  width: 90px;
-  margin-left: 10px;
-  vertical-align: bottom;
-}
-</style>
-
 <script>
 import {getProductList} from "@/api/table";
 import Pagination from '@/components/Pagination';
 import {createProduct, updateProduct, getFactoryNameList, deleteFactory, deleteProduct} from "@/api/operation";
 import {global} from "@/common";
+import { renderType } from '@/utils'
 export default {
   name: 'Product',
   components: {Pagination},
@@ -261,6 +243,7 @@ export default {
       hardVersion: [],
       hardValue: "",
       productType: global.productType,
+      renderType:renderType,
       getModel: {},
       listQuery: {
         current: 1,
@@ -318,16 +301,22 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      getProductList(this.listQuery).then(response => {
-        const data = response.data.data
-        this.list = data.records
-        this.total = data.total
+      getProductList(this.listQuery).then(res => {
+        if (res.data.success) {
+          let data = res.data.data
+          this.list = data.records
+          this.total = data.total
+        }else {
+          this.$message({
+            showClose: true,
+            message: message,
+            type: 'error'
+          })
+        }
+
       })
       this.listLoading = false
 
-    },
-    renderType(row, column, cellValue) {
-      return row.productType === "1" ? '电池' : row.productType === "2" ? '换电柜' : '两轮车'
     },
     //新增
     cancelCreate() {
@@ -451,7 +440,7 @@ export default {
         this.$refs['updateForm'].clearValidate()
       })
     },
-    updateData(index, row) {
+    updateData() {
       this.$refs['updateForm'].validate((valid) => {
         if (valid) {
           this.hardVersion.forEach((item, index) => {
@@ -462,10 +451,6 @@ export default {
           updateProduct(this.updateTemp).then(res => {
             const message = res.data.message
             if (res.data.success) {
-              setTimeout(() => {
-                this.submitLoading = false
-
-              }, 4.5 * 1000)
               this.updateDialogVisible = false
               this.getList()
               this.$notify({
@@ -474,14 +459,15 @@ export default {
                 type: 'success',
                 duration: 5000
               })
-            } else {
+            } else
               this.$notify.error({
                 title: '失败',
                 message: message,
-                duration: 15000
+                type: 'error',
+                duration:0
               })
-            }
           })
+          this.submitLoading = false
           this.hardVersion = []
         }
       })
@@ -515,9 +501,11 @@ export default {
             message: '删除成功！'
           })
         } else {
-          this.$message({
+          this.$notify.error({
+            title: '失败',
+            message: message,
             type: 'error',
-            message: message
+            duration:0
           })
         }
       })
@@ -528,18 +516,38 @@ export default {
     },
     //重置新增输入框
     resetTemp() {
-      this.temp.productName = ''
-      this.temp.details = ''
-      this.temp.hardVersion = ''
-      this.temp.factoryName = ''
-      this.temp.productModel = ''
-      this.temp.productType = ''
+      this.temp.productName = undefined
+      this.temp.details = undefined
+      this.temp.hardVersion = undefined
+      this.temp.factoryName = undefined
+      this.temp.productModel = undefined
+      this.temp.productType = undefined
     },
     //重置搜索
     clearSearch() {
-      this.listQuery.factoryName = ""
-      this.listQuery.productModel = ""
+      this.listQuery.factoryName = undefined
+      this.listQuery.productModel = undefined
+      this.getList()
     }
   }
 }
 </script>
+<style scoped>
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
+}
+</style>

@@ -2,23 +2,24 @@
   <div class="app-container">
     <el-form :inline="true" class="demo-form-inline" size="small">
       <el-form-item label="厂商名称">
-        <el-input v-model="listQuery.factoryName" placeholder="厂商名称" style="width: 200px"
+        <el-input clearable v-model="listQuery.factoryName" placeholder="厂商名称" style="width: 200px"
                   class="filter-item"></el-input>
       </el-form-item>
       <el-form-item label="产品型号">
-        <el-input v-model="listQuery.productModel" placeholder="产品型号" style="width: 200px"
+        <el-input clearable v-model="listQuery.productModel" placeholder="产品型号" style="width: 200px"
                   class="filter-item"></el-input>
       </el-form-item>
       <el-form-item label="硬件型号">
-        <el-input v-model="listQuery.hardVersion" placeholder="硬件型号" style="width: 200px"
+        <el-input clearable v-model="listQuery.hardVersion" placeholder="硬件型号" style="width: 200px"
                   class="filter-item"></el-input>
       </el-form-item>
-      <el-button type="primary" @click="search" icon="el-icon-search" size="small">查询</el-button>
       <el-button type="primary" @click="handleCreate" icon="el-icon-plus" size="small">新增</el-button>
+      <el-button type="primary" @click="clearSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
+
     </el-form>
     <el-table
       ref="multipleTable"
-      v-loading="listLoading"
+      :loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
       border
@@ -117,7 +118,7 @@
       <el-form ref="createRef" :rules="rules" :model="createTemp" class="demo-form-inline" :label-position="right"
                label-width="100px">
         <el-form-item label="厂商名称" prop="factoryName">
-          <el-select v-model="createTemp.factoryName" placeholder="请选择厂商名称" style="width: 80%" class="filter-item">
+          <el-select v-model="createTemp.factoryName" @focus="getFactoryName" @change="getFormProduct" placeholder="请选择厂商名称" style="width: 80%" class="filter-item">
             <el-option
               v-for="item in factoryName"
               :key="item.index"
@@ -127,7 +128,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="设备类型" prop="deviceType">
-          <el-select v-model="createTemp.deviceType" placeholder="请选择设备类型" style="width: 80%" class="filter-item">
+          <el-select v-model="createTemp.deviceType" @change="getFormProduct" placeholder="请选择设备类型" style="width: 80%" class="filter-item">
             <el-option
               v-for="item in deviceType"
               :key="item.index"
@@ -137,7 +138,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="产品型号" prop="productModel" v-if="createTemp.factoryName &&  createTemp.deviceType">
-          <el-select v-model="createTemp.productModel" placeholder="请选择产品型号" style="width: 80%" class="filter-item">
+          <el-select v-model="createTemp.productModel" @focus="getFormProduct" @change="getFormHard" placeholder="请选择产品型号" style="width: 80%" class="filter-item">
             <el-option
               v-for="item in tempProductModel"
               :key="item.index"
@@ -158,11 +159,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="软件版本" prop="softVersion">
-          <el-input v-model="createTemp.softVersion" placeholder="请输入软件版本" style="width: 80%"
+          <el-input clearable v-model="createTemp.softVersion" placeholder="请输入软件版本" style="width: 80%"
                     class="filter-item"></el-input>
         </el-form-item>
         <el-form-item label="软件描述" prop="softDescribe">
-          <el-input v-model="createTemp.softDescribe" placeholder="软件版本描述" style="width: 80%"
+          <el-input clearable v-model="createTemp.softDescribe" placeholder="软件版本描述" style="width: 80%"
                     class="filter-item"></el-input>
         </el-form-item>
         <el-form-item label="是否拆包" prop="split" v-if="isSplit">
@@ -187,7 +188,7 @@
         </el-form-item>
         <el-form-item label="上传软件包" prop="excelFile" style="width: 80%">
           <el-upload
-            v-loading="uploadLoading"
+            :loading="uploadLoading"
             element-loading-text="上传中..."
             class="upload-demo"
             ref="upload"
@@ -198,7 +199,6 @@
             :on-success="handleSuccess"
             :http-request="getFile"
             :on-remove="handleRemove"
-            :before-upload="beforeUpload"
             :limit=1>
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
           </el-upload>
@@ -219,7 +219,7 @@
       <el-form ref="updateRef" :rules="rules" :model="createTemp" class="demo-form-inline" :label-position="right"
                label-width="100px">
         <el-form-item label="软件描述" prop="softDescribe">
-          <el-input v-model="createTemp.softDescribe" placeholder="软件版本描述" style="width: 80%"
+          <el-input clearable v-model="createTemp.softDescribe" placeholder="软件版本描述" style="width: 80%"
                     class="filter-item"></el-input>
         </el-form-item>
       </el-form>
@@ -276,6 +276,7 @@ export default {
       factoryName: [],
       tempHardVersion: [],
       tempProductModel: [],
+      tempProductKey: [],
       tempHard: [],
       createTemp: {
         softVersion: undefined,
@@ -298,7 +299,6 @@ export default {
         splitLength: [{required: true, message: '请选择拆分单位', trigger: 'blur'}],
         softDescribe: [{required: true, message: '请输入软件版本描述', trigger: 'blur'}],
         deviceType: [{required: true, message: '请选择设备类型', trigger: 'blur'}],
-        // excelFile: [{required: true, message: '请上传文件', trigger: 'blur'}],
       },
       uploadFile: '',
       fileList: [],
@@ -309,102 +309,22 @@ export default {
     this.getList()
   },
   watch: {
-    'createTemp.factoryName': function (e) {
-      if (this.createTemp.factoryName !== '' && this.createTemp.deviceType !== '') {
-        const getModel = {factoryName: this.createTemp.factoryName, productType: this.createTemp.deviceType}
-        queryProductModelList(getModel).then(res => {
-          if (res.data.success) {
-            if (res.data.data.length !== 0 && res.data.data.infoList.length !== 0) {
-              this.tempHardVersion.length = 0
-              this.tempProductModel.length = 0
-              this.tempHard.length = 0
-              this.createTemp.hardVersion = ''
-              this.createTemp.productModel = ''
-
-              var data = res.data.data.infoList
-              data.forEach((item, index) => {
-                this.tempHard.push(item.hardVersions)
-                this.tempProductModel.push({value: item.productModel, label: item.productModel})
-              })
-              this.createTemp.productModel = this.tempProductModel[0].label
-              if (this.tempHard.length !== 0 && this.tempHard[0].length !== 0) {
-                this.tempHard[0].forEach((item, index) => {
-                  this.tempHardVersion.push({value: item, label: item})
-                })
-              }
-            } else {
-              this.createTemp.productModel = ''
-              this.createTemp.hardVersion = ''
-              this.tempHard.length = 0
-              this.tempHardVersion.length = 0
-              this.tempProductModel.length = 0
-            }
+    'mainTemp.productModel': function (e) {
+      let keyIndex = ''
+      if (this.tempProductModel !== undefined) {
+        keyIndex = this.tempProductModel.indexOf(this.createTemp.productModel.value)
+        this.tempProductModel.forEach((item, index) => {
+          if (this.createTemp.productModel === item.value) {
+            keyIndex = index
           }
-
         })
+
+        this.createTemp.productKey = this.tempProductKey[keyIndex]
       }
-    },
-    'createTemp.deviceType': function (e) {
-      if (this.createTemp.factoryName !== '' && this.createTemp.deviceType !== '') {
-        const getModel = {factoryName: this.createTemp.factoryName, productType: this.createTemp.deviceType}
-        queryProductModelList(getModel).then(res => {
-          if (res.data.success) {
-            if (res.data.data.length !== 0 && res.data.data.infoList.length !== 0) {
-              this.tempHardVersion.length = 0
-              this.tempProductModel.length = 0
-              this.tempHard.length = 0
-              this.createTemp.hardVersion = ''
-              this.createTemp.productModel = ''
-
-              const data = res.data.data.infoList
-              data.forEach((item, index) => {
-                this.tempHard.push(item.hardVersions)
-                this.tempProductModel.push({value: item.productModel, label: item.productModel})
-              })
-
-              this.createTemp.productModel = this.tempProductModel[0].label
-              if (this.tempHard.length !== 0 && this.tempHard[0].length !== 0) {
-                this.tempHard[0].forEach((item, index) => {
-                  this.tempHardVersion.push({value: item, label: item})
-                })
-              }
-
-            } else {
-              this.createTemp.productModel = ''
-              this.createTemp.hardVersion = ''
-              this.tempHard.length = 0
-              this.tempHardVersion.length = 0
-              this.tempProductModel.length = 0
-            }
-          }
-
-        })
-      }
-    },
-    'createTemp.productModel': function (e) {
-      if (this.createTemp.factoryName !== '' && this.createTemp.deviceType !== '') {
-        if (this.tempHard.length !== 0 && this.tempProductModel.length !== 0) {
-          this.tempHardVersion.length = 0
-          this.createTemp.hardVersion = ''
-          var modelIndex = ''
-          this.tempProductModel.forEach((item, index) => {
-            if (this.createTemp.productModel === item.value) {
-              modelIndex = index
-            }
-          })
-          this.tempHard[modelIndex].forEach((item, index) => {
-            this.tempHardVersion.push({value: item, label: item})
-          })
-          this.createTemp.hardVersion = this.tempHardVersion[0].value
-        }
-
-      }
-
-    },
-
+    }
   },
   methods: {
-    getFactoryNameList() {
+    getFactoryName() {
       getFactoryNameList().then(res => {
         if (res.data.success) {
           if (res.data.data.length !== 0) {
@@ -432,8 +352,6 @@ export default {
     getList() {
       this.listLoading = true
       softList(this.listQuery).then(response => {
-        if (response !== null) {
-          const message = response.data.message
           if (response.data.success) {
             const data = response.data.data
             this.list = data.records
@@ -441,31 +359,83 @@ export default {
           } else {
             this.$message({
               showClose: true,
-              message: message,
+              message: response.data.message,
               type: 'error'
             });
           }
-        } else {
-          this.$message({
-            showClose: true,
-            message: '网络错误，无法获取数据',
-            type: 'error'
-          });
-        }
-
       })
       this.listLoading = false
     },
+    getFormProduct() {
+      this.hard = []
+      this.tempProductModel = []
+      this.tempHardVersion = []
+      this.tempProductKey = []
+      this.createTemp.productModel = undefined
+      this.createTemp.hardVersion = undefined
+      let query = {
+        factoryName: this.createTemp.factoryName,
+        productType: this.createTemp.deviceType
+      }
+      this.product(query).then(res => {
+        this.tempProductModel = res.productModel
+        this.tempProductKey = res.productKey
+      })
+    },
+    getFormHard() {
+      this.createTemp.hardVersion = undefined
+      this.tempHardVersion = this.hardVersions(this.tempProductModel, this.createTemp.productModel)
+    },
+    hardVersions(productModel, chosenProduct) {
+      let list = []
+      let modelIndex = 0
+      productModel.forEach((item, index) => {
+        if (chosenProduct === item.value) {
+          modelIndex = index
+        }
+      })
+      if (this.hard.length !== 0 && this.hard[modelIndex].length !== 0) {
+        this.hard[modelIndex].forEach((item, index) => {
+          list.push({value: item, label: item})
+        })
+      }
+      return list
+    },
+    async product(query) {
+      let list = {
+        productModel: [],
+        productKey: []
+      }
+      try {
+        if (query.factoryName !== undefined && query.productType !== undefined) {
+          let res = await queryProductModelList(query)
+          let data = res.data.data
+          if (data.infoList.length !== 0) {
+            data.infoList.forEach((item, index) => {
+              if (item.hardVersions.length !== 0) {
+                this.hard.push(item.hardVersions)
+              }
+              list.productModel.push({value: item.productModel, label: item.productModel})
+              list.productKey.push(item.productKey)
+            })
+          }
+
+        }
+      } catch (err) {
+        console.log(err)
+      }
+      return list
+    },
     resetTemp() {
-      this.createTemp.factoryName = ""
-      this.createTemp.hardVersion = ""
-      this.createTemp.productModel = ""
+      this.createTemp.factoryName = undefined
+      this.createTemp.hardVersion = undefined
+      this.createTemp.productModel = undefined
       this.createTemp.hasSplitPackage = '0'
       this.createTemp.splitLength = 0
       this.createTemp.splitNums = 0
-      this.createTemp.deviceType = ""
-      this.createTemp.softDescribe = ''
-      this.createTemp.softVersion = ''
+      this.createTemp.deviceType = undefined
+      this.createTemp.softDescribe = undefined
+      this.createTemp.softVersion = undefined
     },
     //取消
     cancel() {
@@ -479,7 +449,6 @@ export default {
       this.factoryName = []
       this.resetTemp()
       this.isSplit = false
-      this.getFactoryNameList()
       this.dialogVisible = true
       this.$nextTick(() => {
         this.$refs['createRef'].clearValidate()
@@ -507,17 +476,14 @@ export default {
           softSave(form).then(res => {
             const message = res.data.message
             if (res.data.success) {
-              this.uploadLoading = false
               this.dialogVisible = false
               this.getList()
-              this.$notify({
-                title: '成功',
+              this.$message({
+                showClose: true,
                 message: message,
-                type: 'success',
-                duration: 5000
+                type: 'success'
               })
             } else {
-              this.uploadLoading = false
               this.$notify.error({
                 title: '失败',
                 message: message,
@@ -525,6 +491,7 @@ export default {
               })
             }
           })
+          this.uploadLoading = false
           this.$refs.upload.clearFiles()
           this.isSplit = false
         }
@@ -562,17 +529,16 @@ export default {
             if (res.data.success) {
               this.updateDialogVisible = false
               this.getList()
-              this.$notify({
-                title: '成功',
+              this.$message({
+                showClose: true,
                 message: message,
-                type: 'success',
-                duration: 5000
+                type: 'success'
               })
             } else {
               this.$notify.error({
                 title: '失败',
                 message: message,
-                duration: 5000
+                duration: 0
               })
             }
           })
@@ -604,9 +570,10 @@ export default {
     },
     //重置搜索
     clearSearch() {
-      this.listQuery.factoryName = ""
-      this.listQuery.hardVersion = ""
-      this.listQuery.productModel = ""
+      this.listQuery.factoryName = undefined
+      this.listQuery.hardVersion = undefined
+      this.listQuery.productModel = undefined
+      this.getList()
     },
     //上传
     handleChange(file, fileList) {
@@ -622,8 +589,6 @@ export default {
       } else {
         this.isSplit = false
       }
-
-
     },
     handleError(err, file, fileList) {
       fileList = []
@@ -635,9 +600,6 @@ export default {
     handleRemove(file, fileList) {
       this.fileList = fileList
       this.isSplit = false
-    },
-    beforeUpload(file) {
-
     },
     getFile(param) {
       this.uploadFile = param.file

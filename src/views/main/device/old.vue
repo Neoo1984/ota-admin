@@ -54,7 +54,7 @@
       ref="multipleTable"
       @select="selectOta"
       @select-all="selectAllOta"
-      v-loading="listLoading"
+      :loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
       border
@@ -275,7 +275,7 @@
           <el-upload
             class="upload-demo"
             ref="upload"
-            v-loading="uploadLoading"
+            :loading="uploadLoading"
             element-loading-text="上传中..."
             action=""
             :before-upload="handleBefore"
@@ -306,7 +306,7 @@
       width="90%">
       <el-table
         :data="statusData"
-        v-loading='statusLoading'
+        :loading='statusLoading'
         style="width: 100%">
         <el-table-column label="设备编号" align="center" width="150">
           <template slot-scope="scope">
@@ -352,7 +352,7 @@
       width="90%">
       <el-table
         :data="commandList"
-        v-loading='cmdLoading'
+        :loading='cmdLoading'
         style="width: 100%">
         <el-table-column label="指令内容" align="center" width="150">
           <template slot-scope="scope">

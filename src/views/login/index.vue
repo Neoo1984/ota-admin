@@ -76,6 +76,7 @@
 <script>
 import {validatePhone,validatePassword} from '@/utils/validate'
 import {Base64} from "js-base64";
+import { global } from '@/common'
 
 export default {
   name: 'Login',
@@ -89,7 +90,7 @@ export default {
       loginForm: {
         mobile: '',
         password: '',
-        loginType: "1"
+        loginType: global.loginType.default
       },
       temp: {
         password: "",
@@ -136,7 +137,7 @@ export default {
           this.query = {
             mobile: this.loginForm.mobile,
             password: this.loginForm.password,
-            loginType: "1"
+            loginType: global.loginType.default
           }
           this.query.password = Base64.encode(this.query.password)
           this.$store.dispatch('user/login',this.query ).then((response) => {

@@ -145,43 +145,39 @@ export const splitLength = [
 ]
 /*
 *任务状态
-*     case 0:
-      return '任务开始'
-    case 1:
-      return '任务中止'
+*     case 1:
+      return '执行中'
     case 2:
-      return '任务恢复'
+      return '已中止'
     case 3:
-      return '任务删除'
-    case 4:
-      return '任务结束'
+      return '已结束'
 *  */
 export const taskStatus = [
   {
-    label: '任务开始',
-    value: 0
+    label: '全部',
+    value: undefined
   },
   {
-    label: '任务中止',
+    label: '执行中',
     value: 1
   },
   {
-    label: '任务恢复',
+    label: '已中止',
     value: 2
   },
   {
-    label: '任务删除',
+    label: '已结束',
     value: 3
-  },
-  {
-    label: '任务结束',
-    value: 4
-  },
+  }
 ]
 /*
 OTA状态
 */
 export const otaStatus = [
+  {
+    value: undefined,
+    label: '全部'
+  },
   {
     value: '1',
     label: 'ota指令下发中'
@@ -232,5 +228,13 @@ export const otaStatus = [
 export const changePasswordType = {
   admin: '2',
   user: '1'
+}
+/*
+*登录类型
+*
+* '1' ：后台用户
+*/
+export const loginType = {
+  default: '1',
 }
 

@@ -2,20 +2,23 @@
   <div class="app-container">
     <el-form :inline="true" class="demo-form-inline" size="small">
       <el-form-item label="商户名称">
-        <el-input v-model="listQuery.tenantName" placeholder="商户名称" style="width: 200px" class="filter-item"></el-input>
+        <el-input clearable v-model="listQuery.tenantName" placeholder="商户名称" style="width: 200px" class="filter-item"
+        ></el-input>
       </el-form-item>
       <el-form-item label="商户地址">
-        <el-input v-model="listQuery.address" placeholder="商户地址" style="width: 200px" class="filter-item"></el-input>
+        <el-input clearable v-model="listQuery.address" placeholder="商户地址" style="width: 200px" class="filter-item"
+        ></el-input>
       </el-form-item>
       <el-form-item label="联系人">
-        <el-input v-model="listQuery.manager" placeholder="联系人" style="width: 200px" class="filter-item"></el-input>
+        <el-input clearable v-model="listQuery.manager" placeholder="联系人" style="width: 200px" class="filter-item"
+        ></el-input>
       </el-form-item>
       <el-button type="primary" @click="search" icon="el-icon-search" size="small">查询</el-button>
-      <!--      <el-button type="primary" @click="clearSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>-->
+      <el-button type="primary" @click="clearSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
       <el-button type="primary" @click="handleCreate" icon="el-icon-plus" size="small">新增</el-button>
     </el-form>
     <el-table
-      v-loading="listLoading"
+      :loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
       border
@@ -49,11 +52,12 @@
           <el-button
             size="mini"
             type="text"
-            @click="handleUpdate(scope.row.$index, scope.row)">编辑
+            @click="handleUpdate(scope.row.$index, scope.row)"
+          >编辑
           </el-button>
           <el-popconfirm
-            confirm-button-text='删除'
-            cancel-button-text='取消'
+            confirm-button-text="删除"
+            cancel-button-text="取消"
             icon="el-icon-info"
             icon-color="red"
             title="是否确定删除？"
@@ -63,7 +67,8 @@
               style="margin-left: 10px"
               size="mini"
               type="text"
-              slot="reference">删除
+              slot="reference"
+            >删除
             </el-button>
           </el-popconfirm>
 
@@ -71,18 +76,23 @@
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.current" :limit.sync="listQuery.size"
-                @pagination="getList"/>
+                @pagination="getList"
+    />
 
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="dialogVisible"
 
-      width="60%">
-      <el-form ref="temp"  v-loading="submitLoading" :rules="rules" :model="temp" class="demo-form-inline" :label-position="labelPosition"
-               label-width="100px">
+      width="60%"
+    >
+      <el-form ref="temp" :loading="submitLoading" :rules="rules" :model="temp" class="demo-form-inline"
+               :label-position="labelPosition"
+               label-width="100px"
+      >
         <el-form-item label="商户名称" prop="tenantName">
           <el-input :disabled=disabled v-model="temp.tenantName" placeholder="商户名称" style="width: 80%"
-                    class="filter-item"></el-input>
+                    class="filter-item"
+          ></el-input>
         </el-form-item>
         <el-form-item label="商户地址" prop="address">
           <el-input v-model="temp.address" placeholder="商户地址" style="width: 80%" class="filter-item"></el-input>
@@ -103,19 +113,19 @@
 </template>
 
 <script>
-import {getStoreList} from "@/api/table";
+import { getStoreList } from '@/api/table'
 import Pagination from '@/components/Pagination'
-import {createStore, deleteStore, updateStore} from "@/api/operation";
-import {validatePhone} from "@/utils/validate";
+import { createStore, deleteStore, updateStore } from '@/api/operation'
+import { validatePhone } from '@/utils/validate'
 
 export default {
   name: 'Stores',
-  components: {Pagination},
+  components: { Pagination },
   data() {
     return {
       list: null,
       listLoading: true,
-      submitLoading:false,
+      submitLoading: false,
       labelPosition: 'right',
       total: 0,
       disabled: false,
@@ -138,29 +148,29 @@ export default {
         manager: undefined,
         mobile: undefined
       },
-      validatePhone:validatePhone,
+      validatePhone: validatePhone,
 
       rules: {
-        tenantName: [{required: true, message: '请输入商户名称', trigger: 'blur'}, {
+        tenantName: [{ required: true, message: '请输入商户名称', trigger: 'blur' }, {
           min: 1,
           max: 20,
           message: '商户名过长',
           trigger: 'blur'
         }],
-        address: [{required: true, message: '请输入商户地址', trigger: 'blur'}, {
+        address: [{ required: true, message: '请输入商户地址', trigger: 'blur' }, {
           min: 1,
           max: 20,
           message: '商户地址过长',
           trigger: 'blur'
         }],
-        manager: [{required: true, message: '请输入联系人姓名', trigger: 'blur'}, {
+        manager: [{ required: true, message: '请输入联系人姓名', trigger: 'blur' }, {
           min: 1,
           max: 20,
           message: '联系人姓名过长',
           trigger: 'blur'
         }],
-        mobile: [{required: true, trigger: 'blur', validator: validatePhone}]
-      },
+        mobile: [{ required: true, trigger: 'blur', validator: validatePhone }]
+      }
 
     }
   },
@@ -170,9 +180,18 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      getStoreList(this.listQuery).then(response => {
-        this.list = response.data.data.records
-        this.total = response.data.data.total
+      getStoreList(this.listQuery).then(res => {
+        if (res.data.success) {
+          this.list = res.data.data.records
+          this.total = res.data.data.total
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.data.message,
+            type: 'error'
+          })
+        }
+
       })
       this.listLoading = false
 
@@ -180,7 +199,7 @@ export default {
 
     //新增
     handleCreate() {
-      this.resetTemp();
+      this.resetTemp()
       this.dialogVisible = true
       this.dialogStatus = 'create'
       this.disabled = false
@@ -195,24 +214,24 @@ export default {
           createStore(this.temp).then(res => {
             const message = res.data.message
             if (res.data.success) {
-              this.submitLoading = false
               this.dialogVisible = false
               this.getList()
-              this.$notify({
-                title: '成功',
+              this.$message({
+                showClose: true,
                 message: message,
-                type: 'success',
-                duration: 5000
+                type: 'success'
               })
             } else {
-              this.submitLoading = false
               this.$notify.error({
                 title: '失败',
                 message: message,
-                duration: 5000
+                type: 'error',
+                duration:0
               })
             }
+
           })
+          this.submitLoading = false
         }
       })
     },
@@ -237,17 +256,17 @@ export default {
               this.submitLoading = false
               this.dialogVisible = false
               this.getList()
-              this.$notify({
-                title: '成功',
+              this.$message({
+                showClose: true,
                 message: message,
-                type: 'success',
-                duration: 5000
+                type: 'success'
               })
             } else {
               this.$notify.error({
                 title: '失败',
                 message: message,
-                duration: 5000
+                type: 'error',
+                duration:0
               })
             }
           })
@@ -266,9 +285,11 @@ export default {
             message: '删除成功！'
           })
         } else {
-          this.$message({
+          this.$notify.error({
+            title: '失败',
+            message: message,
             type: 'error',
-            message: message
+            duration:0
           })
         }
       })
@@ -278,16 +299,17 @@ export default {
       this.getList()
     },
     resetTemp() {
-      this.temp.tenantName = ""
-      this.temp.address = ""
-      this.temp.manager = ""
-      this.temp.mobile = ""
+      this.temp.tenantName = undefined
+      this.temp.address = undefined
+      this.temp.manager = undefined
+      this.temp.mobile = undefined
     },
     //重置搜索
     clearSearch() {
-      this.listQuery.tenantName = ""
-      this.listQuery.address = ""
-      this.listQuery.manager = ""
+      this.listQuery.tenantName = undefined
+      this.listQuery.address = undefined
+      this.listQuery.manager = undefined
+      this.getList()
     }
   }
 }

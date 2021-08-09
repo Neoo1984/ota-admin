@@ -2,11 +2,13 @@
   <div class="app-container">
     <el-form :inline="true" size="small">
       <el-form-item label="厂商名称">
-        <el-input v-model="listQuery.factoryName" placeholder="厂商名称" style="width: 200px"
-                  class="filter-item"></el-input>
+        <el-input clearable v-model="listQuery.factoryName" placeholder="厂商名称" style="width: 200px"
+                  class="filter-item"
+        ></el-input>
       </el-form-item>
       <el-form-item label="厂商地址">
-        <el-input v-model="listQuery.address" placeholder="厂商地址" style="width: 200px" class="filter-item"></el-input>
+        <el-input clearable v-model="listQuery.address" placeholder="厂商地址" style="width: 200px" class="filter-item"
+        ></el-input>
       </el-form-item>
 
       <el-button type="primary" @click="search" icon="el-icon-search" size="small">查询</el-button>
@@ -14,7 +16,7 @@
       <el-button type="primary" @click="handleCreate" icon="el-icon-plus" size="small">新增</el-button>
     </el-form>
     <el-table
-      v-loading="listLoading"
+      :loading="listLoading"
       :data="list"
       element-loading-text="Loading"
       border
@@ -38,11 +40,12 @@
           <el-button
             size="mini"
             type="text"
-            @click="handleUpdate(scope.$index, scope.row)">编辑
+            @click="handleUpdate(scope.$index, scope.row)"
+          >编辑
           </el-button>
           <el-popconfirm
-            confirm-button-text='删除'
-            cancel-button-text='取消'
+            confirm-button-text="删除"
+            cancel-button-text="取消"
             icon="el-icon-info"
             icon-color="red"
             title="是否确定删除？"
@@ -52,26 +55,33 @@
               style="margin-left: 10px"
               size="mini"
               type="text"
-              slot="reference">删除
+              slot="reference"
+            >删除
             </el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.current" :limit.sync="listQuery.size"
-                @pagination="getList"/>
+                @pagination="getList"
+    />
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="dialogVisible"
-      width="60%">
-      <el-form v-loading="submitLoading" ref="dataForm" :rules="rules" :model="temp" class="demo-form-inline" :label-position="labelPosition"
-               label-width="100px">
+      width="60%"
+    >
+      <el-form :loading="submitLoading" ref="dataForm" :rules="rules" :model="temp" class="demo-form-inline"
+               :label-position="labelPosition"
+               label-width="100px"
+      >
         <el-form-item label="厂商名称" prop="factoryName">
-          <el-input :disabled=disabled v-model="temp.factoryName" placeholder="厂商名称" style="width: 80%"
-                    class="filter-item"></el-input>
+          <el-input clearable :disabled=disabled v-model="temp.factoryName" placeholder="厂商名称" style="width: 80%"
+                    class="filter-item"
+          ></el-input>
         </el-form-item>
         <el-form-item label="厂商地址" prop="address">
-          <el-input v-model="temp.address" placeholder="厂商地址" style="width: 80%" class="filter-item"></el-input>
+          <el-input clearable v-model="temp.address" placeholder="厂商地址" style="width: 80%" class="filter-item"
+          ></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -84,19 +94,19 @@
 </template>
 
 <script>
-import {getFactoryList} from "@/api/table";
-import {createFactory, deleteFactory, updateFactory} from "@/api/operation";
+import { getFactoryList } from '@/api/table'
+import { createFactory, deleteFactory, updateFactory } from '@/api/operation'
 
 import Pagination from '@/components/Pagination'
 
 export default {
   name: 'factory',
-  components: {Pagination},
+  components: { Pagination },
   data() {
     return {
       list: null,
       listLoading: true,
-      submitLoading:false,
+      submitLoading: false,
       total: 0,
       labelPosition: 'right',
       listQuery: {
@@ -118,19 +128,19 @@ export default {
       },
       disabled: false,
       rules: {
-        address: [{required: true, message: '请输入厂商地址', trigger: 'blur'}, {
+        address: [{ required: true, message: '请输入厂商地址', trigger: 'blur' }, {
           min: 1,
           max: 20,
           message: '厂商地址过长',
           trigger: 'blur'
         }],
-        factoryName: [{required: true, message: '请输入厂商名称', trigger: 'blur'}, {
+        factoryName: [{ required: true, message: '请输入厂商名称', trigger: 'blur' }, {
           min: 1,
           max: 20,
           message: '厂商名过长',
           trigger: 'blur'
-        }],
-      },
+        }]
+      }
     }
   },
   created() {
@@ -140,32 +150,30 @@ export default {
     getList() {
       this.listLoading = true
       getFactoryList(this.listQuery).then(response => {
-        if (response.data.data !==null){
+        if (response.data.data !== null) {
           const data = response.data.data
           this.list = data.records
           this.total = data.total
-        }else {
-          this.listLoading = false
+        } else {
           this.$message({
             showClose: true,
-            message: '获取失败!',
+            message: response.data.message,
             type: 'error'
           })
         }
-
       })
-      this.listLoading = false;
+      this.listLoading = false
 
     },
     resetTemp() {
       this.temp = {
-        factoryName: "",
-        address: "",
+        factoryName: undefined,
+        address: undefined
       }
     },
     //新增
     handleCreate() {
-      this.resetTemp();
+      this.resetTemp()
       this.disabled = false
       this.dialogStatus = 'create'
       this.dialogVisible = true
@@ -180,25 +188,23 @@ export default {
           createFactory(this.temp).then(res => {
             const message = res.data.message
             if (res.data.success) {
-              this.submitLoading = false
               this.dialogVisible = false
               this.getList()
-              this.$notify({
-                title: '成功',
+              this.$message({
+                showClose: true,
                 message: message,
-                type: 'success',
-                duration: 5000
+                type: 'success'
               })
             } else {
-              this.submitLoading = false
               this.$notify.error({
                 title: '失败',
                 message: message,
-                duration: 15000
+                type: 'error',
+                duration:0
               })
             }
-
           })
+          this.submitLoading = false
         }
       })
     },
@@ -221,24 +227,24 @@ export default {
           updateFactory(this.temp).then(res => {
             const message = res.data.message
             if (res.data.success) {
-              this.submitLoading = false
               this.dialogVisible = false
               this.getList()
-              this.$notify({
-                title: '成功',
+              this.$message({
+                showClose: true,
                 message: message,
-                type: 'success',
-                duration: 5000
+                type: 'success'
               })
             } else {
-              this.submitLoading = false
               this.$notify.error({
                 title: '失败',
                 message: message,
-                duration: 15000
+                type: 'error',
+                duration:0
               })
             }
           })
+          this.submitLoading = false
+
         }
       })
     },
@@ -267,8 +273,8 @@ export default {
     },
     //重置搜索
     clearSearch() {
-      this.listQuery.factoryName = ""
-      this.listQuery.address = ""
+      this.listQuery.factoryName = undefined
+      this.listQuery.address = undefined
       this.getList()
     }
   }
