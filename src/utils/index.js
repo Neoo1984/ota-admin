@@ -255,16 +255,16 @@ export function renderTaskStatus(taskStatus) {
 */
 export function renderExTaskStatus(taskStatus) {
   switch (taskStatus) {
+    case 0:
+      return '开始任务'
     case 1:
-      return '已创建'
+      return '中止任务'
     case 2:
-      return '创建失败'
+      return '恢复任务'
     case 3:
-      return '执行中'
+      return '删除任务'
     case 4:
-      return '已中止'
-    case 5:
-      return '已结束'
+      return '任务结束'
     default:
       return '--'
   }

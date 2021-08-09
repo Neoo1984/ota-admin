@@ -690,11 +690,6 @@
           </el-table-column>
           <el-table-column label="升级任务状态" align="center" :formatter="renderExStatus">
           </el-table-column>
-          <el-table-column label="详情" align="center">
-            <template slot-scope="scope">
-              {{ scope.row.sendDetails }}
-            </template>
-          </el-table-column>
 
           <el-table-column label="更新结束时间" align="center" :formatter="renderExEndTime">
           </el-table-column>
@@ -784,9 +779,6 @@
               </template>
             </el-table-column>
             <el-table-column label="升级状态" align="center" :formatter="renderOtaStatus">
-            </el-table-column>
-
-            <el-table-column label="下载进度" align="center" :formatter="renderProgress">
             </el-table-column>
             <el-table-column label="更新结束时间" align="center" :formatter="renderOtaEndTime">
             </el-table-column>
