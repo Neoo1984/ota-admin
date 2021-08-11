@@ -18,7 +18,7 @@
       <el-button type="primary" @click="handleCreate" icon="el-icon-plus" size="small">新增</el-button>
     </el-form>
     <el-table
-      :loading="listLoading"
+      v-loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
       border
@@ -85,7 +85,7 @@
 
       width="60%"
     >
-      <el-form ref="temp" :loading="submitLoading" :rules="rules" :model="temp" class="demo-form-inline"
+      <el-form ref="temp" v-loading="submitLoading" :rules="rules" :model="temp" class="demo-form-inline"
                :label-position="labelPosition"
                label-width="100px"
       >
@@ -182,9 +182,11 @@ export default {
       this.listLoading = true
       getStoreList(this.listQuery).then(res => {
         if (res.data.success) {
+          this.listLoading = false
           this.list = res.data.data.records
           this.total = res.data.data.total
         } else {
+          this.listLoading = false
           this.$message({
             showClose: true,
             message: res.data.message,
@@ -193,7 +195,6 @@ export default {
         }
 
       })
-      this.listLoading = false
 
     },
 
@@ -214,6 +215,7 @@ export default {
           createStore(this.temp).then(res => {
             const message = res.data.message
             if (res.data.success) {
+              this.submitLoading = false
               this.dialogVisible = false
               this.getList()
               this.$message({
@@ -222,16 +224,16 @@ export default {
                 type: 'success'
               })
             } else {
+              this.submitLoading = false
               this.$notify.error({
                 title: '失败',
                 message: message,
                 type: 'error',
-                duration:0
+                duration: 0
               })
             }
 
           })
-          this.submitLoading = false
         }
       })
     },
@@ -262,11 +264,12 @@ export default {
                 type: 'success'
               })
             } else {
+              this.submitLoading = false
               this.$notify.error({
                 title: '失败',
                 message: message,
                 type: 'error',
-                duration:0
+                duration: 0
               })
             }
           })
@@ -289,7 +292,7 @@ export default {
             title: '失败',
             message: message,
             type: 'error',
-            duration:0
+            duration: 0
           })
         }
       })

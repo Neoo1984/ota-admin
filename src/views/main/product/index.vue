@@ -15,7 +15,7 @@
       <el-button type="primary" @click="handleCreate" icon="el-icon-plus" size="small">新增</el-button>
     </el-form>
     <el-table
-      :loading="listLoading"
+      v-loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
       border
@@ -84,7 +84,7 @@
       :title="textMap[dialogStatus]"
       :visible.sync="dialogVisible"
       :show-close="false"
-      :loading='submitLoading'
+      v-loading='submitLoading'
       element-loading-text="提交中..."
       width="60%">
       <el-form ref="dataForm" :rules="rules" :model="temp" class="demo-form-inline" :label-position="labelPosition"
@@ -151,7 +151,7 @@
       :show-close="false"
       element-loading-text="提交中..."
       width="60%">
-      <el-form :loading='submitLoading' ref="updateForm" :rules="rules" :model="updateTemp" class="demo-form-inline"
+      <el-form v-loading='submitLoading' ref="updateForm" :rules="rules" :model="updateTemp" class="demo-form-inline"
                :label-position="labelPosition" label-width="100px">
         <el-form-item label="产品名称" prop="details" label-width="25%">
           <el-input clearable v-model="updateTemp.productName" placeholder="请输入产品名称" style="width: 80%"

@@ -54,7 +54,6 @@ const mutations = {
 }
 
 const actions = {
-  // user login
   login({commit}, userInfo) {
     const {mobile, password, loginType} = userInfo
     return new Promise((resolve, reject) => {
@@ -63,7 +62,7 @@ const actions = {
           const token = response.data.data.token
           const data = response.data.data.userInfo
           commit('SET_TOKEN', token)
-          commit('SET_ROLE',data.userRole)
+          // commit('SET_ROLE',data.userRole)
           commit('SET_USERNAME',data.userName)
           setToken(token)
           resolve(response)
@@ -71,7 +70,8 @@ const actions = {
           console.log(response)
           resolve(response)
         }
-      }).catch(error => {
+      })
+        .catch(error => {
         console.log(error)
         reject(error)
       })
@@ -79,17 +79,7 @@ const actions = {
   },
 
   // user logout
-  logout({commit, state}) {
-    // return myAdmin Promise((resolve, reject) => {
-    //   logout(state.token).then(() => {
-    //     removeToken()
-    //     resetRouter()
-    //     commit('RESET_STATE')
-    //     resolve()
-    //   }).catch(error => {
-    //     reject(error)
-    //   })
-    // })
+  logout({commit}) {
     removeToken()
     resetRouter()
     commit('RESET_STATE')

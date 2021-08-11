@@ -68,7 +68,7 @@
     </div>
     <el-table
       ref="multipleTable"
-      :loading="listLoading"
+      v-loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
       border
@@ -344,14 +344,14 @@
                 <el-button size="mini" type="text" @click="isPop = false">取消</el-button>
                 <el-button type="warning" size="mini" @click="createTask">确定</el-button>
               </div>
-              <el-button type="primary" style="width: 40%" size="small" slot="reference" :loading="creatingTask">
+              <el-button type="primary" style="width: 40%" size="small" slot="reference" v-loading="creatingTask">
                 {{ creatingTask ? '提交中 ...' : '开始升级' }}
               </el-button>
             </el-popover>
           </div>
           <div v-else style="text-align: center;padding-right: 8px">
             <el-button @click="createTask" slot="reference" style="width: 40%" type="primary" size="small"
-                       :loading="creatingTask"
+                       v-loading="creatingTask"
             >{{ creatingTask ? '提交中 ...' : '开始升级' }}
             </el-button>
           </div>
@@ -415,7 +415,7 @@
 
         </el-form>
         <el-table
-          :loading="mainDeviceLoading"
+          v-loading="mainDeviceLoading"
           :data="mainDeviceData"
           @select="selectMain"
           @select-all="selectMain"
@@ -476,7 +476,7 @@
             </el-form-item>
           </el-form>
           <el-table
-            :loading="mainDeviceLoading"
+            v-loading="mainDeviceLoading"
             :data="chosenDeviceData"
             @select="selectChosen"
             @select-all="selectChosen"
@@ -672,7 +672,7 @@
 
         </el-form>
         <el-table
-          :loading="exLoading"
+          v-loading="exLoading"
           :data="exData"
           element-loading-text="加载中..."
           border
@@ -752,13 +752,13 @@
             </el-form-item>
 
             <el-button type="primary" @click="reDetailSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
-            <el-button type="primary" @click="handleExcel(false)" :loading="getExcel" icon="el-icon-plus" size="small">
+            <el-button type="primary" @click="handleExcel(false)" v-loading="getExcel" icon="el-icon-plus" size="small">
               导出表格
             </el-button>
 
           </el-form>
           <el-table
-            :loading="detailLoading"
+            v-loading="detailLoading"
             :data="detailData"
             element-loading-text="加载中..."
             border
@@ -1086,12 +1086,15 @@ export default {
       }
       getOtaList(this.listQuery).then(response => {
         if (response.data.data !== null) {
+          this.listLoading = false
           const data = response.data.data
           this.list = data.records
           this.total = data.total
+        }else {
+          this.listLoading = false
+
         }
       })
-      this.listLoading = false
     },
     //获取厂商
     getFactoryName() {
@@ -1338,11 +1341,12 @@ export default {
               message: res.data.message,
               type: res.data.success ? 'success' : 'error'
             })
+            this.isPop = false
+            this.creatingTask = false
             this.otaDialogVisible = !res.data.success
             this.getList()
           })
-          this.isPop = false
-          this.creatingTask = false
+
         }
       })
 
@@ -1426,11 +1430,8 @@ export default {
         //删除的设备名
         this.deleteSelectedNames.push(item.deviceName)
       })
-      console.log(this.deleteSelectedNames)
       this.deleteSelected = this.chosenDeviceData.filter((item, index, arr) => !this.deleteSelectedNames.includes(item.deviceName))
 
-      console.log(this.chosenDeviceData)
-      console.log(this.deleteSelected)
     },
 
     //删除已选
@@ -1580,9 +1581,11 @@ export default {
       this.exDetailLoading = true
       getExDetail(this.exQuery).then(response => {
         if (response.data.data !== null) {
+          this.exDetailLoading = false
           this.exData = response.data.data.records
           this.exTotal = response.data.data.total
         } else {
+          this.exDetailLoading = false
           this.$message({
             showClose: true,
             message: '获取失败!',
@@ -1590,7 +1593,7 @@ export default {
           })
         }
       })
-      this.exDetailLoading = false
+
     },
     reExSearch() {
       this.exQuery.mainDeviceName = undefined
@@ -1619,10 +1622,12 @@ export default {
       getOtaDetail(this.detailQuery).then(response => {
         if (response.data.data !== null) {
           if (response.data.data.records !== null) {
+            this.detailLoading = false
             this.detailData = response.data.data.records
             this.detailTotal = response.data.data.total
           }
         } else {
+          this.detailLoading = false
           this.$message({
             showClose: true,
             message: '获取失败!',
@@ -1630,7 +1635,6 @@ export default {
           })
         }
       })
-      this.detailLoading = false
     },
     reDetailSearch() {
       this.detailQuery.mainDeviceName = undefined
@@ -1733,8 +1737,9 @@ export default {
         } else { // IE10+下载
           navigator.msSaveBlob(blob, fileName)
         }
+        this.getExcel = false
       })
-      this.getExcel = false
+
 
     }
   }

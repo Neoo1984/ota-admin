@@ -9,13 +9,14 @@
           style="width: 400px"
           clearable
           @input="getList"
-          class="filter-item">
+          class="filter-item"
+        >
         </el-input>
       </el-form-item>
       <el-button type="primary" icon="el-icon-plus" size="small" @click="handleCreate">新增用户</el-button>
     </el-form>
     <el-table
-      :loading="listLoading"
+      v-loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
       border
@@ -58,28 +59,39 @@
           <el-button
             size="mini"
             type="text"
-            @click="handleDetail(scope.row.$index, scope.row)">详情
+            @click="handleDetail(scope.row.$index, scope.row)"
+          >详情
           </el-button>
           <el-popover
             placement="right"
             width="400"
             :value="showPop"
-            trigger="click">
+            trigger="click"
+          >
             <el-form :model="password"
                      class="form-inline"
                      :label-position="labelPosition"
-                     label-width="50px">
+                     label-width="50px"
+            >
               <el-form-item label="密 码">
                 <el-tooltip class="item" effect="dark" content="此处展示的是后台加密后的密码" placement="top">
-                  <el-input v-model="password.password" :disabled="changePwd" placeholder="请输入密码" :show-password="changePwd" style="width:80%"></el-input>
+                  <el-input v-model="password.password" :disabled="changePwd" placeholder="请输入密码"
+                            :show-password="changePwd" style="width:80%"
+                  ></el-input>
                 </el-tooltip>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" size="mini" @click="changePwd = false">修改密码</el-button>
-                <el-button type="danger" size="mini" v-if="!changePwd" @click="sendPassword(scope.row.$index, scope.row)">提交</el-button>
+                <el-button type="danger" size="mini" v-if="!changePwd"
+                           @click="sendPassword(scope.row.$index, scope.row)"
+                >提交
+                </el-button>
               </el-form-item>
             </el-form>
-            <el-button style="margin-left: 10px" type="text" size="mini" slot="reference" @click="showPassword(scope.row.$index, scope.row)">密码</el-button>
+            <el-button style="margin-left: 10px" type="text" size="mini" slot="reference"
+                       @click="showPassword(scope.row.$index, scope.row)"
+            >密码
+            </el-button>
           </el-popover>
           <el-popconfirm
             :confirm-button-text=confirmText(scope.row.isDelete,true)
@@ -106,7 +118,8 @@
       :total="total"
       :page.sync="listQuery.current"
       :limit.sync="listQuery.size"
-      @pagination="getList"/>
+      @pagination="getList"
+    />
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="dialogVisible"
@@ -114,7 +127,7 @@
     >
       <el-form
         ref="dataForm"
-        :loading="submitLoading"
+        v-loading="submitLoading"
         :rules="rules"
         :model="temp"
         class="form-inline"
@@ -122,10 +135,12 @@
         label-width="100px"
       >
         <el-form-item label="手机号" prop="mobile" v-if="dialogStatus==='create'">
-          <el-input clearable v-model="temp.mobile" placeholder="请输入手机号" style="width: 80%" class="filter-item"></el-input>
+          <el-input clearable v-model="temp.mobile" placeholder="请输入手机号" style="width: 80%" class="filter-item"
+          ></el-input>
         </el-form-item>
         <el-form-item label="用户名称" prop="userName">
-          <el-input clearable v-model="temp.userName" placeholder="请输入用户名" style="width: 80%" class="filter-item"></el-input>
+          <el-input clearable v-model="temp.userName" placeholder="请输入用户名" style="width: 80%" class="filter-item"
+          ></el-input>
         </el-form-item>
         <el-form-item label="邮箱地址" prop="email">
           <el-input clearable v-model="temp.email" placeholder=" 请输入邮箱地址" style="width:80%"></el-input>
@@ -137,7 +152,8 @@
               v-for="item in userRole"
               :key="item.index"
               :label="item.label"
-              :value="item.value">
+              :value="item.value"
+            >
             </el-option>
           </el-select>
         </el-form-item>
@@ -156,21 +172,22 @@
 </template>
 
 <script>
-import {getUser} from '@/api/table'
+import { getUser } from '@/api/table'
 import Pagination from '@/components/Pagination'
-import {addUser, operateUser, updateUser} from '@/api/operation'
-import {renderDelete, renderTime, renderRole} from '@/utils'
-import {isEmail, validatePhone} from "@/utils/validate";
-import {changePasswordType, userRole} from '@/common/global'
-import {Base64} from "js-base64";
-import {changePassword} from '@/api/user'
-import {MessageBox} from "element-ui";
+import { addUser, operateUser, updateUser } from '@/api/operation'
+import { renderDelete, renderTime, renderRole } from '@/utils'
+import { isEmail, validatePhone } from '@/utils/validate'
+import { changePasswordType, userRole } from '@/common/global'
+import { Base64 } from 'js-base64'
+import { changePassword } from '@/api/user'
+import { MessageBox } from 'element-ui'
+
 export default {
   name: 'ManagerUser',
-  components: {Pagination},
+  components: { Pagination },
   data() {
     return {
-      userInfo:JSON.parse(sessionStorage.getItem('userInfo')),
+      userInfo: JSON.parse(sessionStorage.getItem('userInfo')),
       list: null,
       listLoading: false,
       dialogVisible: false,
@@ -184,7 +201,7 @@ export default {
       userRole: userRole,
       textMap: {
         create: '新增',
-        update: '编辑',
+        update: '编辑'
       },
       temp: {
         userName: undefined,
@@ -203,24 +220,24 @@ export default {
         keyWord: undefined
       },
       rules: {
-        userName: [{required: true, message: '请输入用户名称', trigger: 'blur'}, {
+        userName: [{ required: true, message: '请输入用户名称', trigger: 'blur' }, {
           min: 1,
           max: 20,
           message: '用户名过长',
           trigger: 'blur'
         }],
-        mobile : [{required: true, trigger: 'blur', validator: validatePhone}],
-        userRole: [{required: true, message: '请选择用户角色', trigger: 'blur',}],
-        password: [{required: true, message: '请输入密码', trigger: 'blur',}],
-        email: [{required: true, message: '请输入电子邮箱', trigger: 'blur', validator: isEmail}]
+        mobile: [{ required: true, trigger: 'blur', validator: validatePhone }],
+        userRole: [{ required: true, message: '请选择用户角色', trigger: 'blur' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        email: [{ required: true, message: '请输入电子邮箱', trigger: 'blur', validator: isEmail }]
       },
       //修改密码
-      password:{
-        password:'',
-        mobile:''
+      password: {
+        password: '',
+        mobile: ''
       },
-      changePwd:true,
-      showPop:false
+      changePwd: true,
+      showPop: false
     }
   },
   created() {
@@ -231,12 +248,15 @@ export default {
       this.listLoading = true
       getUser(this.listQuery).then(res => {
         if (res.data.data !== null) {
+          this.listLoading = false
           this.list = res.data.data.records
           this.total = res.data.data.total
 
+        } else {
+          this.listLoading = false
         }
       })
-      this.listLoading = false
+
     },
     confirmText(isDelete, isText) {
       if (isText) {
@@ -285,17 +305,43 @@ export default {
             if (res.data != null) {
               const message = res.data.message
               if (res.data.success) {
+                this.submitLoading = false
+
+                this.dialogVisible = false
+
                 if (this.userInfo.userId === this.temp.userId) {
-                  this.$store.commit('user/SET_USERNAME',this.temp.userName)
+                  if (this.temp.userName !== undefined) {
+                    this.$store.commit('user/SET_USERNAME', this.temp.userName)
+                  }
+                  let role = JSON.parse(sessionStorage.getItem('userRole'))
+                  if (this.temp.userRole !== role) {
+                    sessionStorage.setItem('path','/dashboard')
+                    MessageBox.confirm(
+                      '当前权限已经修改，请重新登录',
+                      '确认登出', {
+                        confirmButtonText: '退出登录',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                      }
+                    ).then(() => {
+                      this.$store.dispatch('user/logout')
+                      console.log(this.$route.fullPath)
+                      this.$router.push(`/login?redirect=/dashboard`)
+                    })
+
+                  }
+                }else {
+                  this.getList()
+                  this.$message({
+                    showClose: true,
+                    message: message,
+                    type: 'success'
+                  })
                 }
 
-                this.getList()
-                this.$message({
-                  showClose: true,
-                  message: message,
-                  type: 'success'
-                })
               } else {
+                this.submitLoading = false
+
                 this.$message({
                   showClose: true,
                   message: message,
@@ -305,8 +351,6 @@ export default {
             }
 
           })
-          this.submitLoading = false
-          this.dialogVisible = false
         }
       })
 
@@ -341,6 +385,7 @@ export default {
           addUser(this.temp).then(res => {
             const message = res.data.message
             if (res.data.success) {
+              this.submitLoading = false
               this.dialogVisible = false
               this.getList()
               this.$message({
@@ -349,6 +394,7 @@ export default {
                 type: 'success'
               })
             } else {
+              this.submitLoading = false
               this.$message({
                 showClose: true,
                 message: message,
@@ -356,28 +402,27 @@ export default {
               })
             }
           })
-          this.submitLoading = false
         }
       })
     },
     //修改密码
-    sendPassword(){
+    sendPassword() {
       let query = {
-        newPassword:Base64.encode(this.password.password),
-        mobile:this.password.mobile,
+        newPassword: Base64.encode(this.password.password),
+        mobile: this.password.mobile,
         changeType: changePasswordType.admin
       }
       changePassword(query).then((res) => {
-        if (res.data != null){
+        if (res.data != null) {
           this.$message({
             showClose: true,
             message: res.data.message,
             type: res.data.success ? 'success' : 'error'
           })
-          if (res.data.success){
+          if (res.data.success) {
             this.getList()
             //如果当前修改的为当前登陆的账号，则跳转到登录
-            if (this.userInfo.mobile === query.mobile){
+            if (this.userInfo.mobile === query.mobile) {
               MessageBox.confirm(
                 '密码已修改，请重新登录',
                 '重新登录', {
@@ -398,7 +443,7 @@ export default {
       })
       this.showPop = false
     },
-    showPassword(index,row){
+    showPassword(index, row) {
       this.changePwd = true
       this.password.password = undefined
       this.password.mobile = undefined
@@ -416,7 +461,7 @@ export default {
     //重置搜索
     clearSearch() {
       this.listQuery.keyWord = undefined
-    },
+    }
   }
 
 }

@@ -16,7 +16,7 @@
       <el-button type="primary" @click="handleCreate" icon="el-icon-plus" size="small">新增</el-button>
     </el-form>
     <el-table
-      :loading="listLoading"
+      v-loading="listLoading"
       :data="list"
       element-loading-text="Loading"
       border
@@ -70,7 +70,7 @@
       :visible.sync="dialogVisible"
       width="60%"
     >
-      <el-form :loading="submitLoading" ref="dataForm" :rules="rules" :model="temp" class="demo-form-inline"
+      <el-form v-loading="submitLoading" ref="dataForm" :rules="rules" :model="temp" class="demo-form-inline"
                :label-position="labelPosition"
                label-width="100px"
       >
@@ -151,10 +151,12 @@ export default {
       this.listLoading = true
       getFactoryList(this.listQuery).then(response => {
         if (response.data.data !== null) {
+          this.listLoading = false
           const data = response.data.data
           this.list = data.records
           this.total = data.total
         } else {
+          this.listLoading = false
           this.$message({
             showClose: true,
             message: response.data.message,
@@ -162,7 +164,6 @@ export default {
           })
         }
       })
-      this.listLoading = false
 
     },
     resetTemp() {
@@ -188,6 +189,7 @@ export default {
           createFactory(this.temp).then(res => {
             const message = res.data.message
             if (res.data.success) {
+              this.submitLoading = false
               this.dialogVisible = false
               this.getList()
               this.$message({
@@ -196,6 +198,7 @@ export default {
                 type: 'success'
               })
             } else {
+              this.submitLoading = false
               this.$notify.error({
                 title: '失败',
                 message: message,
@@ -204,7 +207,7 @@ export default {
               })
             }
           })
-          this.submitLoading = false
+
         }
       })
     },
@@ -227,6 +230,7 @@ export default {
           updateFactory(this.temp).then(res => {
             const message = res.data.message
             if (res.data.success) {
+              this.submitLoading = false
               this.dialogVisible = false
               this.getList()
               this.$message({
@@ -235,6 +239,7 @@ export default {
                 type: 'success'
               })
             } else {
+              this.submitLoading = false
               this.$notify.error({
                 title: '失败',
                 message: message,
@@ -243,7 +248,6 @@ export default {
               })
             }
           })
-          this.submitLoading = false
 
         }
       })

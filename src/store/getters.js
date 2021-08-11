@@ -3,10 +3,11 @@ const getters = {
   device: state => state.app.device,
   token: state => state.user.token,
   avatar: state => state.user.avatar,
-  userRole: state => state.user.userRole || sessionStorage.getItem('userRole'),
+  userRole: state => state.user.userRole,
   userName: state => state.user.userName || sessionStorage.getItem('userName'),
   userType: state => state.user.userType,
   mobile: state => state.user.mobile,
   userId: state => state.user.userId,
+  permission_routes: state => state.permission.routes
 }
 export default getters

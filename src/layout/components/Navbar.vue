@@ -8,14 +8,10 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <!--          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">-->
-          <div class="user-avatar">你好, <span class="helloName">{{userName}} </span> <i class="el-icon-arrow-down"></i></div>
+          <div class="user-avatar">你好, <span :class="{adminName : userRole=== '1',userName: userRole !== '1'}"
+          >{{ userName }} </span> <i class="el-icon-arrow-down"></i></div>
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <!--          <router-link to="/">-->
-          <!--            <el-dropdown-item>-->
-          <!--              首页-->
-          <!--            </el-dropdown-item>-->
-          <!--          </router-link>-->
           <el-dropdown-item divided @click.native="handlePwd()">
             <span style="display:block;">修改账户</span>
           </el-dropdown-item>
@@ -28,10 +24,12 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="restPwdDialogVisible"
-      width="40%">
+      width="40%"
+    >
       <el-form ref="ruleForm" :rules="rules" :model="ruleForm" class="demo-form-inline"
                :label-position="labelPosition"
-               label-width="100px">
+               label-width="100px"
+      >
         <el-form-item label="手机号" prop="mobile">
           <el-input v-model="ruleForm.mobile" disabled></el-input>
         </el-form-item>
@@ -41,14 +39,14 @@
         <el-form-item label="新密码" prop="newPassword">
           <el-input v-model="ruleForm.newPassword" placeholder="请输入密码" autocomplete="false"></el-input>
         </el-form-item>
-<!--        <el-form-item label="确认密码" prop="checkPass">-->
-<!--          <el-input v-model="ruleForm.checkPass" placeholder="请确认密码" autocomplete="true"></el-input>-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="确认密码" prop="checkPass">-->
+        <!--          <el-input v-model="ruleForm.checkPass" placeholder="请确认密码" autocomplete="true"></el-input>-->
+        <!--        </el-form-item>-->
 
       </el-form>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click='restPwdDialogVisible = false'>取 消</el-button>
+        <el-button @click="restPwdDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click=confirmPwd()>确 定</el-button>
       </span>
     </el-dialog>
@@ -57,13 +55,12 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import {changePassword} from "@/api/user"
-import {MessageBox} from "element-ui";
-import store from "@/store";
-import {changePasswordType} from "@/common/global";
+import { changePassword } from '@/api/user'
+import { MessageBox } from 'element-ui'
+import { changePasswordType } from '@/common/global'
 
 export default {
   components: {
@@ -74,62 +71,54 @@ export default {
     ...mapGetters([
       'sidebar',
       'avatar',
-      'userName'
+      'userName',
+      'userRole'
     ])
 
   },
   data() {
-    const checkMobile = (rule, value, callback) => {
-      const phone = /^1[3456789]\d{9}$/
-      if (value === '') {
-        callback(new Error('手机号不能为空'));
-      } else if (!phone.test(value)) {
-        callback(new Error('请输入正确的手机号'));
-      } else {
-        callback();
-      }
-    };
 
     const validatePass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入密码'));
+        callback(new Error('请输入密码'))
       } else if (this.ruleForm.checkPass !== '') {
-        this.$refs.ruleForm.validateField('checkPass');
+        this.$refs.ruleForm.validateField('checkPass')
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validatePass2 = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请再次输入密码'));
+        callback(new Error('请再次输入密码'))
       } else if (value !== this.ruleForm.newPassword) {
-        callback(new Error('两次输入密码不一致!'));
+        callback(new Error('两次输入密码不一致!'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
-      userInfo:JSON.parse(sessionStorage.getItem('userInfo')),
+      userInfo: JSON.parse(sessionStorage.getItem('userInfo')),
       textMap: {
-        resetPwd: '修改账户',
+        resetPwd: '修改账户'
       },
       dialogStatus: '',
       restPwdDialogVisible: false,
       labelPosition: 'right',
       rules: {
-        oldPassword: [{required: true, message: '请输入原密码', trigger: 'blur'}],
-        newPassword: [{required: true, message: '请输入新密码', trigger: 'blur'}],
-        pass: [{required: true, validator: validatePass, trigger: 'blur'}],
-        checkPass: [{required: true, validator: validatePass2, trigger: 'blur'}],
+        oldPassword: [{ required: true, message: '请输入原密码', trigger: 'blur' }],
+        newPassword: [{ required: true, message: '请输入新密码', trigger: 'blur' }],
+        pass: [{ required: true, validator: validatePass, trigger: 'blur' }],
+        checkPass: [{ required: true, validator: validatePass2, trigger: 'blur' }]
       },
       ruleForm: {
         oldPassword: '',
         newPassword: '',
         changeType: changePasswordType.user,
-        mobile:''
+        mobile: ''
       }
     }
   },
+
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -137,7 +126,7 @@ export default {
     async logout() {
       MessageBox.confirm(
         '是否退出登录？',
-        "确认登出", {
+        '确认登出', {
           confirmButtonText: '退出登录',
           cancelButtonText: '取消',
           type: 'warning'
@@ -196,8 +185,8 @@ export default {
       })
     },
     clearPwd() {
-      this.ruleForm.newPassword = ''
-      this.ruleForm.oldPassword = ''
+      this.ruleForm.newPassword = undefined
+      this.ruleForm.oldPassword = undefined
     }
 
   }
@@ -268,10 +257,7 @@ export default {
           height: 40px;
           border-radius: 10px;
         }
-        .helloName {
-          color: #5cb6ff;
-          font-weight: bold;
-        }
+
         .el-icon-caret-bottom {
           cursor: pointer;
           position: absolute;
@@ -280,6 +266,16 @@ export default {
           font-size: 12px;
         }
       }
+    }
+
+    .adminName {
+      color: #E6A23C;
+      font-weight: bold;
+    }
+
+    .userName {
+      color: #5cb6ff;
+      font-weight: bold;
     }
   }
 }

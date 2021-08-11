@@ -10,7 +10,7 @@
         ></el-input>
       </el-form-item>
 
-      <el-button type="primary" @click="handleRefresh" :loading="refreshLoading" icon="el-icon-refresh" size="small">
+      <el-button type="primary" @click="handleRefresh" v-loading="refreshLoading" icon="el-icon-refresh" size="small">
         刷新
       </el-button>
       <el-tooltip class="item" effect="dark" content="勾选柜子编号进行OTA" placement="top">
@@ -41,7 +41,7 @@
             >
               <el-table
                 :data="statusData"
-                :loading="statusLoading"
+                v-loading="statusLoading"
               >
                 <el-table-column label="设备编号" align="center" width="150">
                   <template slot-scope="scope">
@@ -253,7 +253,7 @@ export default {
               console.log('刷新失败' + cmdRes)
               that.$message({
                 showClose: true,
-                message: '刷新失败，请重试！',
+                message: '刷新失败，请刷新重试！',
                 type: 'error'
               })
             } else {

@@ -19,7 +19,7 @@
     </el-form>
     <el-table
       ref="multipleTable"
-      :loading="listLoading"
+      v-loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
       border
@@ -188,7 +188,7 @@
         </el-form-item>
         <el-form-item label="上传软件包" prop="excelFile" style="width: 80%">
           <el-upload
-            :loading="uploadLoading"
+            v-loading="uploadLoading"
             element-loading-text="上传中..."
             class="upload-demo"
             ref="upload"
@@ -353,10 +353,12 @@ export default {
       this.listLoading = true
       softList(this.listQuery).then(response => {
           if (response.data.success) {
+            this.listLoading = false
             const data = response.data.data
             this.list = data.records
             this.total = data.total
           } else {
+            this.listLoading = false
             this.$message({
               showClose: true,
               message: response.data.message,
@@ -364,7 +366,6 @@ export default {
             });
           }
       })
-      this.listLoading = false
     },
     getFormProduct() {
       this.hard = []
@@ -476,6 +477,7 @@ export default {
           softSave(form).then(res => {
             const message = res.data.message
             if (res.data.success) {
+              this.uploadLoading = false
               this.dialogVisible = false
               this.getList()
               this.$message({
@@ -484,6 +486,7 @@ export default {
                 type: 'success'
               })
             } else {
+              this.uploadLoading = false
               this.$notify.error({
                 title: '失败',
                 message: message,
@@ -491,7 +494,6 @@ export default {
               })
             }
           })
-          this.uploadLoading = false
           this.$refs.upload.clearFiles()
           this.isSplit = false
         }

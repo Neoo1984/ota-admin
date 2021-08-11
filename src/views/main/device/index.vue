@@ -81,7 +81,7 @@
     <el-table
       ref="multipleTable"
       @select="selectOta"
-      :loading="listLoading"
+      v-loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
       border
@@ -333,7 +333,7 @@
           <el-upload
             class="upload-demo"
             ref="upload"
-            :loading="uploadLoading"
+            v-loading="uploadLoading"
             element-loading-text="上传中..."
             action=""
             :on-success="handleSuccess"
@@ -853,12 +853,14 @@ export default {
       }
       getDevice(this.listQuery).then(res => {
         if (res.data.success) {
+          this.listLoading = false
           if (res.data.data.length !== 0) {
             let device = res.data.data
             this.list = device.records
             this.total = device.total
           }
         } else {
+          this.listLoading = false
           this.$message({
             showClose: true,
             message: '获取设备失败',
@@ -866,7 +868,6 @@ export default {
           })
         }
       })
-      this.listLoading = false
     },
 //过滤表格
 

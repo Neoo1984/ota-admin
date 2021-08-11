@@ -11,7 +11,7 @@
         ></el-input>
       </el-form-item>
 
-      <el-button type="primary" @click="handleRefresh" :loading="refreshLoading" icon="el-icon-refresh" size="small">
+      <el-button type="primary" @click="handleRefresh" v-loading="refreshLoading" icon="el-icon-refresh" size="small">
         刷新
       </el-button>
     </el-form>
@@ -109,7 +109,7 @@ export default {
               clearInterval(interval)
               that.$message({
                 showClose: true,
-                message: '刷新失败：' + cmdRes,
+                message: '刷新失败，请重试！' ,
                 type: 'error'
               })
             } else {
@@ -135,7 +135,7 @@ export default {
               })
             }
 
-          }, 3000)
+          }, 1000)
 
         } else {
           this.refreshLoading = false

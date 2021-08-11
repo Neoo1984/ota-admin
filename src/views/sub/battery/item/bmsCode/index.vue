@@ -9,7 +9,7 @@
         ></el-input>
       </el-form-item>
 
-      <el-button type="primary" @click="handleRefresh" :loading="refreshLoading" icon="el-icon-refresh" size="small">
+      <el-button type="primary" @click="handleRefresh" v-loading="refreshLoading" icon="el-icon-refresh" size="small">
         刷新
       </el-button>
     </el-form>
@@ -35,8 +35,8 @@
 <script>
 
 
-import {commandResult, deviceData, refreshDevice} from "@/api/operation";
-import {renderTime} from "@/utils";
+import { commandResult, deviceData, refreshDevice } from '@/api/operation'
+import { renderTime } from '@/utils'
 
 export default {
   name: 'BmsCode',
@@ -50,7 +50,7 @@ export default {
       infoSoc: [],
 
       //柜子
-      refreshLoading: false,
+      refreshLoading: false
     }
   },
   created() {
@@ -64,7 +64,7 @@ export default {
         text: 'Loading',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
-      });
+      })
       let res = await deviceData(this.deviceInfo.deviceName)
       if (res.data.success && res.data.data !== null) {
         this.dataTime = renderTime(res.data.data.dataTime)
@@ -76,17 +76,16 @@ export default {
             this.infoSoc[index] = item.batteryDataRecord.batSn
           }
         })
-        loading.close();
+        loading.close()
 
       } else {
-        loading.close();
+        loading.close()
         this.$message({
           showClose: true,
           message: '获取失败: ' + res.data.message,
           type: 'error'
         })
       }
-
 
     },
 
@@ -101,15 +100,13 @@ export default {
       if (idRes.data !== null) {
         if (idRes.data.success) {
           messageId = idRes.data.data.messageId
-
-          interval = setInterval(function () {
-            console.log(i)
+          interval = setInterval(function() {
             if (i === 4) {
               that.refreshLoading = false
               clearInterval(interval)
               that.$message({
                 showClose: true,
-                message: '刷新失败：' + cmdRes,
+                message: '刷新失败，请重试！',
                 type: 'error'
               })
             } else {
@@ -135,7 +132,7 @@ export default {
               })
             }
 
-          }, 3000)
+          }, 1000)
 
         } else {
           this.refreshLoading = false
@@ -146,7 +143,7 @@ export default {
           })
         }
       }
-    },
+    }
 
   }
 

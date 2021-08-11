@@ -42,7 +42,7 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
+      <el-button v-loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
                  @click.native.prevent="handleLogin">登录
       </el-button>
 
@@ -143,6 +143,7 @@ export default {
           this.$store.dispatch('user/login',this.query ).then((response) => {
             if (response.data.success){
               sessionStorage.setItem('userInfo',JSON.stringify(response.data.data.userInfo))
+              sessionStorage.setItem('userRole', response.data.data.userInfo.userRole.toString())
               this.$router.push({path: this.redirect || '/'})
               this.loading = false
             }else {

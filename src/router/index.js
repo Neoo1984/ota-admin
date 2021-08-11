@@ -38,11 +38,7 @@ export const constantRoutes = [
     hidden: true
   },
 
-  {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  },
+
 
   {
     path: '/',
@@ -53,7 +49,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/main/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard', state: '1' }
+      meta: { title: '首页', icon: 'home', state: '1' }
     }]
   },
   {
@@ -134,22 +130,22 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/user',
-    component: Layout,
-    redirect: '/user',
-    meta: { title: '用户管理', icon: 'user' },
-    name: 'User',
-    children: [
-      {
-        path: 'managerUser',
-        component: () => import('@/views/main/user/item/managerUser/index'),
-        name: 'ManagerUser',
-        meta: { title: '后台用户管理', icon: 'user', affix: true, state: '1' }
-      }
-    ]
-
-  },
+  // {
+  //   path: '/user',
+  //   component: Layout,
+  //   redirect: '/user',
+  //   meta: { title: '用户管理', icon: 'user',roles:['1'] },
+  //   name: 'User',
+  //   children: [
+  //     {
+  //       path: 'managerUser',
+  //       component: () => import('@/views/main/user/managerUser'),
+  //       name: 'ManagerUser',
+  //       meta: { title: '后台用户管理', icon: 'user', affix: true, state: '1',roles:['1'] }
+  //     }
+  //   ]
+  //
+  // },
   {
     path: '/detail',
     component: () => import('@/views/sub/detail/index'),
@@ -253,9 +249,12 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
+  },
 
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
 ]
 /**
  * asyncRoutes
@@ -266,14 +265,14 @@ export const asyncRoutes = [
     path: '/user',
     component: Layout,
     redirect: '/user',
-    meta: { title: '用户管理', icon: 'user',role: ['1']},
+    meta: { state: '1',roles: ['1']},
 
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/main/user/item/managerUser/index'),
+        path: 'managerUser',
+        component: () => import('@/views/main/user/managerUser'),
         name: 'ManagerUser',
-        meta: { title: '后台用户管理', icon: 'user', affix: true, state: '1',role: ['1'] }
+        meta: { icon: 'user',title: '后台用户管理', state: '1',roles: ['1'] }
       }
     ]
   },

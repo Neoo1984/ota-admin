@@ -11,7 +11,7 @@
         ></el-input>
       </el-form-item>
 
-      <el-button type="primary" @click="handleRefresh" :loading="refreshLoading" icon="el-icon-refresh" size="small">
+      <el-button type="primary" @click="handleRefresh" v-loading="refreshLoading" icon="el-icon-refresh" size="small">
         刷新
       </el-button>
     </el-form>
@@ -23,7 +23,7 @@
 
           <el-checkbox :label="index+1" :key="index" class="check-list"></el-checkbox>
           <div class="info" v-if="warningIndex.indexOf((index+1)) > -1">
-            <span class="info-item" v-for="(item,index) in warningType[(index +1)]">{{item}}</span>
+            <span class="info-item" v-for="(item,index) in warningType[(index +1)]">{{ item }}</span>
           </div>
           <div class="info" v-else>
 
@@ -40,8 +40,8 @@
 <script>
 
 
-import {commandResult, deviceData, getWarning, refreshDevice} from "@/api/operation";
-import {renderTime, warningType} from "@/utils";
+import { commandResult, deviceData, getWarning, refreshDevice } from '@/api/operation'
+import { renderTime, warningType } from '@/utils'
 
 export default {
   name: 'Warning',
@@ -58,7 +58,7 @@ export default {
       warningType: null,
 
       //柜子
-      refreshLoading: false,
+      refreshLoading: false
     }
   },
   created() {
@@ -72,7 +72,7 @@ export default {
         text: 'Loading',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
-      });
+      })
       let res = await deviceData(this.deviceInfo.deviceName)
       let warningRes = await getWarning(this.deviceInfo.deviceName)
       if (res.data.success && res.data.data !== null) {
@@ -97,7 +97,7 @@ export default {
           type: 'error'
         })
       }
-      loading.close();
+      loading.close()
 
     },
 
@@ -113,14 +113,14 @@ export default {
         if (idRes.data.success) {
           messageId = idRes.data.data.messageId
 
-          interval = setInterval(function () {
+          interval = setInterval(function() {
             console.log(i)
             if (i === 4) {
               that.refreshLoading = false
               clearInterval(interval)
               that.$message({
                 showClose: true,
-                message: '刷新失败：' + cmdRes,
+                message: '刷新失败，请刷新重试！',
                 type: 'error'
               })
             } else {
@@ -146,7 +146,7 @@ export default {
               })
             }
 
-          }, 3000)
+          }, 1000)
 
         } else {
           this.refreshLoading = false
@@ -157,7 +157,7 @@ export default {
           })
         }
       }
-    },
+    }
 
   }
 

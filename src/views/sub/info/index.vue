@@ -14,7 +14,9 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="厂商名称" prop="factoryName">
-              <el-select v-model="mainTemp.factoryName" disabled placeholder="请选择厂商名称" style="width: 200px" class="filter-item">
+              <el-select v-model="mainTemp.factoryName" disabled placeholder="请选择厂商名称" style="width: 200px"
+                         class="filter-item"
+              >
                 <el-option
                   v-for="item in factoryName"
                   :key="item.index"
@@ -25,7 +27,9 @@
               </el-select>
             </el-form-item>
             <el-form-item label="设备类型" prop="deviceType">
-              <el-select v-model="mainTemp.deviceType" disabled placeholder="请选择设备类型" style="width: 200px" class="filter-item">
+              <el-select v-model="mainTemp.deviceType" disabled placeholder="请选择设备类型" style="width: 200px"
+                         class="filter-item"
+              >
                 <el-option
                   v-for="item in deviceType"
                   :key="item.index"
@@ -46,7 +50,9 @@
           >
 
             <el-form-item label="产品型号" prop="productModel">
-              <el-select v-model="mainTemp.productModel" disabled placeholder="请选择产品型号" style="width: 200px" class="filter-item">
+              <el-select v-model="mainTemp.productModel" disabled placeholder="请选择产品型号" style="width: 200px"
+                         class="filter-item"
+              >
                 <el-option
                   v-for="item in productModel"
                   :key="item.index"
@@ -57,7 +63,9 @@
               </el-select>
             </el-form-item>
             <el-form-item label="硬件版本" prop="hardVersion">
-              <el-select v-model="mainTemp.hardVersion" disabled placeholder="请选择产品型号" style="width: 200px" class="filter-item">
+              <el-select v-model="mainTemp.hardVersion" disabled placeholder="请选择产品型号" style="width: 200px"
+                         class="filter-item"
+              >
                 <el-option
                   v-for="item in hardVersion"
                   :key="item.index"
@@ -74,10 +82,10 @@
 
       <el-table
         :data="statusData"
-        :loading="statusLoading"
+        v-loading="statusLoading"
         style="width: 90%"
       >
-        <el-table-column label="设备编号" align="center" >
+        <el-table-column label="设备编号" align="center">
           <template slot-scope="scope">
             {{ scope.row.deviceName }}
           </template>
@@ -86,21 +94,21 @@
         </el-table-column>
         <el-table-column label="最后在线时间" align="center" :formatter="renderOnlineTime">
         </el-table-column>
-        <el-table-column label="最后离线时间" align="center"  :formatter="renderOfflineTime">
+        <el-table-column label="最后离线时间" align="center" :formatter="renderOfflineTime">
         </el-table-column>
-        <el-table-column label="OTA版本" align="center" >
+        <el-table-column label="OTA版本" align="center">
           <template slot-scope="scope">
             {{ scope.row.otaSoftVersion || '--' }}
           </template>
         </el-table-column>
-        <el-table-column label="OTA状态" align="center"  :formatter="renderOtaStatus">
+        <el-table-column label="OTA状态" align="center" :formatter="renderOtaStatus">
         </el-table-column>
         <el-table-column label="刷新时间" align="center" :formatter="renderRefreshTime">
         </el-table-column>
-        <el-table-column label="安装进度" align="center"  :formatter="renderUpdateProgress">
+        <el-table-column label="安装进度" align="center" :formatter="renderUpdateProgress">
 
         </el-table-column>
-        <el-table-column label="下载进度" align="center"  :formatter="renderDownloadProgress">
+        <el-table-column label="下载进度" align="center" :formatter="renderDownloadProgress">
 
         </el-table-column>
 
@@ -112,9 +120,9 @@
 
 <script>
 
-import {renderTime, renderIsOnline, renderOtaStatus, renderProgress} from "@/utils";
-import {queryDeviceStatus} from "@/api/operation";
-import {global} from "@/common";
+import { renderTime, renderIsOnline, renderOtaStatus, renderProgress } from '@/utils'
+import { queryDeviceStatus } from '@/api/operation'
+import { global } from '@/common'
 
 export default {
   name: 'Info',
@@ -133,16 +141,16 @@ export default {
         factoryName: '',
         productKey: '',
         productModel: '',
-        hardVersion: '',
+        hardVersion: ''
       },
       factoryName: [],
       hardVersion: [],
       rules: {
-        deviceName: [{required: true, message: '请输入设备编号', trigger: 'blur'}],
-        deviceType: [{required: true, message: '请选择设备类型', trigger: 'blur'}],
-        factoryName: [{required: true, message: '请选择厂商名称', trigger: 'blur'}],
-        productModel: [{required: true, message: '请选择产品型号', trigger: 'blur'}],
-        hardVersion: [{required: true, message: '请选择硬件版本', trigger: 'blur'}],
+        deviceName: [{ required: true, message: '请输入设备编号', trigger: 'blur' }],
+        deviceType: [{ required: true, message: '请选择设备类型', trigger: 'blur' }],
+        factoryName: [{ required: true, message: '请选择厂商名称', trigger: 'blur' }],
+        productModel: [{ required: true, message: '请选择产品型号', trigger: 'blur' }],
+        hardVersion: [{ required: true, message: '请选择硬件版本', trigger: 'blur' }]
       },
       infoQuery: JSON.parse(sessionStorage.getItem('infoQuery'))
     }
@@ -159,11 +167,14 @@ export default {
       this.statusData = []
       queryDeviceStatus(query).then(res => {
         if (res.data != null) {
+          this.statusLoading = false
           if (res.data.success) {
             if (res.data.data !== null) {
               this.statusData.push(res.data.data)
             }
           } else {
+            this.statusLoading = false
+
             this.$message({
               showClose: true,
               message: '无此设备或此设备未曾上线过',
@@ -174,7 +185,6 @@ export default {
         }
 
       })
-      this.statusLoading = false
 
     },
     //  添加表单
@@ -199,7 +209,7 @@ export default {
     },
     renderDownloadProgress(row) {
       return renderProgress(row)
-    },
+    }
   }
 }
 </script>

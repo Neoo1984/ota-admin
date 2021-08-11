@@ -11,7 +11,7 @@
         ></el-input>
       </el-form-item>
 
-      <el-button type="primary" @click="handleRefresh" :loading="refreshLoading" icon="el-icon-refresh" size="small">
+      <el-button type="primary" @click="handleRefresh" v-loading="refreshLoading" icon="el-icon-refresh" size="small">
         刷新
       </el-button>
     </el-form>
@@ -40,8 +40,8 @@
 </template>
 
 <script>
-import {commandResult, deviceData, refreshDevice} from "@/api/operation";
-import {renderTime} from "@/utils";
+import { commandResult, deviceData, refreshDevice } from '@/api/operation'
+import { renderTime } from '@/utils'
 
 export default {
   name: 'VolState',
@@ -59,7 +59,7 @@ export default {
       infoTemp2: [],
       infoTemp: [],
       //柜子
-      refreshLoading: false,
+      refreshLoading: false
     }
   },
   created() {
@@ -73,35 +73,35 @@ export default {
         text: 'Loading',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
-      });
+      })
       let res = await deviceData(this.deviceInfo.deviceName)
 
-        if (res.data.success && res.data.data !== null) {
-          this.dataTime = renderTime(res.data.data.dataTime)
+      if (res.data.success && res.data.data !== null) {
+        this.dataTime = renderTime(res.data.data.dataTime)
 
-          //电池
-          this.cpData = Object.values(res.data.data.cpAndBatteryData)
-          this.itemWidth = 100 / (Math.ceil(this.cpData.length / 4))
-          this.cpData.forEach((item, index, arr) => {
-            if (item.batteryDataRecord !== null) {
-              this.infoVol[index] = item.batteryDataRecord.packVolt + ' V'
-              this.infoCurrent[index] = item.batteryDataRecord.packCur + ' A'
-              this.infoMos[index] = item.batteryDataRecord.mosTmp + ' ℃'
-              this.infoTemp1[index] = item.batteryDataRecord.packTmp1 + ' ℃'
-              this.infoTemp2[index] = item.batteryDataRecord.packTmp2 + ' ℃'
-            }
-            this.infoTemp[index] = item.compartmentDataRecordVo.cpTmp + ' ℃'
-          })
-          loading.close();
+        //电池
+        this.cpData = Object.values(res.data.data.cpAndBatteryData)
+        this.itemWidth = 100 / (Math.ceil(this.cpData.length / 4))
+        this.cpData.forEach((item, index, arr) => {
+          if (item.batteryDataRecord !== null) {
+            this.infoVol[index] = item.batteryDataRecord.packVolt + ' V'
+            this.infoCurrent[index] = item.batteryDataRecord.packCur + ' A'
+            this.infoMos[index] = item.batteryDataRecord.mosTmp + ' ℃'
+            this.infoTemp1[index] = item.batteryDataRecord.packTmp1 + ' ℃'
+            this.infoTemp2[index] = item.batteryDataRecord.packTmp2 + ' ℃'
+          }
+          this.infoTemp[index] = item.compartmentDataRecordVo.cpTmp + ' ℃'
+        })
+        loading.close()
 
-        } else {
-          loading.close();
-          this.$message({
-            showClose: true,
-            message: '获取失败，请刷新重试: ' + res.data.message,
-            type: 'error'
-          })
-        }
+      } else {
+        loading.close()
+        this.$message({
+          showClose: true,
+          message: '获取失败: ' + res.data.message,
+          type: 'error'
+        })
+      }
     },
 
     async handleRefresh() {
@@ -116,14 +116,14 @@ export default {
         if (idRes.data.success) {
           messageId = idRes.data.data.messageId
 
-          interval = setInterval(function () {
+          interval = setInterval(function() {
             console.log(i)
             if (i === 4) {
               that.refreshLoading = false
               clearInterval(interval)
               that.$message({
                 showClose: true,
-                message: '刷新失败：' + cmdRes,
+                message: '刷新失败，请刷新重试',
                 type: 'error'
               })
             } else {
@@ -149,7 +149,7 @@ export default {
               })
             }
 
-          }, 3000)
+          }, 1000)
 
         } else {
           this.refreshLoading = false
@@ -160,7 +160,7 @@ export default {
           })
         }
       }
-    },
+    }
 
   }
 
@@ -173,6 +173,7 @@ export default {
   flex-direction: column;
   justify-content: start;
   padding: 10px;
+
   .info-item {
     font-size: 14px;
     padding: 4px;
