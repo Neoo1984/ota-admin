@@ -4,8 +4,6 @@
  * @param {string} cFormat
  * @returns {string | null}
  */
-import current from "element-ui/packages/table/src/store/current";
-import da from "element-ui/src/locale/lang/da";
 
 export function parseTime(time, cFormat) {
   if (arguments.length === 0 || !time) {
@@ -211,7 +209,12 @@ export function renderCmdStatus(row, column, cellValue) {
 
 //渲染设备类型
 export function renderType(row, column, cellValue) {
-  return row.deviceType === '1' ? '电池' : row.deviceType === '2' ? '换电柜' : '两轮车'
+  if (row.deviceType){
+    return row.deviceType === '1' ? '电池' : row.deviceType === '2' ? '换电柜' : '两轮车'
+  }
+  if (row.productType) {
+    return row.productType === '1' ? '电池' : row.productType === '2' ? '换电柜' : '两轮车'
+  }
 }
 
 export function renderSubType(deviceType) {

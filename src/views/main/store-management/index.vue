@@ -47,7 +47,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="200">
+      <el-table-column align="center" label="操作" width="120">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -82,7 +82,7 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="dialogVisible"
-
+      :close-on-click-modal="false"
       width="60%"
     >
       <el-form ref="temp" v-loading="submitLoading" :rules="rules" :model="temp" class="demo-form-inline"

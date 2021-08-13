@@ -4,13 +4,11 @@
       <el-form-item>
         <el-input
           v-model="listQuery.keyWord"
-          prefix-icon="el-icon-search"
           placeholder="用户名/邮箱/手机"
           style="width: 400px"
           clearable
-          @input="getList"
-          class="filter-item"
         >
+          <el-button type="primary" slot="append" @click="getList" icon="el-icon-search"></el-button>
         </el-input>
       </el-form-item>
       <el-button type="primary" icon="el-icon-plus" size="small" @click="handleCreate">新增用户</el-button>
@@ -62,37 +60,12 @@
             @click="handleDetail(scope.row.$index, scope.row)"
           >详情
           </el-button>
-          <el-popover
-            placement="right"
-            width="400"
-            :value="showPop"
-            trigger="click"
-          >
-            <el-form :model="password"
-                     class="form-inline"
-                     :label-position="labelPosition"
-                     label-width="50px"
-            >
-              <el-form-item label="密 码">
-                <el-tooltip class="item" effect="dark" content="此处展示的是后台加密后的密码" placement="top">
-                  <el-input v-model="password.password" :disabled="changePwd" placeholder="请输入密码"
-                            :show-password="changePwd" style="width:80%"
-                  ></el-input>
-                </el-tooltip>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" size="mini" @click="changePwd = false">修改密码</el-button>
-                <el-button type="danger" size="mini" v-if="!changePwd"
-                           @click="sendPassword(scope.row.$index, scope.row)"
-                >提交
-                </el-button>
-              </el-form-item>
-            </el-form>
-            <el-button style="margin-left: 10px" type="text" size="mini" slot="reference"
-                       @click="showPassword(scope.row.$index, scope.row)"
-            >密码
-            </el-button>
-          </el-popover>
+          <el-button
+            size="mini"
+            type="text"
+            @click="changePassword(scope.row.$index, scope.row)"
+          >密码
+          </el-button>
           <el-popconfirm
             :confirm-button-text=confirmText(scope.row.isDelete,true)
             cancel-button-text="取消"
@@ -123,6 +96,7 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
       width="60%"
     >
       <el-form
@@ -166,7 +140,28 @@
         <el-button type="primary" @click="dialogStatus==='update'?updateData():createData()">确 定</el-button>
       </span>
     </el-dialog>
-
+    <el-dialog
+      title="修改密码"
+      :visible.sync="changePasswordVisible"
+      width="30%"
+      >
+      <el-form   class="demo-form-inline" size="small">
+        <el-form-item>
+          <el-input
+            v-model="password.newPassword"
+            placeholder="请输入新密码"
+            style="width: 100%"
+            clearable
+          >
+            <el-button type="primary" @click="getList"></el-button>
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+    <el-button size="small" @click="changePasswordVisible = false">取 消</el-button>
+    <el-button size="small" type="danger" @click="sendPassword">确认修改</el-button>
+  </span>
+    </el-dialog>
 
   </div>
 </template>
@@ -231,13 +226,12 @@ export default {
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
         email: [{ required: true, message: '请输入电子邮箱', trigger: 'blur', validator: isEmail }]
       },
-      //修改密码
-      password: {
-        password: '',
-        mobile: ''
-      },
-      changePwd: true,
-      showPop: false
+      changePasswordVisible:false,
+      password:{
+        mobile: '',
+        newPassword: '',
+        changeType: changePasswordType.admin
+      }
     }
   },
   created() {
@@ -315,7 +309,7 @@ export default {
                   }
                   let role = JSON.parse(sessionStorage.getItem('userRole'))
                   if (this.temp.userRole !== role) {
-                    sessionStorage.setItem('path','/dashboard')
+                    sessionStorage.setItem('path', '/dashboard')
                     MessageBox.confirm(
                       '当前权限已经修改，请重新登录',
                       '确认登出', {
@@ -330,7 +324,7 @@ export default {
                     })
 
                   }
-                }else {
+                } else {
                   this.getList()
                   this.$message({
                     showClose: true,
@@ -406,13 +400,14 @@ export default {
       })
     },
     //修改密码
+    changePassword(index,row) {
+      this.password.mobile = row.mobile
+      this.changePasswordVisible = true
+
+    },
     sendPassword() {
-      let query = {
-        newPassword: Base64.encode(this.password.password),
-        mobile: this.password.mobile,
-        changeType: changePasswordType.admin
-      }
-      changePassword(query).then((res) => {
+      this.password.newPassword = Base64.encode(this.password.newPassword)
+      changePassword(this.password).then((res) => {
         if (res.data != null) {
           this.$message({
             showClose: true,
@@ -420,9 +415,10 @@ export default {
             type: res.data.success ? 'success' : 'error'
           })
           if (res.data.success) {
+            this.changePasswordVisible = false
             this.getList()
             //如果当前修改的为当前登陆的账号，则跳转到登录
-            if (this.userInfo.mobile === query.mobile) {
+            if (this.userInfo.mobile === this.password.mobile) {
               MessageBox.confirm(
                 '密码已修改，请重新登录',
                 '重新登录', {
@@ -441,15 +437,9 @@ export default {
           }
         }
       })
-      this.showPop = false
+
     },
-    showPassword(index, row) {
-      this.changePwd = true
-      this.password.password = undefined
-      this.password.mobile = undefined
-      this.password.password = row.password
-      this.password.mobile = row.mobile
-    },
+
     resetTemp() {
       this.temp.userName = undefined
       this.temp.mobile = undefined

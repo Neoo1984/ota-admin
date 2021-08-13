@@ -55,10 +55,12 @@
           </el-select>
         </el-form-item>
         <el-form-item label="任务编号">
-          <el-input prefix-icon="el-icon-search" clearable @input="getList" v-model="listQuery.taskId"
+          <el-input clearable v-model="listQuery.taskId"
                     placeholder="设备编码" style="width: 200px"
-                    class="filter-item"
-          ></el-input>
+          >
+
+            <el-button type="primary" slot="append"  @click="getList" icon="el-icon-search"></el-button>
+          </el-input>
         </el-form-item>
 
         <el-button type="primary" @click="reSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
@@ -75,11 +77,6 @@
       :default-sort="{prop: 'date', order: 'descending'}"
       highlight-current-row
     >
-      <el-table-column
-        type="selection"
-        width="40"
-      >
-      </el-table-column>
       <el-table-column type="index" align="center" label="序号" width="50" fixed="left"></el-table-column>
 
       <el-table-column label="任务编号" align="center" width="150" fixed="left">
@@ -344,14 +341,14 @@
                 <el-button size="mini" type="text" @click="isPop = false">取消</el-button>
                 <el-button type="warning" size="mini" @click="createTask">确定</el-button>
               </div>
-              <el-button type="primary" style="width: 40%" size="small" slot="reference" v-loading="creatingTask">
+              <el-button type="primary" style="width: 40%" size="small" slot="reference" :loading="creatingTask">
                 {{ creatingTask ? '提交中 ...' : '开始升级' }}
               </el-button>
             </el-popover>
           </div>
           <div v-else style="text-align: center;padding-right: 8px">
             <el-button @click="createTask" slot="reference" style="width: 40%" type="primary" size="small"
-                       v-loading="creatingTask"
+                       :loading="creatingTask"
             >{{ creatingTask ? '提交中 ...' : '开始升级' }}
             </el-button>
           </div>
@@ -752,7 +749,7 @@
             </el-form-item>
 
             <el-button type="primary" @click="reDetailSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
-            <el-button type="primary" @click="handleExcel(false)" v-loading="getExcel" icon="el-icon-plus" size="small">
+            <el-button type="primary" @click="handleExcel(false)" :loading="getExcel" icon="el-icon-plus" size="small">
               导出表格
             </el-button>
 
@@ -1555,6 +1552,7 @@ export default {
       operateTask(query).then(res => {
         if (res.data.success) {
           this.taskDetailVisible = false
+          this.getList()
         }
         this.$message({
           showClose: true,

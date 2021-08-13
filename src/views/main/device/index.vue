@@ -16,7 +16,8 @@
         <el-form-item label="厂商">
           <el-select filterable @focus="getFactoryName" @change="getList" v-model="listQuery.factoryName"
                      placeholder="请选择厂商名称"
-                     style="width: 200px" class="filter-item">
+                     style="width: 200px" class="filter-item"
+          >
             <el-option
               v-for="item in listFactoryName"
               :key="item.index"
@@ -28,7 +29,8 @@
         </el-form-item>
         <el-form-item label="产品型号">
           <el-select @focus="getProduct" @change="getList" v-model="listQuery.productModel" placeholder="请选择产品型号"
-                     style="width: 200px" class="filter-item">
+                     style="width: 200px" class="filter-item"
+          >
             <el-option
               v-for="item in listProductModel"
               :key="item.index"
@@ -40,7 +42,8 @@
         </el-form-item>
         <el-form-item label="硬件版本">
           <el-select v-model="listQuery.hardVersion" @focus="getHard" @change="getList" placeholder="请选择产品型号"
-                     style="width: 200px" class="filter-item">
+                     style="width: 200px" class="filter-item"
+          >
             <el-option
               v-for="item in listHardVersion"
               :key="item.index"
@@ -52,7 +55,8 @@
         </el-form-item>
         <el-form-item label="是否在线">
           <el-select v-model="listQuery.isOnline" @change="getList" placeholder="请选择是否在线" style="width: 200px"
-                     class="filter-item">
+                     class="filter-item"
+          >
             <el-option
               v-for="item in isOnline"
               :key="item.index"
@@ -64,10 +68,14 @@
         </el-form-item>
 
         <el-form-item label="设备编码">
-          <el-input @change="getList" prefix-icon="el-icon-search" clearable v-model="listQuery.deviceName" :disabled=slaveDisabled placeholder="请输入设备编码"
-                    style="width: 80%"
-                    class="filter-item"
-          ></el-input>
+          <el-input clearable v-model="listQuery.deviceName" :disabled=slaveDisabled
+                    placeholder="请输入设备编码"
+                    style="width: 90%"
+
+          >
+            <el-button slot="append"  @click="getList" icon="el-icon-search"></el-button>
+          </el-input>
+
         </el-form-item>
 
         <el-button type="primary" @click="handleMainCreate" icon="el-icon-plus" size="small">新建主设备</el-button>
@@ -101,7 +109,8 @@
         </template>
       </el-table-column>
       <el-table-column label="设备类型"
-                       align="center" :formatter="renderType" prop="deviceType">
+                       align="center" :formatter="renderType" prop="deviceType"
+      >
       </el-table-column>
       <el-table-column label="厂商名称" align="center" prop="factory">
         <template slot-scope="scope">
@@ -129,7 +138,7 @@
           {{ scope.row.mainDeviceName || '--' }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" fixed="right">
+      <el-table-column align="center" label="操作" fixed="right" width="120">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -176,6 +185,8 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="mainDialogVisible"
+      :close-on-click-modal="false"
+      :destroy-on-close="true"
       width="60%"
     >
       <el-form ref="mainDataForm" :rules="rules" :model="mainTemp" class="demo-form-inline"
@@ -184,7 +195,8 @@
       >
         <el-form-item label="厂商名称" prop="factoryName">
           <el-select v-model="mainTemp.factoryName" @focus="getFactoryName" @change="getFormProduct"
-                     placeholder="请选择厂商名称" style="width: 80%" class="filter-item">
+                     placeholder="请选择厂商名称" style="width: 80%" class="filter-item"
+          >
             <el-option
               v-for="item in tempFactoryName"
               :key="item.index"
@@ -196,7 +208,8 @@
         </el-form-item>
         <el-form-item label="设备类型" prop="deviceType">
           <el-select v-model="mainTemp.deviceType" placeholder="请选择设备类型" @change="getFormProduct" style="width: 80%"
-                     class="filter-item">
+                     class="filter-item"
+          >
             <el-option
               v-for="item in deviceType"
               :key="item.index"
@@ -218,7 +231,8 @@
         </el-form-item>
         <el-form-item label="产品型号" prop="productModel" v-if="mainTemp.factoryName &&  mainTemp.deviceType">
           <el-select v-model="mainTemp.productModel" @focus="getFormProduct" @change="getFormHard" placeholder="请选择产品型号"
-                     style="width: 80%" class="filter-item">
+                     style="width: 80%" class="filter-item"
+          >
             <el-option
               v-for="item in tempProductModel"
               :key="item.index"
@@ -229,7 +243,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="硬件版本" prop="hardVersion" v-if="mainTemp.factoryName && mainTemp.deviceType">
-          <el-select v-model="mainTemp.hardVersion" placeholder="请选择硬件版本" style="width: 80%" class="filter-item">
+          <el-select v-model="mainTemp.hardVersion" @focus="getFormHard" placeholder="请选择硬件版本" style="width: 80%" class="filter-item">
             <el-option
               v-for="item in tempHardVersion"
               :key="item.index"
@@ -257,6 +271,7 @@
     <!--上传-->
     <el-dialog
       :title="textMap[dialogStatus]"
+      :close-on-click-modal="false"
       :visible.sync="mainUploadDialogVisible"
       :show-close="false"
       width="60%"
@@ -267,7 +282,8 @@
       >
         <el-form-item label="厂商名称" prop="factoryName">
           <el-select v-model="mainTemp.factoryName" @focus="getFactoryName" @change="getFormProduct"
-                     placeholder="请选择厂商名称" style="width: 80%" class="filter-item">
+                     placeholder="请选择厂商名称" style="width: 80%" class="filter-item"
+          >
             <el-option
               v-for="item in tempFactoryName"
               :key="item.index"
@@ -279,7 +295,8 @@
         </el-form-item>
         <el-form-item label="设备类型" prop="deviceType">
           <el-select v-model="mainTemp.deviceType" @change="getFormProduct" placeholder="请选择设备类型" style="width: 80%"
-                     class="filter-item">
+                     class="filter-item"
+          >
             <el-option
               v-for="item in deviceType"
               :key="item.index"
@@ -297,7 +314,8 @@
 
         <el-form-item label="产品型号" prop="productModel" v-if="mainTemp.factoryName &&  mainTemp.deviceType">
           <el-select v-model="mainTemp.productModel" @focus="getFormProduct" @change="getFormHard" placeholder="请选择产品型号"
-                     style="width: 80%" class="filter-item">
+                     style="width: 80%" class="filter-item"
+          >
             <el-option
               v-for="item in tempProductModel"
               :key="item.index"
@@ -413,6 +431,7 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="otaDialogVisible"
+      :close-on-click-modal="false"
       width="60%"
     >
       <el-form ref="otaRef" :rules="otaRules" :model="otaTemp" class="demo-form-inline"
@@ -490,7 +509,7 @@
 
 <script>
 import Pagination from '@/components/Pagination'
-import {getDevice} from '@/api/table'
+import { getDevice } from '@/api/table'
 import {
   createDevice,
   deleteDevice,
@@ -502,12 +521,12 @@ import {
   querySoftVersion,
   updateDevice
 } from '@/api/operation'
-import {renderCmdResult, renderCmdStatus, renderCmdType, renderType} from '@/utils'
-import {global} from "@/common";
+import { renderCmdResult, renderCmdStatus, renderCmdType, renderType } from '@/utils'
+import { global } from '@/common'
 
 export default {
   name: 'Device',
-  components: {Pagination},
+  components: { Pagination },
   data() {
     return {
       list: null,
@@ -542,7 +561,7 @@ export default {
         hardVersion: undefined,
         productModel: undefined,
         isOnline: undefined,
-        deviceName: undefined,
+        deviceName: undefined
       },
       commandListQuery: {
         current: 1,
@@ -616,19 +635,19 @@ export default {
         excelFile: undefined
       },
       rules: {
-        deviceName: [{required: true, message: '请输入设备编号', trigger: 'blur'}],
-        deviceType: [{required: true, message: '请选择设备类型', trigger: 'blur'}],
-        factoryName: [{required: true, message: '请选择厂商名称', trigger: 'blur'}],
-        productModel: [{required: true, message: '请选择产品型号', trigger: 'blur'}],
-        hardVersion: [{required: true, message: '请选择硬件版本', trigger: 'blur'}],
-        mainDeviceName: [{required: true, message: '请输入主设备编码', trigger: 'blur'}],
-        excelFile: [{required: true, validator: this.validateFile}]
+        deviceName: [{ required: true, message: '请输入设备编号', trigger: 'blur' }],
+        deviceType: [{ required: true, message: '请选择设备类型', trigger: 'blur' }],
+        factoryName: [{ required: true, message: '请选择厂商名称', trigger: 'blur' }],
+        productModel: [{ required: true, message: '请选择产品型号', trigger: 'blur' }],
+        hardVersion: [{ required: true, message: '请选择硬件版本', trigger: 'blur' }],
+        mainDeviceName: [{ required: true, message: '请输入主设备编码', trigger: 'blur' }],
+        excelFile: [{ required: true, validator: this.validateFile }]
       },
-      otaRules: {packageId: [{required: true, message: '请选择软件版本', trigger: 'blur'}]},
+      otaRules: { packageId: [{ required: true, message: '请选择软件版本', trigger: 'blur' }] },
       uploadFile: '',
       isDownload: false,
       downloadUrl: '',
-      fileName: '',
+      fileName: ''
     }
   },
 
@@ -636,9 +655,9 @@ export default {
     this.getList()
   },
   watch: {
-    'mainTemp.productModel': function (e) {
+    'mainTemp.productModel': function(e) {
       let keyIndex = ''
-      if (this.tempProductModel !== undefined) {
+      if (e !== undefined) {
         keyIndex = this.tempProductModel.indexOf(this.mainTemp.productModel.value)
         this.tempProductModel.forEach((item, index) => {
           if (this.mainTemp.productModel === item.value) {
@@ -648,6 +667,9 @@ export default {
 
         this.mainTemp.productKey = this.tempProductKey[keyIndex]
       }
+    },
+    'mainTemp.deviceType' : function(e) {
+      e === '1' ? this.isSlave = true : this.isSlave = false
     }
   },
   /* watch: {
@@ -892,7 +914,7 @@ export default {
                 if (item.hardVersions.length !== 0) {
                   this.hard.push(item.hardVersions)
                 }
-                this.listProductModel.push({value: item.productModel, label: item.productModel})
+                this.listProductModel.push({ value: item.productModel, label: item.productModel })
               })
             }
           }
@@ -903,7 +925,7 @@ export default {
           message: '请先选择设备类型和厂商！',
           type: 'warning',
           duration: 2000
-        });
+        })
       }
     },
     getHard() {
@@ -923,7 +945,7 @@ export default {
         })
         if (this.hard.length !== 0 && this.hard[modelIndex].length !== 0) {
           this.hard[modelIndex].forEach((item, index) => {
-            this.listHardVersion.push({value: item, label: item})
+            this.listHardVersion.push({ value: item, label: item })
           })
         }
       } else {
@@ -951,11 +973,11 @@ export default {
             let data = res.data.data
             if (this.mainDialogVisible || this.mainUploadDialogVisible) {
               data.forEach((item, index) => {
-                this.tempFactoryName.push({value: item, label: item})
+                this.tempFactoryName.push({ value: item, label: item })
               })
             } else {
               data.forEach((item, index) => {
-                this.listFactoryName.push({value: item, label: item})
+                this.listFactoryName.push({ value: item, label: item })
               })
             }
 
@@ -1004,7 +1026,7 @@ export default {
               if (item.hardVersions.length !== 0) {
                 this.hard.push(item.hardVersions)
               }
-              list.productModel.push({value: item.productModel, label: item.productModel})
+              list.productModel.push({ value: item.productModel, label: item.productModel })
               list.productKey.push(item.productKey)
             })
           }
@@ -1031,7 +1053,7 @@ export default {
       })
       if (this.hard.length !== 0 && this.hard[modelIndex].length !== 0) {
         this.hard[modelIndex].forEach((item, index) => {
-          list.push({value: item, label: item})
+          list.push({ value: item, label: item })
         })
       }
       return list
@@ -1061,11 +1083,8 @@ export default {
     handleUpdate(index, row) {
       this.resetMainTemp()
       this.dialogStatus = 'update'
-      if (row.mainDeviceName !== '') {
-        this.isSlave = true
-      }
-
       this.mainTemp = Object.assign({}, row)
+      delete this.mainTemp['extentsInfo']
       this.deviceType.forEach((item, index) => {
         if (item.value.toString() === row.deviceType) {
           this.mainTemp.deviceType = item.value
@@ -1131,9 +1150,9 @@ export default {
 
     //下载模板
     downloadExcel() {
-      let query = {fileName: 'upload/exampleExcel.xlsx'}
+      let query = { fileName: 'upload/exampleExcel.xlsx' }
       downloadFile(query).then(res => {
-        const blob = new Blob([res.data], {type: 'application/vnd.ms-excel;charset=utf-8'})
+        const blob = new Blob([res.data], { type: 'application/vnd.ms-excel;charset=utf-8' })
         const fileName = 'exampleExcel.xlsx'
         if ('download' in document.createElement('a')) { // 非IE下载
           const eLink = document.createElement('a')
@@ -1158,22 +1177,22 @@ export default {
       //   /**引用对象然后验证表单域-这个可以清除上一步不通过时的提示*/
       //   this.$refs.uploadRef.validateField('upload');
       // }
-      this.$refs.mainTemp.validateField('excelFile');
+      this.$refs.mainTemp.validateField('excelFile')
       console.log(this.$refs.upload.$el)
       // this.$refs.upload.$el.children[0].children[1].value = "";
     },
     validateFile(rule, value, callback) {
       if (!this.$refs.upload.uploadFiles.length) {
-        callback(new Error('请选择要上传的文件'));
+        callback(new Error('请选择要上传的文件'))
       } else if (this.$refs.upload.uploadFiles.length > 1) {
-        callback(new Error('每次上传只支持一个文件'));
+        callback(new Error('每次上传只支持一个文件'))
       }
-      const regx = new RegExp("(.xlsx)$|(.xls)$");
+      const regx = new RegExp('(.xlsx)$|(.xls)$')
       /**这里有个坑，单文件上传，第一次上传错误格式接着上传第二次格式，列表中数组值有两个*/
       if (!regx.test(this.$refs.upload.uploadFiles[0].name)) {
-        callback(new Error('文件格式只支持xlsx、xls'));
+        callback(new Error('文件格式只支持xlsx、xls'))
       }
-      callback();
+      callback()
 
     },
     //cancel
@@ -1241,9 +1260,9 @@ export default {
     },
     downloadResult() {
       if (this.downloadUrl) {
-        const query = {fileName: this.downloadUrl}
+        const query = { fileName: this.downloadUrl }
         downloadFile(query).then(res => {
-          const blob = new Blob([res.data], {type: 'application/vnd.ms-excel;charset=utf-8'})
+          const blob = new Blob([res.data], { type: 'application/vnd.ms-excel;charset=utf-8' })
           const fileName = this.fileName
           if ('download' in document.createElement('a')) { // 非IE下载
             const eLink = document.createElement('a')
@@ -1264,7 +1283,6 @@ export default {
     handleSuccess(res, file, fileList) {
       this.$refs.upload.clearValidate()
     },
-
 
 //OTA
     selectOta(selection, row) {
@@ -1287,28 +1305,28 @@ export default {
           message: '请选择需要OTA的设备！',
           type: 'warning',
           duration: 2000
-        });
+        })
       } else if (!this.otaTemp.factoryNames.every((item, index, arr) => item === this.otaTemp.factoryNames[0])) {
         this.$notify({
           title: '警告',
           message: '批量OTA需要选择相同的厂商！',
           type: 'warning',
           duration: 2000
-        });
+        })
       } else if (!this.otaTemp.hardVersions.every((item, index, arr) => item === this.otaTemp.hardVersions[0])) {
         this.$notify({
           title: '警告',
           message: '批量OTA需要选择相同的硬件版本！',
           type: 'warning',
           duration: 2000
-        });
+        })
       } else if (!this.otaTemp.productModels.every((item, index, arr) => item === this.otaTemp.productModels[0])) {
         this.$notify({
           title: '警告',
           message: '批量OTA需要选择相同的产品型号！',
           type: 'warning',
           duration: 2000
-        });
+        })
       } else {
         this.otaTemp.factoryName = this.otaTemp.factoryNames[0]
         this.otaTemp.productModel = this.otaTemp.productModels[0]
@@ -1329,7 +1347,7 @@ export default {
               if (res.data.data.length !== 0) {
                 var data = res.data.data
                 data.forEach((item, value) => {
-                  this.softVersion.push({softVersion: item.softVersion, objectId: item.objectId})
+                  this.softVersion.push({ softVersion: item.softVersion, objectId: item.objectId })
                 })
               }
             } else {
@@ -1352,7 +1370,7 @@ export default {
           let query = {
             deviceNames: this.otaTemp.deviceNames,
             packageId: this.otaTemp.packageId,
-            updateType: this.otaTemp.updateType,
+            updateType: this.otaTemp.updateType
           }
           otaSend(query).then(res => {
             if (res.data.success) {
@@ -1416,7 +1434,7 @@ export default {
       })
     },
     handleDetail(index, row) {
-      const {href} = this.$router.resolve({
+      const { href } = this.$router.resolve({
         name: 'Info',
         path: '/info',
         query: {
@@ -1424,11 +1442,11 @@ export default {
           factoryName: row.factoryName,
           deviceType: row.deviceType,
           hardVersion: row.hardVersion,
-          productModel: row.productModel,
+          productModel: row.productModel
         }
       })
       window.open(href, '_blank')
-    },
+    }
   }
 }
 </script>

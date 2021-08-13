@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="858px" height="715px" viewBox="0 0 858 715" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>组合示例/功能区块示例/电脑组合08</title>
+    <defs>
+        <filter color-interpolation-filters="auto" id="filter-1">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.929412 0 0 0 0 0.929412 0 0 0 0 0.945098 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+        <linearGradient x1="0%" y1="89.6062836%" x2="0%" y2="21.0365058%" id="linearGradient-2">
+            <stop stop-color="#EFEFF1" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#EFEFF1" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="84.0591523%" x2="50%" y2="12.7399407%" id="linearGradient-3">
+            <stop stop-color="#F0F3FD" offset="0%"></stop>
+            <stop stop-color="#DFE4EE" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#DAE3F4" offset="0%"></stop>
+            <stop stop-color="#F6F9FF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="13.1193773%" y1="9.62348111%" x2="72.6895757%" y2="67.9479751%" id="linearGradient-5">
+            <stop stop-color="#87A7FD" offset="0%"></stop>
+            <stop stop-color="#3C72F2" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="5.04268523%" y1="50%" x2="89.5240045%" y2="50%" id="linearGradient-6">
+            <stop stop-color="#3C72F2" offset="0%"></stop>
+            <stop stop-color="#87A7FD" offset="100%"></stop>
+        </linearGradient>
+        <filter color-interpolation-filters="auto" id="filter-7">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.929412 0 0 0 0 0.929412 0 0 0 0 0.945098 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+        <linearGradient x1="19.0164379%" y1="13.3399566%" x2="88.7637619%" y2="79.6437172%" id="linearGradient-8">
+            <stop stop-color="#FFBDBD" offset="0%"></stop>
+            <stop stop-color="#FF7A7A" offset="100%"></stop>
+        </linearGradient>
+        <circle id="path-9" cx="55" cy="55" r="55"></circle>
+        <filter x="-62.7%" y="-46.4%" width="225.5%" height="225.5%" filterUnits="objectBoundingBox" id="filter-10">
+            <feOffset dx="0" dy="18" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="20" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 1   0 0 0 0 0.737254902   0 0 0 0 0.737254902  0 0 0 0.504112831 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <linearGradient x1="75.4544805%" y1="86.8660521%" x2="29.1507419%" y2="7.72819245%" id="linearGradient-11">
+            <stop stop-color="#FD7272" offset="0%"></stop>
+            <stop stop-color="#FF9D9D" offset="100%"></stop>
+        </linearGradient>
+        <filter color-interpolation-filters="auto" id="filter-12">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.929412 0 0 0 0 0.929412 0 0 0 0 0.945098 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+        <linearGradient x1="12.9905368%" y1="9.62348111%" x2="72.7688406%" y2="67.9479751%" id="linearGradient-13">
+            <stop stop-color="#87A7FD" offset="0%"></stop>
+            <stop stop-color="#3C72F2" offset="100%"></stop>
+        </linearGradient>
+        <circle id="path-14" cx="59" cy="360" r="14"></circle>
+        <filter x="-133.9%" y="-98.2%" width="375.0%" height="375.0%" filterUnits="objectBoundingBox" id="filter-15">
+            <feOffset dx="1" dy="11" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="11" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.337254902   0 0 0 0 0.517647059   0 0 0 0 0.964705882  0 0 0 0.401496941 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <circle id="path-16" cx="14" cy="360" r="14"></circle>
+        <filter x="-183.9%" y="-116.1%" width="467.9%" height="467.9%" filterUnits="objectBoundingBox" id="filter-17">
+            <feOffset dx="0" dy="19" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="14" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 1   0 0 0 0 0.737254902   0 0 0 0 0.737254902  0 0 0 0.504112831 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <linearGradient x1="12.9905368%" y1="47.784715%" x2="72.7688406%" y2="50.9847278%" id="linearGradient-18">
+            <stop stop-color="#87A7FD" offset="0%"></stop>
+            <stop stop-color="#3C72F2" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-19" x="32" y="296" width="111" height="26" rx="11.88"></rect>
+        <filter x="-13.5%" y="-53.8%" width="128.8%" height="223.1%" filterUnits="objectBoundingBox" id="filter-20">
+            <feOffset dx="1" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.337254902   0 0 0 0 0.517647059   0 0 0 0 0.964705882  0 0 0 0.401496941 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="插画" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="组合示例/功能区块示例" transform="translate(-3644.000000, -3697.000000)">
+            <g id="组合示例/功能区块示例/电脑组合08" transform="translate(3600.000000, 3536.000000)">
+                <rect id="背景-" x="0" y="0" width="1000" height="1000"></rect>
+                <g id="主图" transform="translate(82.000000, 161.000000)">
+                    <g filter="url(#filter-1)" id="4.背景组件/彩色版/粒子备份">
+                        <g transform="translate(593.000000, 0.000000)" id="编组-2">
+                            <circle id="椭圆形备份-4" fill="#EFEFF1" cx="6.5" cy="29.5" r="6.5"></circle>
+                            <circle id="椭圆形备份-4" fill="#EFEFF1" cx="40.5" cy="44.5" r="6.5"></circle>
+                            <line x1="40.7002195" y1="51.5037421" x2="40.881339" y2="154.711134" id="直线-2" stroke="url(#linearGradient-2)" stroke-width="3" stroke-linecap="square"></line>
+                            <line x1="6.26605582" y1="34.6970194" x2="6.44717527" y2="137.904412" id="直线-2备份" stroke="url(#linearGradient-2)" stroke-width="3" stroke-linecap="square"></line>
+                            <line x1="75.1343832" y1="13.6886161" x2="75.3155027" y2="116.896008" id="直线-2备份-2" stroke="url(#linearGradient-2)" stroke-width="3" stroke-linecap="square"></line>
+                            <line x1="109.568547" y1="34.6970194" x2="109.749666" y2="137.904412" id="直线-2备份-3" stroke="url(#linearGradient-2)" stroke-width="3" stroke-linecap="square"></line>
+                            <circle id="椭圆形备份-4" fill="#EFEFF1" cx="75.5" cy="6.5" r="6.5"></circle>
+                            <circle id="椭圆形备份-4" fill="#EFEFF1" cx="109.5" cy="29.5" r="6.5"></circle>
+                        </g>
+                    </g>
+                    <g id="编组备份-11" transform="translate(122.000000, 125.000000)">
+                        <path d="M348.600241,439.118058 L336.810861,434.139829 L328.723393,374.871193 L221.024214,374.871193 L212.258005,433.897687 L201.710541,439.186359 C200.671571,439.70735 200.12614,440.876364 200.39305,442.010119 C200.659961,443.143873 201.66916,443.944775 202.830775,443.944775 L347.62859,443.944775 C348.820828,443.944775 349.847864,443.102117 350.083794,441.930127 C350.319723,440.758138 349.699138,439.581821 348.600241,439.118058 Z" id="路径" fill="url(#linearGradient-3)" fill-rule="nonzero"></path>
+                        <path d="M539.989057,382.756625 L10.940824,382.756625 C5.16129964,382.743606 0.482892522,378.041395 0.482892522,372.245395 L0.482892522,297.430155 L550.44698,297.430155 L550.44698,372.245387 C550.44698,378.041365 545.768559,382.743549 539.989057,382.756625 L539.989057,382.756625 Z" id="路径" fill="url(#linearGradient-4)" fill-rule="nonzero"></path>
+                        <path d="M551,332.789635 L-9.18496299e-14,332.789635 L-9.18496299e-14,12.6710875 C0.00806330686,5.67621736 5.6605405,0.00784027928 12.6355449,-2.30278084e-14 L538.364326,-2.30278084e-14 C545.339353,0.00783568459 550.99187,5.67619454 551,12.6710875 L551,332.789635 Z" id="路径" fill="#253369"></path>
+                        <path d="M518.090968,309.555398 L32.9090648,309.555398 C27.5317685,309.549491 23.1740366,305.179467 23.1679988,299.786855 L23.1679988,33.0028117 C23.1739915,27.6100843 27.5316534,23.2398624 32.9090648,23.2336693 L518.090968,23.2336693 C523.468377,23.2398669 527.826036,27.6100861 527.832034,33.0028117 L527.832034,299.786855 C527.825991,305.179465 523.468262,309.549486 518.090968,309.555398 Z" id="路径" fill="#FFFFFF" fill-rule="nonzero"></path>
+                        <g id="编组-2备份-8" transform="translate(215.000000, 93.000000)">
+                            <g id="编组-12" transform="translate(15.292683, 0.000000)">
+                                <ellipse id="椭圆形" fill="url(#linearGradient-5)" cx="48.2926829" cy="48.3769634" rx="48.2926829" ry="48.3769634"></ellipse>
+                                <path d="M62.2458295,52.5597597 C60.9673467,51.2789512 58.8943456,51.2789512 57.615627,52.5597597 L51.1208271,59.0658471 L51.1208271,30.4371728 C51.1208271,28.7673172 49.7694809,27.4136126 48.1025344,27.4136126 C46.435588,27.4136126 45.0842417,28.7673172 45.0842417,30.4371728 L45.0842417,59.066225 L38.5890645,52.5597597 C37.3105818,51.2789512 35.2375806,51.2789512 33.9588621,52.5597597 C32.6803793,53.8405681 32.6803793,55.9172816 33.9588621,57.1981373 L45.5345333,68.7939631 C46.2381256,69.4988306 47.1822853,69.8149344 48.1023458,69.7439752 C49.0224063,69.8149344 49.9666603,69.4988778 50.6703941,68.7939631 L62.2458295,57.1981373 C63.524548,55.9172816 63.524548,53.8405681 62.2458295,52.5597597 Z" id="路径" fill="#FFFFFF" fill-rule="nonzero" transform="translate(48.102434, 48.583672) scale(1, -1) translate(-48.102434, -48.583672) "></path>
+                            </g>
+                            <g id="编组-11" transform="translate(0.000000, 133.842932)">
+                                <rect id="矩形" stroke="#979797" fill="#FFFFFF" x="0.5" y="0.5" width="131" height="19.1570681" rx="9.57853403"></rect>
+                                <rect id="矩形备份" fill="url(#linearGradient-6)" x="4.02439024" y="4.03141361" width="71.6341463" height="12.0942408" rx="6.04712042"></rect>
+                            </g>
+                        </g>
+                    </g>
+                    <g filter="url(#filter-7)" id="编组-9备份">
+                        <g transform="translate(36.000000, 38.000000)">
+                            <circle id="椭圆形" fill="#EFEFF1" cx="348.5" cy="13.5" r="13.5"></circle>
+                            <circle id="椭圆形备份" fill="#EFEFF1" cx="13.5" cy="271.5" r="13.5"></circle>
+                            <path d="M11,270.244202 L11,61 C11,33.3857625 33.3857625,11 61,11 L258.701294,11 L348.5,12" id="路径" stroke="#EFEFF1" stroke-width="5" stroke-linecap="round" stroke-dasharray="11"></path>
+                        </g>
+                    </g>
+                    <g id="编组备份-4" transform="translate(0.000000, 215.000000)">
+                        <g id="椭圆形">
+                            <use fill="black" fill-opacity="1" filter="url(#filter-10)" xlink:href="#path-9"></use>
+                            <use fill="url(#linearGradient-8)" fill-rule="evenodd" xlink:href="#path-9"></use>
+                        </g>
+                        <circle id="椭圆形" fill="url(#linearGradient-11)" cx="55" cy="55" r="42"></circle>
+                        <g id="icon/界面/积分/面型" transform="translate(30.000000, 30.000000)">
+                            <rect id="矩形" x="0" y="0" width="50" height="50"></rect>
+                            <g id="合并形状-2" transform="translate(0.505051, 4.787879)" fill="#FFFFFF">
+                                <path d="M38.6718363,0.893939394 C39.5068903,0.893939394 40.2807215,1.28942245 40.7104303,1.93600336 L47.8426861,12.667198 C48.3616408,13.4446621 48.2825899,14.4331063 47.6451633,15.1353822 L26.2488143,38.7439632 C25.7967286,39.2424804 25.1202471,39.5312447 24.4064883,39.530303 C23.6927294,39.5295927 23.0171367,39.2391765 22.5662013,38.7395265 L1.16985223,15.1309455 C0.532425628,14.4288584 0.453426973,13.4404142 0.972538582,12.6627613 L8.10458522,1.93156664 C8.53554876,1.2868265 9.30911864,0.893044139 10.1432315,0.893939394 L38.6718363,0.893939394 Z M34.8096348,9.81002331 L14.005439,9.81002331 C13.1847361,9.81002331 12.519425,10.4753344 12.519425,11.2960373 C12.519425,12.1167402 13.1847361,12.7820513 14.005439,12.7820513 L14.005439,12.7820513 L34.8096348,12.7820513 C35.6303377,12.7820513 36.2956488,12.1167402 36.2956488,11.2960373 C36.2956488,10.4753344 35.6303377,9.81002331 34.8096348,9.81002331 L34.8096348,9.81002331 Z" id="合并形状"></path>
+                            </g>
+                        </g>
+                    </g>
+                    <g id="编组-39" transform="translate(205.000000, 295.000000)">
+                        <g filter="url(#filter-12)" id="编组-38">
+                            <g transform="translate(45.000000, 0.000000)">
+                                <path d="M370.826904,0 L370.826904,0 L526,0 C548.643675,0 567,16.2469187 567,36.2885086 L567,325.711491 C567,345.753081 548.643675,362 526,362 L9.9083252,362 L9.9083252,362" id="路径" stroke="#979797" stroke-width="5" stroke-linecap="round" stroke-dasharray="11"></path>
+                                <circle id="椭圆形备份-21" fill="#EFEFF1" cx="13.5" cy="360.5" r="13.5"></circle>
+                            </g>
+                        </g>
+                        <g id="椭圆形备份-23">
+                            <use fill="black" fill-opacity="1" filter="url(#filter-15)" xlink:href="#path-14"></use>
+                            <use fill="url(#linearGradient-13)" fill-rule="evenodd" xlink:href="#path-14"></use>
+                        </g>
+                        <g id="椭圆形备份-22">
+                            <use fill="black" fill-opacity="1" filter="url(#filter-17)" xlink:href="#path-16"></use>
+                            <use fill="url(#linearGradient-8)" fill-rule="evenodd" xlink:href="#path-16"></use>
+                        </g>
+                    </g>
+                    <g id="编组-17备份" transform="translate(569.000000, 214.000000)">
+                        <g id="手机备份-3">
+                            <path d="M173.464615,82.7016477 L171.552564,82.7016477 L171.552564,30.3176412 C171.552564,13.5736703 157.984102,0 141.246556,0 L30.3060088,0 C13.5684623,0 0,13.5736703 0,30.3176412 L0,317.701145 C0,334.445116 13.5684623,348.018786 30.3060088,348.018786 L141.246078,348.018786 C157.983624,348.018786 171.552086,334.445116 171.552086,317.701145 L171.552086,119.989477 L173.464615,119.989477 L173.464615,82.7016477 Z" id="adc31fd7-f1bd-4275-a5ba-966b160b5074" fill="#253369"></path>
+                            <path d="M142.423641,7.82741214 L127.955039,7.82741214 C129.306917,11.1457171 128.920714,14.9203811 126.924973,17.8950608 C124.929232,20.8697405 121.585911,22.6539847 118.007786,22.6539328 L54.5078427,22.6539328 C50.9301854,22.6536162 47.587419,20.8694957 45.591872,17.8952499 C43.5963249,14.921004 43.2098567,11.1469189 44.5610672,7.82741214 L31.0452585,7.82741214 C18.5564706,7.82741214 8.43230769,17.9694821 8.43230769,30.4785891 L8.43230769,30.4785891 L8.43230769,30.4785891 L8.43230769,317.541632 C8.43230769,330.050739 18.5564706,340.191374 31.0452585,340.191374 L142.419357,340.191374 C154.908145,340.191374 165.032308,330.050739 165.032308,317.541632 L165.032308,317.54157 L165.032308,317.54157 L165.032308,30.4771588 C165.032308,17.9680518 154.908145,7.82741214 142.419357,7.82741214 L142.419357,7.82741214 L142.423641,7.82741214 Z" id="ba1c2519-d6d5-475e-b818-d50dee449681" fill="#FFFFFF" fill-rule="nonzero"></path>
+                            <path d="M105.403846,80.6072938 L105.403846,104.842163 C105.403846,105.301308 105.220995,105.741684 104.895238,106.066348 C104.569482,106.391013 104.127625,106.573227 103.666935,106.573227 L69.7976805,106.573227 C69.336991,106.573227 68.8951341,106.391013 68.5693774,106.066348 C68.2436207,105.741684 68.0607692,105.301308 68.0607692,104.842163 L68.0607692,80.6072938 C68.0596966,80.4092561 68.0950536,80.2126972 68.1651103,80.0273731 C68.3767296,79.4245474 68.9073108,78.989147 69.541536,78.8978641 C69.6262215,78.8840378 69.7118586,78.8768046 69.7976709,78.87623 L103.666926,78.87623 C103.752738,78.8768042 103.838375,78.8840374 103.92306,78.8978641 C104.557315,78.9890804 105.087927,79.4245057 105.299486,80.0273731 C105.369549,80.212696 105.404913,80.4092549 105.403846,80.6072938 Z" id="路径" fill="#FFFFFF" fill-rule="nonzero"></path>
+                        </g>
+                        <g id="编组-2备份-11" transform="translate(30.000000, 84.000000)">
+                            <rect id="矩形备份-10" fill="#E4E3E8" x="0" y="0" width="112.977624" height="3.63103448" rx="1.62"></rect>
+                            <rect id="矩形备份-9" fill="#3C72F3" x="0" y="15.1293103" width="74.9156436" height="3.63103448" rx="1.62"></rect>
+                            <rect id="矩形备份-8" fill="#E4E3E8" x="0" y="30.8637931" width="87.6029703" height="3.63103448" rx="1.62"></rect>
+                            <rect id="矩形备份-7" fill="#E4E3E8" x="0" y="61.1224138" width="74.9156436" height="3.63103448" rx="1.62"></rect>
+                            <rect id="矩形备份-6" fill="#3C72F3" x="0" y="45.9931034" width="50.1451485" height="3.63103448" rx="1.62"></rect>
+                        </g>
+                        <g id="编组-2备份-10" transform="translate(30.000000, 174.000000)">
+                            <rect id="矩形备份-10" fill="#E4E3E8" x="0" y="0" width="112.977624" height="3.63103448" rx="1.62"></rect>
+                            <rect id="矩形备份-9" fill="#3C72F3" x="0" y="15.1293103" width="74.9156436" height="3.63103448" rx="1.62"></rect>
+                            <rect id="矩形备份-8" fill="#E4E3E8" x="0" y="30.8637931" width="87.6029703" height="3.63103448" rx="1.62"></rect>
+                            <rect id="矩形备份-7" fill="#E4E3E8" x="0" y="61.1224138" width="74.9156436" height="3.63103448" rx="1.62"></rect>
+                            <rect id="矩形备份-6" fill="#BBB8C8" x="0" y="45.9931034" width="50.1451485" height="3.63103448" rx="1.62"></rect>
+                        </g>
+                        <g id="矩形备份-58">
+                            <use fill="black" fill-opacity="1" filter="url(#filter-20)" xlink:href="#path-19"></use>
+                            <use fill="url(#linearGradient-18)" fill-rule="evenodd" xlink:href="#path-19"></use>
+                        </g>
+                        <rect id="矩形备份-57" fill="#E1E1E1" x="32" y="46" width="111" height="23" rx="11.5"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

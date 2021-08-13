@@ -53,7 +53,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作">
+      <el-table-column align="center" label="操作" width="120">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -84,6 +84,7 @@
       :title="textMap[dialogStatus]"
       :visible.sync="dialogVisible"
       :show-close="false"
+      :close-on-click-modal="false"
       v-loading='submitLoading'
       element-loading-text="提交中..."
       width="60%">
@@ -149,6 +150,7 @@
       :title="textMap[dialogStatus]"
       :visible.sync="updateDialogVisible"
       :show-close="false"
+      :close-on-click-modal="false"
       element-loading-text="提交中..."
       width="60%">
       <el-form v-loading='submitLoading' ref="updateForm" :rules="rules" :model="updateTemp" class="demo-form-inline"

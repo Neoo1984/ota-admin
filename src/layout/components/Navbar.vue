@@ -8,7 +8,7 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <!--          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">-->
-          <div class="user-avatar">你好, <span :class="{adminName : userRole=== '1',userName: userRole !== '1'}"
+          <div class="user-avatar">你好, <img class="icon_super" :src='icon_super' v-if="userRole === '1'" alt="super"><span :class="{adminName : this.userRole=== '1',userName: this.userRole !== '1'}"
           >{{ userName }} </span> <i class="el-icon-arrow-down"></i></div>
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -24,6 +24,7 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="restPwdDialogVisible"
+      :close-on-click-modal="false"
       width="40%"
     >
       <el-form ref="ruleForm" :rules="rules" :model="ruleForm" class="demo-form-inline"
@@ -115,7 +116,8 @@ export default {
         newPassword: '',
         changeType: changePasswordType.user,
         mobile: ''
-      }
+      },
+      icon_super:require('@/assets/state/super.svg')
     }
   },
 
@@ -253,11 +255,18 @@ export default {
         position: relative;
 
         .user-avatar {
+          display: flex;
+          align-items: center;
           cursor: pointer;
           height: 40px;
           border-radius: 10px;
         }
-
+        .icon_super {
+          width: 16px;
+          height: 16px;
+          max-height: 100%;
+          margin-left: 8px;
+        }
         .el-icon-caret-bottom {
           cursor: pointer;
           position: absolute;

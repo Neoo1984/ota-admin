@@ -10,7 +10,7 @@
         ></el-input>
       </el-form-item>
 
-      <el-button type="primary" @click="handleRefresh" v-loading="refreshLoading" icon="el-icon-refresh" size="small">
+      <el-button type="primary" @click="handleRefresh" :loading="refreshLoading" icon="el-icon-refresh" size="small">
         刷新
       </el-button>
       <el-tooltip class="item" effect="dark" content="勾选柜子编号进行OTA" placement="top">
@@ -85,6 +85,7 @@
     <el-dialog
       title="选择要升级的设备信息和升级包"
       :visible.sync="otaDialogVisible"
+      :close-on-click-modal="false"
       width="60%"
     >
       <el-form ref="otaRef" :rules="otaRules" :model="otaTemp" class="demo-form-inline"
@@ -140,9 +141,8 @@ import {
   renderIsOnline,
   renderOtaStatus,
   renderProgress,
-  renderTime
+  renderTime,
 } from '@/utils'
-
 export default {
   name: 'Maintenance',
   components: { Comm },
@@ -187,7 +187,8 @@ export default {
       statusData: null,
       statusLoading:false,
       renderIsOnline: renderIsOnline,
-      renderOtaStatus: renderOtaStatus
+      renderOtaStatus: renderOtaStatus,
+
     }
   },
   created() {
@@ -291,6 +292,7 @@ export default {
         }
       }
     },
+
     //OTA
     handleOta() {
       if (this.checkList.length > 0) {

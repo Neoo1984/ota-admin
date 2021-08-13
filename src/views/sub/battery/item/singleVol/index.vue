@@ -11,7 +11,7 @@
         ></el-input>
       </el-form-item>
 
-      <el-button type="primary" @click="handleRefresh" v-loading="refreshLoading" icon="el-icon-refresh" size="small">
+      <el-button type="primary" @click="handleRefresh" :loading="refreshLoading" icon="el-icon-refresh" size="small">
         刷新
       </el-button>
     </el-form>

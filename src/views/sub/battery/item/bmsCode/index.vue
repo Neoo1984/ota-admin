@@ -9,7 +9,7 @@
         ></el-input>
       </el-form-item>
 
-      <el-button type="primary" @click="handleRefresh" v-loading="refreshLoading" icon="el-icon-refresh" size="small">
+      <el-button type="primary" @click="handleRefresh" :loading="refreshLoading" icon="el-icon-refresh" size="small">
         刷新
       </el-button>
     </el-form>
@@ -156,14 +156,15 @@ export default {
   flex-direction: column;
   justify-content: start;
 
-  .info-item {
-    font-size: 14px;
-    padding: 10px;
-  }
+}
 
-  .info-text {
+.info-item {
+  font-size: 14px;
+  padding: 10px;
+}
 
-    color: #1482f0;
-  }
+.info-text {
+
+  color: #1482f0;
 }
 </style>

@@ -1,10 +1,21 @@
 <template>
   <div class="app-container">
     <el-form :inline="true" class="demo-form-inline" size="small">
-      <el-form-item label="厂商名称">
-        <el-input clearable v-model="listQuery.factoryName" placeholder="厂商名称" style="width: 200px"
-                  class="filter-item"></el-input>
+      <el-form-item label="厂商">
+        <el-select filterable @focus="getFactoryName" @change="getList" v-model="listQuery.factoryName"
+                   placeholder="请选择厂商名称"
+                   style="width: 200px" class="filter-item"
+        >
+          <el-option
+            v-for="item in listFactoryName"
+            :key="item.index"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
+
       <el-form-item label="产品型号">
         <el-input clearable v-model="listQuery.productModel" placeholder="产品型号" style="width: 200px"
                   class="filter-item"></el-input>
@@ -13,6 +24,7 @@
         <el-input clearable v-model="listQuery.hardVersion" placeholder="硬件型号" style="width: 200px"
                   class="filter-item"></el-input>
       </el-form-item>
+      <el-button type="primary" @click="getList" icon="el-icon-search" size="small">查询</el-button>
       <el-button type="primary" @click="handleCreate" icon="el-icon-plus" size="small">新增</el-button>
       <el-button type="primary" @click="clearSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
 
@@ -26,10 +38,6 @@
       fit
       highlight-current-row
     >
-      <el-table-column
-        type="selection"
-        width="55">
-      </el-table-column>
       <el-table-column type="index" align="center" label="序号" width="50" fixed="left"></el-table-column>
 
       <el-table-column label="产品型号" align="center" width="120" fixed="left">
@@ -37,7 +45,7 @@
           <span>{{ scope.row.productModel }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="厂商名称" align="center" width="100">
+      <el-table-column label="厂商" align="center" width="100">
         <template slot-scope="scope">
           {{ scope.row.factoryName }}
         </template>
@@ -57,12 +65,12 @@
           {{ scope.row.softDescribe }}
         </template>
       </el-table-column>
-      <el-table-column label="http下载地址" align="center" width="150">
+      <el-table-column label="http下载地址" align="center">
         <template slot-scope="scope">
           {{ scope.row.storeUrlPath }}
         </template>
       </el-table-column>
-      <el-table-column label="ftp地址" align="center" width="150">
+      <el-table-column label="ftp地址" align="center">
         <template slot-scope="scope">
           {{ scope.row.storeFtpPath }}
         </template>
@@ -114,6 +122,7 @@
       :title="textMap[dialogStatus]"
       :visible.sync="dialogVisible"
       :show-close="false"
+      :close-on-click-modal="false"
       width="60%">
       <el-form ref="createRef" :rules="rules" :model="createTemp" class="demo-form-inline" :label-position="right"
                label-width="100px">
@@ -215,6 +224,7 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="updateDialogVisible"
+      :close-on-click-modal="false"
       width="60%">
       <el-form ref="updateRef" :rules="rules" :model="createTemp" class="demo-form-inline" :label-position="right"
                label-width="100px">
@@ -258,6 +268,12 @@ export default {
       deviceType: global.deviceType,
       packageSplit: global.packageSplit,
       splitLength: global.splitLength,
+      listFactoryName: [
+        {
+          label: '全部',
+          value: undefined
+        }
+      ],
       listQuery: {
         current: 1,
         size: 20,
@@ -325,6 +341,41 @@ export default {
   },
   methods: {
     getFactoryName() {
+      this.factoryName = []
+      this.listFactoryName = [
+        {
+          label: '全部',
+          value: undefined
+        }
+      ]
+      getFactoryNameList().then(res => {
+        if (res.data.success) {
+          if (res.data.data.length !== 0) {
+            let data = res.data.data
+            if (this.dialogVisible) {
+              data.forEach((item, index) => {
+                this.factoryName.push({ value: item, label: item })
+              })
+            } else {
+              data.forEach((item, index) => {
+                this.listFactoryName.push({ value: item, label: item })
+              })
+            }
+
+          } else {
+            console.error(res.data.message)
+          }
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.data.message,
+            type: 'error'
+          })
+        }
+      })
+
+    },
+  /*  getFactoryName() {
       getFactoryNameList().then(res => {
         if (res.data.success) {
           if (res.data.data.length !== 0) {
@@ -348,7 +399,7 @@ export default {
         }
       })
 
-    },
+    },*/
     getList() {
       this.listLoading = true
       softList(this.listQuery).then(response => {
