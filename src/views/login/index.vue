@@ -1,82 +1,56 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="rules" class="login-form" auto-complete="on"
-             label-position="left">
-
+    <el-form v-loading="loading" ref="loginForm" :model="loginForm" :rules="rules" class="login-form"
+             label-position="top" label-width="80px"
+    >
       <div class="title-container">
-        <h3 class="title">登录</h3>
+        <h3 class="title">OTA 后台管理</h3>
       </div>
 
-      <el-form-item prop="mobile">
-        <span class="svg-container">
-          <svg-icon icon-class="user"/>
-        </span>
+      <el-form-item prop="mobile" label="手机号">
         <el-input
+          prefix-icon="el-icon-user"
           ref="mobile"
+          autocomplete="on"
+          clearable
           v-model="loginForm.mobile"
           placeholder="手机号"
           name="mobile"
-          type="text"
-          tabindex="1"
           auto-complete="on"
-        />
+        ></el-input>
+
       </el-form-item>
 
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password"/>
-        </span>
+      <el-form-item prop="password" label="密码">
         <el-input
-          :key="passwordType"
           ref="password"
+          autocomplete="on"
+          clearable
+          prefix-icon="el-icon-lock"
           v-model="loginForm.password"
-          :type="passwordType"
           placeholder="密码"
-          name="password"
-          tabindex="2"
+          show-password
           auto-complete="on"
+          style="width: 100%"
           @keyup.enter.native="handleLogin"
-        />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>
-        </span>
+        ></el-input>
+
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
-                 @click.native.prevent="handleLogin">登录
-      </el-button>
-
+      <!--        <el-button :loading="loading" type="danger" class="button-login"-->
+      <!--                   @click.native.prevent="handleLogin"-->
+      <!--        >登录-->
+      <!--        </el-button>-->
+      <div class="button-login"  @click="handleLogin">登 录</div>
     </el-form>
-    <el-dialog
-      :title="title"
-      :close-on-click-modal="false"
-      :visible.sync="dialogVisible"
-      width="60%">
-      <el-form ref="registerForm" :rules="rules" :model="temp" :label-position="labelPosition" label-width="100px">
-        <el-form-item label="手机号" prop="mobile">
-          <el-input v-model="temp.mobile" placeholder="手机号" style="width: 80%"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="temp.email" placeholder="邮箱" style="width: 80%" class="filter-item"></el-input>
-        </el-form-item>
-        <el-form-item label="商户">
-          <el-input v-model="temp.tenantId" placeholder="商户" style="width: 80%" class="filter-item"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="temp.password" placeholder="密码" style="width: 80%" class="filter-item"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click=" registerConfirm()">确 定</el-button>
-      </span>
-    </el-dialog>
+
+
   </div>
 </template>
 
 <script>
-import {validatePhone,validatePassword} from '@/utils/validate'
-import {Base64} from "js-base64";
+import { validatePhone, validatePassword } from '@/utils/validate'
+import { Base64 } from 'js-base64'
 import { global } from '@/common'
 
 export default {
@@ -85,51 +59,39 @@ export default {
     return {
       validatePhone: validatePhone,
       validatePassword: validatePassword,
-      title: "注册",
-      labelPosition: "right",
-      dialogVisible: false,
+      title: '注册',
+      labelPosition: 'right',
       loginForm: {
         mobile: '',
         password: '',
         loginType: global.loginType.default
       },
       temp: {
-        password: "",
-        email: "",
-        mobile: "",
-        tenantId: "",
-        userName: ""
+        password: '',
+        email: '',
+        mobile: '',
+        tenantId: '',
+        userName: ''
       },
       rules: {
-        mobile: [{required: true, trigger: 'blur', validator: validatePhone}],
-        password: [{required: true, trigger: 'blur', validator: validatePassword}],
+        mobile: [{ required: true, trigger: 'blur', validator: validatePhone }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
 
       },
       loading: false,
-      passwordType: 'password',
       redirect: undefined,
-      query:{}
+      query: {}
     }
   },
   watch: {
     $route: {
-      handler: function (route) {
+      handler: function(route) {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
     }
   },
   methods: {
-    showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
-      }
-      this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
-    },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
@@ -141,13 +103,13 @@ export default {
             loginType: global.loginType.default
           }
           this.query.password = Base64.encode(this.query.password)
-          this.$store.dispatch('user/login',this.query ).then((response) => {
-            if (response.data.success){
-              sessionStorage.setItem('userInfo',JSON.stringify(response.data.data.userInfo))
+          this.$store.dispatch('user/login', this.query).then((response) => {
+            if (response.data.success) {
+              sessionStorage.setItem('userInfo', JSON.stringify(response.data.data.userInfo))
               sessionStorage.setItem('userRole', response.data.data.userInfo.userRole.toString())
-              this.$router.push({path: this.redirect || '/'})
+              this.$router.push({ path: this.redirect || '/' })
               this.loading = false
-            }else {
+            } else {
               this.$notify({
                 title: '失败',
                 message: response.data.message,
@@ -170,29 +132,6 @@ export default {
           return false
         }
       })
-    },
-    handleRegister() {
-      this.dialogVisible = true
-      this.$nextTick(() => {
-        this.$refs['registerForm'].clearValidate()
-      })
-    },
-    registerConfirm() {
-      this.$refs.registerForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({path: this.redirect || '/'})
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-
     }
   }
 }
@@ -206,18 +145,18 @@ $bg: #283443;
 $light_gray: #fff;
 $cursor: #fff;
 
-@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
-    color: $cursor;
-  }
-}
+//@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
+//  .login-container .el-input input {
+//    color: $cursor;
+//  }
+//}
 
 /* reset element-ui css */
-.login-container {
+/*.login-container {
   .el-input {
-    display: inline-block;
+    //display: inline-block;
     height: 47px;
-    width: 85%;
+    width: 100%;
 
     input {
       background: transparent;
@@ -225,7 +164,7 @@ $cursor: #fff;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      //color: $light_gray;
       height: 47px;
       caret-color: $cursor;
 
@@ -242,69 +181,59 @@ $cursor: #fff;
     border-radius: 5px;
     color: #454545;
   }
-}
+}*/
 </style>
 
-<style lang="scss" scoped>
-$bg: #2d3a4b;
-$dark_gray: #889aa4;
-$light_gray: #eee;
+<style scoped>
 
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
   overflow: hidden;
+  /*background-image: linear-gradient(-225deg, #65379B 0%, #886AEA 53%, #6457C6 100%);*/
+  animation: fade-in 0.5s ease-in both;
+  background-image: linear-gradient(to top, #88d3ce 0%, #6e45e2 100%);
+}
 
-  .login-form {
-    position: relative;
-    width: 520px;
-    max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
-    overflow: hidden;
-  }
+.login-form {
+  width: 400px;
+  max-width: 100%;
+  padding: 80px 35px;
+  margin: 10% auto;
+  /*background-color: #ffffff;*/
+  border-radius: 8px;
+  box-shadow: rgb(0 0 0 / 45%) 30px 30px 20px -20px;
 
-  .tips {
-    font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
+  background: rgba(255, 255, 255, .7);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
 
-    span {
-      &:first-of-type {
-        margin-right: 16px;
-      }
-    }
-  }
+.title-container {
+  position: relative;
 
-  .svg-container {
-    padding: 6px 5px 6px 15px;
-    color: $dark_gray;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
-  }
+}
 
-  .title-container {
-    position: relative;
+.title {
+  font-size: 26px;
+  margin: 0 auto 40px auto;
+  text-align: center;
+  font-weight: bold;
+}
 
-    .title {
-      font-size: 26px;
-      color: $light_gray;
-      margin: 0px auto 40px auto;
-      text-align: center;
-      font-weight: bold;
-    }
-  }
-
-  .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
-    color: $dark_gray;
-    cursor: pointer;
-    user-select: none;
-  }
+.button-login {
+  width: 100%;
+  margin-top: 30px;
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #ffffffff;
+  background-image: linear-gradient(-225deg, #2CD8D5 0%, #6B8DD6 48%, #8E37D7 100%);
+}
+.button-login:hover {
+  color: #2b2f3a;
+  background-image: linear-gradient(-225deg, #AC32E4 0%, #7918F2 48%, #4801FF 100%);
 }
 </style>
