@@ -68,18 +68,18 @@
 
       <el-table-column label="软件详情" type="expand" width="150">
         <template slot-scope="props">
-          <el-form label-position="left" inline class="fix-table-expand" label-width="100px">
+          <el-form label-position="left" class="fix-table-expand" label-width="100px">
             <el-form-item label="http下载地址">
               <span>{{ props.row.storeUrlPath }}</span>
             </el-form-item>
             <el-form-item label="ftp地址">
               <span>{{ props.row.storeFtpPath }}</span>
             </el-form-item>
-            <el-form-item label="分包数">
-              <span>{{ props.row.splitNums }}</span>
-            </el-form-item>
             <el-form-item label="升级包md5">
               <span>{{ props.row.fileMd5 }}</span>
+            </el-form-item>
+            <el-form-item label="分包数">
+              <span>{{ props.row.splitNums }}</span>
             </el-form-item>
             <el-form-item label="分包单元">
               <span>{{ props.row.splitLength }}</span>
