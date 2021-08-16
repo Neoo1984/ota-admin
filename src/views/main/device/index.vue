@@ -108,9 +108,12 @@
           <span>{{ scope.row.deviceName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="设备类型"
-                       align="center" :formatter="renderType" prop="deviceType"
-      >
+      <el-table-column label="设备类型" align="center" prop="deviceType">
+        <template slot-scope="scope">
+          <el-tag effect="dark" :type="renderType(scope.row.deviceType,true)">
+            {{ renderType(scope.row.deviceType, false) }}
+          </el-tag>
+        </template>
       </el-table-column>
       <el-table-column label="厂商名称" align="center" prop="factory">
         <template slot-scope="scope">
@@ -148,6 +151,7 @@
           </el-button>
           <el-button
             size="mini"
+            style="color: #E6A23C"
             type="text"
             @click="handleDetail(scope.$index, scope.row)"
             v-if="scope.row.deviceType === '2'"
@@ -167,7 +171,7 @@
             @confirm="handleDelete(scope.$index, scope.row)"
           >
             <el-button
-              style="margin-left: 10px"
+              style="margin-left: 10px;color: #F56C6C"
               size="mini"
               type="text"
               slot="reference"
@@ -375,58 +379,6 @@
       </span>
     </el-dialog>
 
-    <!--    指令-->
-    <!--    <el-dialog
-          :title="textMap[dialogStatus]"
-          :visible.sync="commandVisible"
-          width="90%"
-        >
-          <el-table
-            :data="commandList"
-            :loading="cmdLoading"
-            style="width: 100%"
-          >
-            <el-table-column label="指令内容" align="center" width="150">
-              <template slot-scope="scope">
-                {{ scope.row.cmd }}
-              </template>
-            </el-table-column>
-            <el-table-column label="指令编码" align="center" width="150">
-              <template slot-scope="scope">
-                {{ scope.row.cmdCode }}
-              </template>
-            </el-table-column>
-            <el-table-column label="指令主键id" align="center" width="150">
-              <template slot-scope="scope">
-                {{ scope.row.cmdId }}
-              </template>
-            </el-table-column>
-            <el-table-column label="指令类型" align="center" width="150" :formatter="renderCmdType">
-            </el-table-column>
-            <el-table-column label="指令状态" align="center" width="150" :formatter="renderCmdStatus">
-            </el-table-column>
-
-            <el-table-column label="指令编号" align="center" width="150">
-              <template slot-scope="scope">
-                {{ scope.row.messageId }}
-              </template>
-            </el-table-column>
-            <el-table-column label="设备编号" align="center" width="150">
-              <template slot-scope="scope">
-                {{ scope.row.deviceName }}
-              </template>
-            </el-table-column>
-            <el-table-column label="指令结果" align="center" width="150" :formatter="renderCmdResult">
-            </el-table-column>
-
-          </el-table>
-          <pagination v-show="commandTotal>0" :total="commandTotal" :page.sync="commandListQuery.current"
-                      :limit.sync="commandListQuery.size" @pagination="getCommandList"
-          />
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="commandVisible = false">关 闭</el-button>
-          </span>
-        </el-dialog>-->
     <!--ota-->
     <el-dialog
       :title="textMap[dialogStatus]"
@@ -521,7 +473,7 @@ import {
   querySoftVersion,
   updateDevice
 } from '@/api/operation'
-import { renderCmdResult, renderCmdStatus, renderCmdType, renderType } from '@/utils'
+import { renderCmdType, renderType } from '@/utils'
 import { global } from '@/common'
 
 export default {
@@ -580,11 +532,8 @@ export default {
         productModels: []
       },
       updateType: global.updateType,
-      renderCmdResult: renderCmdResult,
-      renderCmdStatus: renderCmdStatus,
       renderCmdType: renderCmdType,
       renderType: renderType,
-      // validateFile:validateFile,
       deviceNames: [],
       listProductModel: [
         {

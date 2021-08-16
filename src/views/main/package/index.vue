@@ -45,49 +45,46 @@
           <span>{{ scope.row.productModel }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="厂商" align="center" width="100">
+      <el-table-column label="厂商" align="center">
         <template slot-scope="scope">
           {{ scope.row.factoryName }}
         </template>
       </el-table-column>
-      <el-table-column label="硬件版本" align="center" width="150">
+      <el-table-column label="硬件版本" align="center">
         <template slot-scope="scope">
           {{ scope.row.hardVersion }}
         </template>
       </el-table-column>
-      <el-table-column label="软件版本" align="center" width="150">
+      <el-table-column label="软件版本" align="center">
         <template slot-scope="scope">
           {{ scope.row.softVersion }}
         </template>
       </el-table-column>
-      <el-table-column label="软件版本描述" align="center" width="150">
+      <el-table-column label="软件版本描述" align="center">
         <template slot-scope="scope">
           {{ scope.row.softDescribe }}
         </template>
       </el-table-column>
-      <el-table-column label="http下载地址" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.storeUrlPath }}
-        </template>
-      </el-table-column>
-      <el-table-column label="ftp地址" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.storeFtpPath }}
-        </template>
-      </el-table-column>
-      <el-table-column label="升级包md5" align="center" width="150">
-        <template slot-scope="scope">
-          {{ scope.row.fileMd5 }}
-        </template>
-      </el-table-column>
-      <el-table-column label="分包数" align="center" width="100">
-        <template slot-scope="scope">
-          {{ scope.row.splitNums }}
-        </template>
-      </el-table-column>
-      <el-table-column label="分包单元" align="center" width="90">
-        <template slot-scope="scope">
-          {{ scope.row.splitLength }}
+
+      <el-table-column label="软件详情" type="expand" width="150">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="fix-table-expand" label-width="100px">
+            <el-form-item label="http下载地址">
+              <span>{{ props.row.storeUrlPath }}</span>
+            </el-form-item>
+            <el-form-item label="ftp地址">
+              <span>{{ props.row.storeFtpPath }}</span>
+            </el-form-item>
+            <el-form-item label="分包数">
+              <span>{{ props.row.splitNums }}</span>
+            </el-form-item>
+            <el-form-item label="升级包md5">
+              <span>{{ props.row.fileMd5 }}</span>
+            </el-form-item>
+            <el-form-item label="分包单元">
+              <span>{{ props.row.splitLength }}</span>
+            </el-form-item>
+          </el-form>
         </template>
       </el-table-column>
 
@@ -107,7 +104,7 @@
             @confirm="handleDelete(scope.$index, scope.row)"
           >
             <el-button
-              style="margin-left: 10px"
+              style="margin-left: 10px;color: #F56C6C"
               size="mini"
               type="text"
               slot="reference">删除
@@ -126,8 +123,8 @@
       width="60%">
       <el-form ref="createRef" :rules="rules" :model="createTemp" class="demo-form-inline" :label-position="right"
                label-width="100px">
-        <el-form-item label="厂商名称" prop="factoryName">
-          <el-select v-model="createTemp.factoryName" @focus="getFactoryName" @change="getFormProduct" placeholder="请选择厂商名称" style="width: 80%" class="filter-item">
+        <el-form-item label="厂商" prop="factoryName">
+          <el-select v-model="createTemp.factoryName" @focus="getFactoryName" @change="getFormProduct" placeholder="请选择厂商" style="width: 80%" class="filter-item">
             <el-option
               v-for="item in factoryName"
               :key="item.index"
@@ -252,7 +249,7 @@ import {
   softSave,
   softUpdate
 } from "@/api/operation";
-
+import '@/styles/index.scss'
 export default {
   name: 'Package',
   components: {Pagination},
@@ -375,31 +372,6 @@ export default {
       })
 
     },
-  /*  getFactoryName() {
-      getFactoryNameList().then(res => {
-        if (res.data.success) {
-          if (res.data.data.length !== 0) {
-            var data = res.data.data
-            data.forEach((item, index) => {
-              this.factoryName.push({value: item, label: item})
-            })
-          } else {
-            this.$message({
-              showClose: true,
-              message: '不存在厂商',
-              type: 'error'
-            });
-          }
-        } else {
-          this.$message({
-            showClose: true,
-            message: res.data.message,
-            type: 'error'
-          });
-        }
-      })
-
-    },*/
     getList() {
       this.listLoading = true
       softList(this.listQuery).then(response => {

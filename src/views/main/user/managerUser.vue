@@ -27,7 +27,12 @@
           {{ scope.row.userName }}
         </template>
       </el-table-column>
-      <el-table-column label="用户角色" align="center" :formatter="renderRole">
+      <el-table-column label="用户角色" align="center">
+        <template slot-scope="scope">
+          <el-tag effect="dark" :type="renderRole(scope.row.userRole,true)">
+            {{ renderRole(scope.row.userRole, false) }}
+          </el-tag>
+        </template>
       </el-table-column>
       <el-table-column label="手机号" align="center">
         <template slot-scope="scope">
@@ -39,7 +44,13 @@
           {{ scope.row.email }}
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" :formatter="renderDelete"></el-table-column>
+      <el-table-column label="状态" align="center">
+        <template slot-scope="scope">
+          <el-tag effect="dark" :type="renderDelete(scope.row.isDelete,true)">
+            {{ renderDelete(scope.row.isDelete, false) }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="创建人" align="center">
         <template slot-scope="scope">
           {{ scope.row.createUserName || '--' }}
@@ -144,6 +155,9 @@
       title="修改密码"
       :visible.sync="changePasswordVisible"
       width="30%"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :show-close="false"
       >
       <el-form   class="demo-form-inline" size="small">
         <el-form-item>
@@ -158,7 +172,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-    <el-button size="small" @click="changePasswordVisible = false">取 消</el-button>
+    <el-button size="small" type="primary" @click="changePasswordVisible = false">取 消</el-button>
     <el-button size="small" type="danger" @click="sendPassword">确认修改</el-button>
   </span>
     </el-dialog>
@@ -401,9 +415,9 @@ export default {
     },
     //修改密码
     changePassword(index,row) {
+      this.password.newPassword = undefined
       this.password.mobile = row.mobile
       this.changePasswordVisible = true
-
     },
     sendPassword() {
       this.password.newPassword = Base64.encode(this.password.newPassword)

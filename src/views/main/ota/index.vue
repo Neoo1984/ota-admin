@@ -59,7 +59,7 @@
                     placeholder="设备编码" style="width: 200px"
           >
 
-            <el-button type="primary" slot="append"  @click="getList" icon="el-icon-search"></el-button>
+            <el-button type="primary" slot="append" @click="getList" icon="el-icon-search"></el-button>
           </el-input>
         </el-form-item>
 
@@ -79,56 +79,79 @@
     >
       <el-table-column type="index" align="center" label="序号" width="50" fixed="left"></el-table-column>
 
-      <el-table-column label="任务编号" align="center" width="150" fixed="left">
+      <el-table-column label="任务编号" align="center" fixed="left">
         <template slot-scope="scope">
-          <span>{{ scope.row.taskId }}</span>
+          <el-popover
+            placement="bottom"
+            width="200"
+            trigger="click"
+          >
+            <span>{{ scope.row.taskId }}</span>
+            <el-tag slot="reference">查 看</el-tag>
+          </el-popover>
         </template>
       </el-table-column>
-      <el-table-column label="厂商名称" align="center" width="150">
+      <el-table-column label="厂商名称" align="center">
         <template slot-scope="scope">
           {{ scope.row.factoryName }}
         </template>
       </el-table-column>
-      <el-table-column label="设备类型" align="center" width="120" :formatter="renderType">
+      <el-table-column label="设备类型" align="center" prop="deviceType">
+        <template slot-scope="scope">
+          <el-tag effect="dark" :type="renderType(scope.row.deviceType,true)">
+            {{ renderType(scope.row.deviceType, false) }}
+          </el-tag>
+        </template>
       </el-table-column>
-
-      <el-table-column label="产品型号" align="center" width="150">
+      <el-table-column label="产品型号" align="center">
         <template slot-scope="scope">
           {{ scope.row.productModel }}
         </template>
       </el-table-column>
 
-      <el-table-column label="硬件版本" align="center" width="150">
+      <el-table-column label="硬件版本" align="center">
         <template slot-scope="scope">
           {{ scope.row.hardVersion }}
         </template>
       </el-table-column>
-      <el-table-column label="升级软件版本" align="center" width="150">
+      <el-table-column label="升级软件版本" align="center">
         <template slot-scope="scope">
           {{ scope.row.upSoftVersion }}
         </template>
       </el-table-column>
-      <el-table-column label="任务状态" align="center" width="150" :formatter="renderTaskStatus">
-      </el-table-column>
-      <el-table-column sortable label="创建时间" align="center" width="150" :formatter="renderCreateTime">
-      </el-table-column>
-      <el-table-column label="任务开始时间" align="center" width="150" :formatter="renderBeginTime">
-      </el-table-column>
-      <el-table-column label="任务结束时间" align="center" width="150" :formatter="renderEndTime">
+      <el-table-column label="任务状态" align="center">
+        <template slot-scope="scope">
+          <el-tag effect="dark" :type="renderTaskStatus(scope.row.taskStatus,true)">
+            {{ renderTaskStatus(scope.row.taskStatus, false) }}
+          </el-tag>
+        </template>
       </el-table-column>
 
-      <el-table-column label="创建者" align="center" width="150">
-        <template slot-scope="scope">
-          {{ scope.row.createUserName || '--' }}
+      <el-table-column label="时间/操作人" type="expand" width="150">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="fix-table-expand" label-width="120px">
+            <el-form-item label="任务开始时间">
+              <span>{{ renderTime(props.row.beginTime) }}</span>
+            </el-form-item>
+            <el-form-item label="任务结束时间">
+              <span>{{ renderTime(props.row.endTime) }}</span>
+            </el-form-item>
+            <el-form-item sortable label="创建时间">
+              <span>{{ renderTime(props.row.createTime) }}</span>
+            </el-form-item>
+            <el-form-item label="更新时间">
+              <span>{{ renderTime(props.row.updateTime) }}</span>
+            </el-form-item>
+            <el-form-item label="创建者">
+              <span>{{ props.row.updateUserName || '--' }}</span>
+            </el-form-item>
+            <el-form-item label="更新者">
+              <span> {{ props.row.updateUserName || '--' }}</span>
+            </el-form-item>
+          </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" align="center" width="150" :formatter="renderUpdateTime">
-      </el-table-column>
-      <el-table-column label="更新者" align="center" width="150">
-        <template slot-scope="scope">
-          {{ scope.row.updateUserName || '--' }}
-        </template>
-      </el-table-column>
+
       <el-table-column align="center" label="操作" fixed="right" width="80">
         <template slot-scope="scope">
           <el-button
@@ -433,7 +456,12 @@
               {{ scope.row.deviceName }}
             </template>
           </el-table-column>
-          <el-table-column label="设备类型" align="center" :formatter="renderType">
+          <el-table-column label="设备类型" align="center" prop="deviceType">
+            <template slot-scope="scope">
+              <el-tag effect="dark" :type="renderType(scope.row.deviceType,true)">
+                {{ renderType(scope.row.deviceType, false) }}
+              </el-tag>
+            </template>
           </el-table-column>
           <el-table-column label="厂商" align="center">
             <template slot-scope="scope">
@@ -494,7 +522,12 @@
                 {{ scope.row.deviceName }}
               </template>
             </el-table-column>
-            <el-table-column label="设备类型" align="center" :formatter="renderType">
+            <el-table-column label="设备类型" align="center" prop="deviceType">
+              <template slot-scope="scope">
+                <el-tag effect="dark" :type="renderType(scope.row.deviceType,true)">
+                  {{ renderType(scope.row.deviceType, false) }}
+                </el-tag>
+              </template>
             </el-table-column>
             <el-table-column label="厂商" align="center">
               <template slot-scope="scope">
@@ -619,10 +652,10 @@
         </el-form>
         <div class="drawer-footer">
           <div style="text-align: right;padding-right: 8px">
-            <el-button style="width: 50%" @click="cancelDetail()" size="small">关 闭</el-button>
+            <el-button style="width: 50%" @click="cancelDetail()">关 闭</el-button>
           </div>
           <div style="text-align: left;padding-left: 8px">
-            <el-button style="width: 50%" @click="operate" type="primary" size="small" v-if="canOperate">
+            <el-button style="width: 50%" @click="operate" :type="btnCanOperate" v-if="canOperate">
               {{ canOperateText }}
             </el-button>
           </div>
@@ -652,7 +685,9 @@
             </el-select>
           </el-form-item>
           <el-form-item label="任务状态">
-            <el-select v-model="exQuery.taskStatus" @change="exSearch" placeholder="请选择升级状态" style="width: 200px" class="filter-item">
+            <el-select v-model="exQuery.taskStatus" @change="exSearch" placeholder="请选择升级状态" style="width: 200px"
+                       class="filter-item"
+            >
               <el-option
                 v-for="item in taskStatus"
                 :key="item.index"
@@ -731,13 +766,16 @@
               </el-select>
             </el-form-item>
             <el-form-item label="从设备编码">
-              <el-input   clearable prefix-icon="el-icon-search" v-model="detailQuery.subDeviceName" @input="detailSearch" placeholder="从设备编码" style="width: 200px"
+              <el-input clearable prefix-icon="el-icon-search" v-model="detailQuery.subDeviceName" @input="detailSearch"
+                        placeholder="从设备编码" style="width: 200px"
                         class="filter-item"
               ></el-input>
 
             </el-form-item>
             <el-form-item label="升级状态">
-              <el-select v-model="detailQuery.otaStatus" @change="detailSearch" placeholder="请选择升级状态" style="width: 200px" class="filter-item">
+              <el-select v-model="detailQuery.otaStatus" @change="detailSearch" placeholder="请选择升级状态"
+                         style="width: 200px" class="filter-item"
+              >
                 <el-option
                   v-for="item in otaStatus"
                   :key="item.index"
@@ -777,7 +815,7 @@
             </el-table-column>
             <el-table-column label="升级状态" align="center" :formatter="renderOtaStatus">
             </el-table-column>
-            <el-table-column label="更新结束时间" align="center" :formatter="renderOtaEndTime">
+            <el-table-column label="更新结束时间" align="center" :formatter="renderTime">
             </el-table-column>
             <el-table-column align="center" label="操作" width="80">
               <template slot-scope="scope">
@@ -941,6 +979,8 @@ export default {
       renderType: renderType,
       renderOtaStatus: renderOtaStatus,
       renderProgress: renderProgress,
+      renderTime: renderTime,
+      renderTaskStatus: renderTaskStatus,
       //OTA任务
       creatingTask: false, //新建OTA任务
       otaDialogVisible: false,
@@ -977,6 +1017,7 @@ export default {
       },
       //OTA任务查看主设备（第2层drawer）
       taskMainDeviceVisible: false,
+      btnCanOperate: 'primary',
       tableDrawerSize: '90%',
       mainDeviceLoading: false,
       mainDeviceData: null,
@@ -1087,7 +1128,7 @@ export default {
           const data = response.data.data
           this.list = data.records
           this.total = data.total
-        }else {
+        } else {
           this.listLoading = false
 
         }
@@ -1527,10 +1568,12 @@ export default {
         case 2:
           this.canOperate = true
           this.canOperateText = '恢复'
+          this.btnCanOperate = 'success'
           break
         case 1:
           this.canOperate = true
           this.canOperateText = '中止'
+          this.btnCanOperate = 'danger'
           break
         default:
           this.canOperate = false
@@ -1684,26 +1727,6 @@ export default {
       this.taskForm.productModel = ''
     },
 
-    //渲染
-    renderTaskStatus(row) {
-      return renderTaskStatus(row.taskStatus)
-    },
-    renderBeginTime(row) {
-      return renderTime(row.beginTime)
-    },
-    renderEndTime(row) {
-      return renderTime(row.endTime)
-    },
-    renderCreateTime(row) {
-      return renderTime(row.createTime)
-    },
-    renderUpdateTime(row) {
-      return renderTime(row.updateTime)
-    },
-    renderOtaEndTime(row) {
-      return renderTime(row.updateTime)
-    },
-
 //重置搜索
     //list表格
     reSearch() {
@@ -1737,7 +1760,6 @@ export default {
         }
         this.getExcel = false
       })
-
 
     }
   }

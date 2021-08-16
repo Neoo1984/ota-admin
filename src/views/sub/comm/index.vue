@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import {renderSubType} from "@/utils";
+import {renderType} from "@/utils";
 
 export default {
   name: 'Comm',
@@ -35,7 +35,7 @@ export default {
     },
   },
   created() {
-    this.item.deviceType = renderSubType(this.item.deviceType)
+    this.item.deviceType = renderType(this.item.deviceType,false)
   },
 
 }

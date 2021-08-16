@@ -138,3 +138,18 @@ drawer的margin
 .el-dropdown-menu__item--divided {
   border: none;
 }
+/*
+表格展开行
+*/
+.fix-table-expand {
+  font-size: 0;
+}
+.fix-table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
+.fix-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 50%;
+}

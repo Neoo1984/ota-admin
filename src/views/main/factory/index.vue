@@ -52,7 +52,7 @@
             @confirm="handleDelete(scope.$index, scope.row)"
           >
             <el-button
-              style="margin-left: 10px"
+              style="margin-left: 10px;color: #F56C6C"
               size="mini"
               type="text"
               slot="reference"

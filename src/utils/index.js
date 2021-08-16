@@ -121,7 +121,7 @@ export function param2Obj(url) {
  */
 export function renderTime(date) {
   if (date != null) {
-    let time = new Date(date).toJSON();
+    let time = new Date(date).toJSON()
     return new Date(+new Date(time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
   } else {
     return '--'
@@ -204,21 +204,28 @@ export function renderCmdResult(row, column, cellValue) {
 }
 
 export function renderCmdStatus(row, column, cellValue) {
-  return row.isOnline === "1" ? '发送成功' : '收到设备回执通知'
+  return row.isOnline === '1' ? '发送成功' : '收到设备回执通知'
 }
 
-//渲染设备类型
-export function renderType(row, column, cellValue) {
-  if (row.deviceType){
-    return row.deviceType === '1' ? '电池' : row.deviceType === '2' ? '换电柜' : '两轮车'
-  }
-  if (row.productType) {
-    return row.productType === '1' ? '电池' : row.productType === '2' ? '换电柜' : '两轮车'
+/**
+ * 设备类型tag
+ *  @param {string} type
+ *  @param {boolean} isTag
+ */
+export function renderType(type, isTag) {
+  if (isTag) {
+    return type === '1' ? 'success' : type === '2' ? 'primary' : 'warning'
+  } else {
+    return type === '1' ? '电 池' : type === '2' ? '换电柜' : '两轮车'
   }
 }
 
-export function renderSubType(deviceType) {
-  return deviceType === '1' ? '电池' : deviceType === '2' ? '换电柜' : '两轮车'
+/**
+ * 设备类型tag
+ *  @param {string} val
+ */
+export function renderHardVersion(val) {
+  return val === '1' ? 'success' : type === '2' ? 'primary' : 'warning'
 }
 
 // 指令类型 cmdType: 1:OTA指令 2：设备OTA版本查询 3：设备固件升级
@@ -228,26 +235,44 @@ export function renderCmdType(row, column, cellValue) {
   return row.deviceType === '1' ? 'OTA指令' : row.deviceType === '2' ? '设备OTA版本查询' : '设备固件升级'
 }
 
-/*
-任务状态
-1 已创建
-2 创建失败（设备响应）
-3 执行中
-4 已中止
-5 已结束
-*/
-export function renderTaskStatus(taskStatus) {
-  switch (taskStatus) {
-    case 1:
-      return '执行中'
-    case 2:
-      return '已中止'
-    case 3:
-      return '已结束'
-    default:
-      return '--'
+/**
+ * 任务状态
+ * 1 已创建
+ 2 创建失败（设备响应）
+ 3 执行中
+ 4 已中止
+ 5 已结束
+ *  @param {string | number} status
+ *  @param {boolean} isTag
+ */
+
+export function renderTaskStatus(status, isTag) {
+  if (isTag) {
+    switch (status) {
+      case 1:
+        return 'primary'
+      case 2:
+        return 'warning'
+      case 3:
+        return 'info'
+      default:
+        return '--'
+    }
+  } else {
+    switch (status) {
+      case 1:
+        return '执行中'
+      case 2:
+        return '已中止'
+      case 3:
+        return '已结束'
+      default:
+        return '--'
+    }
   }
+
 }
+
 /*
 任务状态
 1 已创建
@@ -319,35 +344,36 @@ export function renderOtaUpdateStatus(row, column, cellValue) {
   }
 }
 
-/*
-用户状态
-1 注销
-0 正常
-*/
-export function renderDelete(row, column, cellValue) {
-  switch (row.isDelete) {
-    case '1':
-      return '已注销'
-    case '0':
-      return '正常'
-
+/**
+ * 用户状态
+ 1 注销
+ 0 正常
+ @param {string} isDelete
+ @param {boolean} isTag
+ 用户角色
+ 1 注销
+ 0 正常
+ */
+export function renderDelete(isDelete, isTag) {
+  if (isTag) {
+    return isDelete === '1' ? 'danger' : 'success'
+  } else {
+    return isDelete === '1' ? '已注销' : '正 常'
   }
 }
 
-/*
-用户角色
-1 注销
-0 正常
-*/
-export function renderRole(row, column, cellValue) {
-  switch (row.userRole) {
-    case '1':
-      return '超级管理员'
-    case '2':
-      return '一般管理员'
-    case '3':
-      return '一般用户'
-
+/**
+ @param {string} role
+ @param {boolean} isTag
+ 用户角色
+ 1 注销
+ 0 正常
+ */
+export function renderRole(role, isTag) {
+  if (isTag) {
+    return role === '1' ? 'warning' : role === '2' ? 'primary' : 'info'
+  } else {
+    return role === '1' ? '超级管理员' : role === '2' ? '一般管理员' : '一般用户'
   }
 }
 
@@ -365,8 +391,8 @@ export function iconBattery(item) {
   let bat = item.batteryDataRecord
   let com = item.compartmentDataRecordVo
   let res = {
-    route:'',
-    check:false
+    route: '',
+    check: false
   }
   switch (true) {
     case bat.packSoc > 95 && bat.packSoc <= 100:
@@ -416,9 +442,10 @@ export function iconBattery(item) {
       return res
   }
 }
-export function isLocked(item){
+
+export function isLocked(item) {
   let isLocked = false
-  item.batteryDataRecord.cpLockState === 1 ? isLocked = true :false
+  item.batteryDataRecord.cpLockState === 1 ? isLocked = true : false
   return isLocked
 }
 
@@ -461,14 +488,15 @@ export function batteryError(item) {
       code.push(index + 1)
     }
   })
-  if (item.compartmentDataRecordVo.batSwOff === 0){
+  if (item.compartmentDataRecordVo.batSwOff === 0) {
     code.push(13)
   }
-  if (item.compartmentDataRecordVo.batCommOk === 0){
+  if (item.compartmentDataRecordVo.batCommOk === 0) {
     code.push(14)
   }
   return code
 }
+
 /*
 101.格口过温保护
 102.电池过温保护
@@ -488,7 +516,7 @@ export function batteryError(item) {
 116.消防告警
 117.消防启动
 */
-export function type(type){
+export function type(type) {
   switch (type) {
     case 101:
       return '格口过温保护'
@@ -526,13 +554,14 @@ export function type(type){
       return '消防启动'
   }
 }
+
 export function warningType(data) {
   let types = {}
   let values = []
 
-  Object.keys(data).forEach((item,index) => {
+  Object.keys(data).forEach((item, index) => {
     values = []
-    data[item].forEach((current,i) => {
+    data[item].forEach((current, i) => {
       values.push(type(current.warningType))
     })
     types[parseInt(item)] = values
