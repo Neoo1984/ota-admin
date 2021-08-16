@@ -220,14 +220,6 @@ export function renderType(type, isTag) {
   }
 }
 
-/**
- * 设备类型tag
- *  @param {string} val
- */
-export function renderHardVersion(val) {
-  return val === '1' ? 'success' : type === '2' ? 'primary' : 'warning'
-}
-
 // 指令类型 cmdType: 1:OTA指令 2：设备OTA版本查询 3：设备固件升级
 // 指令状态 cmdStatus: 1:发送成功 2：受到设备回执通知
 // 执行结果 cmdResult: 0: 正确应答 1:无效报文 2：校验错误 3：指令超时 4：操作不必要 5：设备忙，无法操作

@@ -48,7 +48,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="硬件版本" align="center">
+      <el-table-column label="硬件版本" align="left" header-align="center" >
         <template slot-scope="scope">
           <el-tag v-for="(item,index) in listHardVersion(scope.row.hardVersion)" type="success">
             {{ item }}
@@ -56,11 +56,6 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="硬件版本" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.hardVersion }}
-        </template>
-      </el-table-column>
       <el-table-column label="型号描述" align="center">
         <template slot-scope="scope">
           {{ scope.row.details }}
@@ -253,7 +248,7 @@ import { getProductList } from '@/api/table'
 import Pagination from '@/components/Pagination'
 import { createProduct, deleteProduct, getFactoryNameList, updateProduct } from '@/api/operation'
 import { global } from '@/common'
-import { renderType,renderHardVersion } from '@/utils'
+import { renderType } from '@/utils'
 
 export default {
   name: 'Product',
@@ -279,7 +274,6 @@ export default {
       hardValue: '',
       productType: global.productType,
       renderType: renderType,
-      renderHardVersion:renderHardVersion,
       getModel: {},
       listQuery: {
         current: 1,
@@ -573,11 +567,10 @@ export default {
   }
 }
 </script>
-<style scoped>
-.el-tag + .el-tag {
-  margin-left: 10px;
+<style scoped lang="scss">
+.el-tag {
+  margin: 0 8px 4px 0;
 }
-
 .button-new-tag {
   margin-left: 10px;
   height: 32px;
