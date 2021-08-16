@@ -126,18 +126,21 @@
           </el-tag>
         </template>
       </el-table-column>
-
-      <el-table-column label="时间/操作人" type="expand" width="150">
+      <el-table-column label="任务开始时间" align="center" width="160">
+        <template slot-scope="scope">
+          {{ renderTime(scope.row.beginTime) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间" align="center" width="160">
+        <template slot-scope="scope">
+          {{ renderTime(scope.row.createTime) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="时间 / 操作人" type="expand" width="150">
         <template slot-scope="props">
           <el-form label-position="left" inline class="fix-table-expand" label-width="120px">
-            <el-form-item label="任务开始时间">
-              <span>{{ renderTime(props.row.beginTime) }}</span>
-            </el-form-item>
             <el-form-item label="任务结束时间">
               <span>{{ renderTime(props.row.endTime) }}</span>
-            </el-form-item>
-            <el-form-item sortable label="创建时间">
-              <span>{{ renderTime(props.row.createTime) }}</span>
             </el-form-item>
             <el-form-item label="更新时间">
               <span>{{ renderTime(props.row.updateTime) }}</span>
