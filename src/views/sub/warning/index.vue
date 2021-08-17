@@ -25,13 +25,18 @@
           <div class="info" v-if="warningIndex.indexOf((index+1)) > -1">
             <span class="info-item" v-for="(item,index) in warningType[(index +1)]">{{ item }}</span>
           </div>
-          <div class="info" v-else>
-
-          </div>
 
         </div>
 
       </div>
+      <!--      整柜告警-->
+      <div class="deviceWarning" >
+        <div class="device" v-for="(item,index) in deviceWarning">
+          <div class="info-text">{{ item }}</div>
+          <div class="red"></div>
+        </div>
+      </div>
+
 
     </div>
   </div>
@@ -41,7 +46,7 @@
 
 
 import { commandResult, deviceData, getWarning, refreshDevice } from '@/api/operation'
-import { renderTime, warningType } from '@/utils'
+import { renderTime, warningType, type } from '@/utils'
 
 export default {
   name: 'Warning',
@@ -58,7 +63,9 @@ export default {
       warningType: null,
 
       //柜子
-      refreshLoading: false
+      refreshLoading: false,
+      deviceWarning: [],
+      hasWarning: false
     }
   },
   created() {
@@ -84,10 +91,17 @@ export default {
 
         //warning
         if (warningRes.data.success) {
-          let data = warningRes.data.data
-          if (data.subDeviceWarningData !== {}) {
-            this.warningIndex = Object.keys(data.subDeviceWarningData).map(Number)
-            this.warningType = warningType(data.subDeviceWarningData)
+          let subData = warningRes.data.data.subDeviceWarningData
+          let deviceData = warningRes.data.data.deviceWarningData
+          if (subData !== {}) {
+            this.warningIndex = Object.keys(subData).map(Number)
+            this.warningType = warningType(subData)
+          }
+          if (deviceData !== null) {
+            this.deviceWarning = []
+            deviceData.forEach((item, index) => {
+              this.deviceWarning.push(type(item.warningType))
+            })
           }
         }
       } else {
@@ -114,7 +128,6 @@ export default {
           messageId = idRes.data.data.messageId
 
           interval = setInterval(function() {
-            console.log(i)
             if (i === 4) {
               that.refreshLoading = false
               clearInterval(interval)
@@ -176,8 +189,31 @@ export default {
   }
 
   .info-text {
-
     color: #1482f0;
   }
 }
+
+
+.deviceWarning {
+  position: absolute;
+  right: 10%;
+  bottom: 6%;
+  margin-right: -20px;
+  display: flex;
+  flex-direction: column;
+  .device {
+    display: flex;
+  }
+  .red {
+    width: 16px;
+    height: 16px;
+    background-color: lightcoral;
+  }
+
+  .info-text {
+    margin-right: 8px;
+  }
+
+}
+
 </style>

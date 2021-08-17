@@ -92,24 +92,40 @@
         </el-table-column>
         <el-table-column label="是否在线" align="center" :formatter="renderIsOnline">
         </el-table-column>
-        <el-table-column label="最后在线时间" align="center" :formatter="renderOnlineTime">
+        <el-table-column label="最后在线时间" align="center">
+          <template slot-scope="scope">
+            {{ renderTime(scope.row.onlineTime) }}
+          </template>
         </el-table-column>
-        <el-table-column label="最后离线时间" align="center" :formatter="renderOfflineTime">
+        <el-table-column label="最后离线时间" align="center">
+          <template slot-scope="scope">
+            {{ renderTime(scope.row.offlineTime) }}
+          </template>
         </el-table-column>
         <el-table-column label="OTA版本" align="center">
           <template slot-scope="scope">
             {{ scope.row.otaSoftVersion || '--' }}
           </template>
         </el-table-column>
-        <el-table-column label="OTA状态" align="center" :formatter="renderOtaStatus">
+        <el-table-column label="OTA状态" align="center">
+          <template slot-scope="scope">
+            {{ renderOtaStatus(scope.row.otaStatus) }}
+          </template>
         </el-table-column>
-        <el-table-column label="刷新时间" align="center" :formatter="renderRefreshTime">
+        <el-table-column label="刷新时间" align="center">
+          <template slot-scope="scope">
+            {{ renderTime(scope.row.offlineTime) }}
+          </template>
         </el-table-column>
-        <el-table-column label="安装进度" align="center" :formatter="renderUpdateProgress">
-
+        <el-table-column label="安装进度" align="center">
+          <template slot-scope="scope">
+            {{ renderProgress(scope.row.updateProgress) }}
+          </template>
         </el-table-column>
-        <el-table-column label="下载进度" align="center" :formatter="renderDownloadProgress">
-
+        <el-table-column label="下载进度" align="center">
+          <template slot-scope="scope">
+            {{ renderProgress(scope.row.downloadProgress) }}
+          </template>
         </el-table-column>
 
       </el-table>
@@ -133,6 +149,8 @@ export default {
       labelPosition: 'right',
       renderIsOnline: renderIsOnline,
       renderOtaStatus: renderOtaStatus,
+      renderProgress:renderProgress,
+      renderTime:renderTime,
       deviceType: global.deviceType,
       productModel: [],
       mainTemp: {

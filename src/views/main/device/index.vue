@@ -103,7 +103,7 @@
       </el-table-column>
       <el-table-column type="index" align="center" label="序号" width="50" fixed="left"></el-table-column>
 
-      <el-table-column label="设备编号" :sortable="true" align="center" fixed="left">
+      <el-table-column label="设备编号" align="center" fixed="left">
         <template slot-scope="scope">
           <span>{{ scope.row.deviceName }}</span>
         </template>

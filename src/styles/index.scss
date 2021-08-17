@@ -89,6 +89,10 @@ div:focus {
 }
 
 .box-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   position: relative;
   height: 180px;
   margin: 8px;

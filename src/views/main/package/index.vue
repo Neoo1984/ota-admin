@@ -68,23 +68,50 @@
 
       <el-table-column label="软件详情" type="expand" width="150">
         <template slot-scope="props">
-          <el-form label-position="left" class="fix-table-expand" label-width="100px">
+          <div class="form-line">
+            <span class="form-line-label">http下载地址</span>
+            <span>/南都电源/ECB1000/V2.0/V2.0_v1.0.38R/20210607140532ScManager_20210531_HMXS_V2.0_v1.0.38R_psigned.apk/南都电源/ECB1000/V2.0/V2.0_v1.0.38R/20210607140532ScManager_20210531_HMXS_V2.0_v1.0.38R_psigned.apk</span>
+<!--            <span>{{ props.row.storeUrlPath }}</span>-->
+          </div>
+          <div class="form-line">
+            <span class="form-line-label">ftp地址</span>
+            <span>/南都电源/ECB1000/V2.0/V2.0_v1.0.38R/20210607140532ScManager_20210531_HMXS_V2.0_v1.0.38R_psigned.apk</span>
+<!--            <span>{{ props.row.storeFtpPath }}</span>-->
+          </div>
+          <div class="form-line">
+            <span class="form-line-label">升级包md5</span>
+            <span>{{ props.row.fileMd5 }}</span>
+          </div>
+          <div class="form-line">
+            <span class="form-line-label">分包数</span>
+            <span>{{ props.row.splitNums }}</span>
+          </div>
+          <div class="form-line">
+            <span class="form-line-label">分包单元</span>
+            <span>{{ props.row.splitLength }}</span>
+          </div>
+<!--          <el-form size="mini" label-position="left" class="fix-table-expand" label-width="100px">
+
             <el-form-item label="http下载地址">
-              <span>{{ props.row.storeUrlPath }}</span>
+              <div>{{ props.row.storeUrlPath }}</div>
             </el-form-item>
-            <el-form-item label="ftp地址">
-              <span>{{ props.row.storeFtpPath }}</span>
-            </el-form-item>
+            <el-col span="20">
+              <el-form-item label="ftp地址">
+                <p>"/南都电源/ECB1000/V2.0/V2.0_v1.0.38R/20210607140532ScManager_20210531_HMXS_V2.0_v1.0.38R_psigned.apk"</p>
+              </el-form-item>
+            </el-col>
+
+
             <el-form-item label="升级包md5">
-              <span>{{ props.row.fileMd5 }}</span>
+              <div>{{ props.row.fileMd5 }}</div>
             </el-form-item>
             <el-form-item label="分包数">
-              <span>{{ props.row.splitNums }}</span>
+              <div>{{ props.row.splitNums }}</div>
             </el-form-item>
             <el-form-item label="分包单元">
-              <span>{{ props.row.splitLength }}</span>
+              <div>{{ props.row.splitLength }}</div>
             </el-form-item>
-          </el-form>
+          </el-form>-->
         </template>
       </el-table-column>
 
@@ -633,3 +660,16 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+  .form-line {
+    display: flex;
+    span {
+      line-height: 30px;
+    }
+  }
+  .form-line-label {
+    width: 120px;
+    color: #99a9bf;
+    margin-right: 32px;
+  }
+</style>

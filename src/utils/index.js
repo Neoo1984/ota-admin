@@ -170,12 +170,13 @@ export function renderOtaStatus(row, column, cellValue) {
   }
 }
 
-/*
-* 渲染进度
-* */
-export function renderProgress(row, column, cellValue) {
-  if (row.downloadProgress !== null && row.downloadProgress !== '') {
-    return row.downloadProgress + '%'
+/**
+ * 渲染进度
+ *  @param {string | number} progress
+ */
+export function renderProgress(progress) {
+  if (progress !== null && progresss !== '') {
+    return progress + '%'
   } else {
     return '--'
   }
@@ -380,34 +381,48 @@ export function renderRole(role, isTag) {
 
 */
 export function iconBattery(item) {
-  let bat = item.batteryDataRecord
   let com = item.compartmentDataRecordVo
   let res = {
     route: '',
+    soc:'',
     check: false
   }
-  switch (true) {
-    case bat.packSoc > 95 && bat.packSoc <= 100:
-      res.route = require('@/assets/battery/battery100.svg')
-      res.check = false
-      return res
-    case 80 < bat.packSoc && bat.packSoc <= 95:
-      res.route = require('@/assets/battery/battery90.svg')
-      res.check = false
-      return res
+  if (item.batteryDataRecord !== null) {
+    let bat = item.batteryDataRecord
+    res.soc = (bat.packSoc)
+    switch (true) {
+      case bat.packSoc > 95 && bat.packSoc <= 100:
+        res.route = require('@/assets/battery/battery100.svg')
+        res.check = false
+        return res
+      case 80 < bat.packSoc && bat.packSoc <= 95:
+        res.route = require('@/assets/battery/battery90.svg')
+        res.check = false
+        return res
 
-    case 50 < bat.packSoc && bat.packSoc <= 80:
-      res.route = require('@/assets/battery/battery60.svg')
-      res.check = false
-      return res
-    case 20 < bat.packSoc && bat.packSoc <= 50:
-      res.route = require('@/assets/battery/battery30.svg')
-      res.check = false
-      return res
-    case 0 < bat.packSoc && bat.packSoc <= 20:
-      res.route = require('@/assets/battery/battery10.svg')
-      res.check = false
-      return res
+      case 50 < bat.packSoc && bat.packSoc <= 80:
+        res.route = require('@/assets/battery/battery60.svg')
+        res.check = false
+        return res
+      case 20 < bat.packSoc && bat.packSoc <= 50:
+        res.route = require('@/assets/battery/battery30.svg')
+        res.check = false
+        return res
+      case 0 < bat.packSoc && bat.packSoc <= 20:
+        res.route = require('@/assets/battery/battery10.svg')
+        res.check = false
+        return res
+      case bat.packSoc === -1:
+        res.route = require('@/assets/battery/unknown_battery.svg')
+        res.check = true
+        return res
+      default:
+        res.route = require('@/assets/battery/empty.svg')
+        res.check = true
+        return res
+    }
+  }
+  switch (true) {
     case com.cpHardwareError === 1:
       res.route = require('@/assets/battery/hardware_error.svg')
       res.check = true
@@ -424,20 +439,13 @@ export function iconBattery(item) {
       res.route = require('@/assets/battery/empty.svg')
       res.check = true
       return res
-    case bat.packSoc === -1:
-      res.route = require('@/assets/battery/unknown_battery.svg')
-      res.check = true
-      return res
-    default:
-      res.route = require('@/assets/battery/empty.svg')
-      res.check = true
-      return res
   }
+
 }
 
 export function isLocked(item) {
   let isLocked = false
-  item.batteryDataRecord.cpLockState === 1 ? isLocked = true : false
+  item.compartmentDataRecordVo.cpLockState === 1 ? isLocked = true : false
   return isLocked
 }
 
