@@ -74,6 +74,7 @@
           <el-button
             size="mini"
             type="text"
+            style="color: #E6A23C"
             @click="changePassword(scope.row.$index, scope.row)"
           >密码
           </el-button>
@@ -86,7 +87,7 @@
             @confirm="handleOperate(scope.$index,scope.row)"
           >
             <el-button
-              style="margin-left: 10px"
+              :class="{'text-red':scope.row.isDelete === '0' ,'text-green':scope.row.isDelete !== '0' }"
               size="mini"
               type="text"
               slot="reference"
@@ -471,3 +472,13 @@ export default {
 }
 
 </script>
+<style scoped>
+.text-red {
+  margin-left: 10px;
+  color: #F56C6C;
+}
+.text-green {
+  margin-left: 10px;
+  color: #67C23A;
+}
+</style>

@@ -103,7 +103,7 @@
       </el-table-column>
       <el-table-column type="index" align="center" label="序号" width="50" fixed="left"></el-table-column>
 
-      <el-table-column label="设备编号" align="center" fixed="left">
+      <el-table-column label="设备编号" align="center" fixed="left" width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.deviceName }}</span>
         </template>
@@ -136,7 +136,7 @@
           {{ scope.row.softVersion || '--' }}
         </template>
       </el-table-column>
-      <el-table-column label="主设备" align="center">
+      <el-table-column label="主设备" align="center" width="150">
         <template slot-scope="scope">
           {{ scope.row.mainDeviceName || '--' }}
         </template>
