@@ -96,7 +96,6 @@ export default {
           this.isDoor[index] = item.compartmentDataRecordVo.cpOpen === 1
           this.isCurrent[index] = item.compartmentDataRecordVo.batSwOff === 1
         })
-        console.log(this.bigData)
         this.isWater = this.bigData.p1Wat === 1
         loading.close()
 

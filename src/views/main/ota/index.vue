@@ -65,6 +65,8 @@
 
         <el-button type="primary" @click="reSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
         <el-button type="primary" @click="handleOtaCreate" icon="el-icon-plus" size="small">新建OTA任务</el-button>
+        <el-button type="success" @click="reSearch" icon="el-icon-refresh" size="small">重置搜索</el-button>
+
 
       </el-form>
     </div>
@@ -79,7 +81,7 @@
     >
       <el-table-column type="index" align="center" label="序号" width="50" fixed="left"></el-table-column>
 
-      <el-table-column label="任务编号" align="center" fixed="left">
+      <el-table-column label="任务编号" align="center" fixed="left" width="100">
         <template slot-scope="scope">
           <el-popover
             placement="bottom"
@@ -96,7 +98,7 @@
           {{ scope.row.factoryName }}
         </template>
       </el-table-column>
-      <el-table-column label="设备类型" align="center" prop="deviceType">
+      <el-table-column label="设备类型" align="center" prop="deviceType" width="100">
         <template slot-scope="scope">
           <el-tag effect="dark" :type="renderType(scope.row.deviceType,true)">
             {{ renderType(scope.row.deviceType, false) }}
@@ -119,24 +121,24 @@
           {{ scope.row.upSoftVersion }}
         </template>
       </el-table-column>
-      <el-table-column label="任务状态" align="center">
+      <el-table-column label="任务状态" align="center" width="100">
         <template slot-scope="scope">
           <el-tag effect="dark" :type="renderTaskStatus(scope.row.taskStatus,true)">
             {{ renderTaskStatus(scope.row.taskStatus, false) }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="任务开始时间" align="center" width="160">
+      <el-table-column label="任务开始时间" align="center" width="180">
         <template slot-scope="scope">
           {{ renderTime(scope.row.beginTime) }}
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" width="160">
+      <el-table-column label="创建时间" align="center" width="180">
         <template slot-scope="scope">
           {{ renderTime(scope.row.createTime) }}
         </template>
       </el-table-column>
-      <el-table-column label="时间 / 操作人" type="expand" width="150">
+      <el-table-column label="时间 / 操作人" type="expand" width="100">
         <template slot-scope="props">
           <el-form label-position="left" inline class="fix-table-expand" label-width="120px">
             <el-form-item label="任务结束时间">
@@ -347,14 +349,14 @@
               @confirm="removeMainDevice"
               v-if="taskForm.mainDeviceCount > 0"
             >
-              <el-button plain slot="reference" type="primary">清空已选主设备</el-button>
+              <el-button plain slot="reference" type="danger">清空已选主设备</el-button>
             </el-popconfirm>
           </el-form-item>
 
         </el-form>
         <div class="drawer-footer">
           <div style="text-align: right;padding-right: 8px">
-            <el-button style="width: 40%" @click="cancelOta" size="small">取 消</el-button>
+            <el-button style="width: 40%" @click="cancelOta">取 消</el-button>
           </div>
           <div v-if="taskForm.mainDeviceCount === 0" style="text-align: left;padding-left: 8px">
             <el-popover
@@ -367,13 +369,13 @@
                 <el-button size="mini" type="text" @click="isPop = false">取消</el-button>
                 <el-button type="warning" size="mini" @click="createTask">确定</el-button>
               </div>
-              <el-button type="primary" style="width: 40%" size="small" slot="reference" :loading="creatingTask">
+              <el-button type="primary" style="width: 40%" slot="reference" :loading="creatingTask">
                 {{ creatingTask ? '提交中 ...' : '开始升级' }}
               </el-button>
             </el-popover>
           </div>
           <div v-else style="text-align: center;padding-right: 8px">
-            <el-button @click="createTask" slot="reference" style="width: 40%" type="primary" size="small"
+            <el-button @click="createTask" slot="reference" style="width: 40%" type="success"
                        :loading="creatingTask"
             >{{ creatingTask ? '提交中 ...' : '开始升级' }}
             </el-button>
@@ -428,11 +430,12 @@
           <el-form-item label="主设备编码">
             <el-input v-model="taskForm.searchDevice" clearable placeholder="主设备编码" style="width: 200px"
                       class="filter-item"
-            ></el-input>
+            >
+              <el-button type="primary" slot="append" @click="mainDeviceList" icon="el-icon-search"></el-button>
+            </el-input>
 
           </el-form-item>
 
-          <el-button type="primary" @click="mainDeviceList" icon="el-icon-search" size="small">查询</el-button>
           <el-button type="primary" @click="addMainDevice" icon="el-icon-plus" size="small">添加选中设备</el-button>
           <el-button type="primary" @click="editChosenMain" icon="el-icon-edit" size="small">查看已选择设备</el-button>
 
@@ -702,7 +705,7 @@
           </el-form-item>
 
           <el-button type="primary" @click="reExSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
-          <el-button type="primary" @click="handleExcel(true)" icon="el-icon-plus" size="small">导出表格</el-button>
+          <el-button type="primary" @click="handleExcel(true)" icon="el-icon-download" size="small">导出表格</el-button>
           <el-button type="primary" @click="handleDetailTable" icon="el-icon-tickets" size="small">子设备升级详情</el-button>
 
         </el-form>
@@ -769,10 +772,12 @@
               </el-select>
             </el-form-item>
             <el-form-item label="从设备编码">
-              <el-input clearable prefix-icon="el-icon-search" v-model="detailQuery.subDeviceName" @input="detailSearch"
+              <el-input clearable v-model="detailQuery.subDeviceName"
                         placeholder="从设备编码" style="width: 200px"
                         class="filter-item"
-              ></el-input>
+              >
+                <el-button type="primary" slot="append" @click="detailSearch" icon="el-icon-search"></el-button>
+              </el-input>
 
             </el-form-item>
             <el-form-item label="升级状态">
@@ -790,7 +795,9 @@
             </el-form-item>
 
             <el-button type="primary" @click="reDetailSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
-            <el-button type="primary" @click="handleExcel(false)" :loading="getExcel" icon="el-icon-plus" size="small">
+            <el-button type="primary" @click="handleExcel(false)" :loading="getExcel" icon="el-icon-download"
+                       size="small"
+            >
               导出表格
             </el-button>
 
@@ -816,9 +823,15 @@
                 {{ scope.row.mainDeviceName }}
               </template>
             </el-table-column>
-            <el-table-column label="升级状态" align="center" :formatter="renderOtaStatus">
+            <el-table-column label="升级状态" align="center">
+              <template slot-scope="scope">
+                {{ renderOtaStatus(scope.row.otaStatus) }}
+              </template>
             </el-table-column>
-            <el-table-column label="更新结束时间" align="center" :formatter="renderTime">
+            <el-table-column label="更新结束时间" align="center">
+              <template slot-scope="scope">
+                {{ renderTime(scope.row.updateTime)}}
+              </template>
             </el-table-column>
             <el-table-column align="center" label="操作" width="80">
               <template slot-scope="scope">

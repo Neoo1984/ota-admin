@@ -12,8 +12,9 @@
       </el-form-item>
 
       <el-button type="primary" @click="search" icon="el-icon-search" size="small">查询</el-button>
-      <el-button type="primary" @click="clearSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
       <el-button type="primary" @click="handleCreate" icon="el-icon-plus" size="small">新增</el-button>
+      <el-button type="success" @click="reSearch" icon="el-icon-refresh" size="small">重置查询</el-button>
+
     </el-form>
     <el-table
       v-loading="listLoading"
@@ -277,7 +278,7 @@ export default {
       this.getList()
     },
     //重置搜索
-    clearSearch() {
+    reSearch() {
       this.listQuery.factoryName = undefined
       this.listQuery.address = undefined
       this.getList()

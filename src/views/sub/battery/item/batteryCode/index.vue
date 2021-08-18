@@ -67,7 +67,6 @@ export default {
       })
       let res = await deviceData(this.deviceInfo.deviceName)
       if (res.data.success && res.data.data !== null) {
-        loading.close()
 
         this.dataTime = renderTime(res.data.data.dataTime)
         //电池
@@ -78,6 +77,7 @@ export default {
             this.infoSoc[index] = item.batteryDataRecord.batSn
           }
         })
+        loading.close()
 
       } else {
         loading.close()

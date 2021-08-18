@@ -14,15 +14,14 @@
         ></el-input>
       </el-form-item>
       <el-button type="primary" @click="search" icon="el-icon-search" size="small">查询</el-button>
-      <el-button type="primary" @click="clearSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
       <el-button type="primary" @click="handleCreate" icon="el-icon-plus" size="small">新增</el-button>
+      <el-button type="success" @click="reSearch" icon="el-icon-refresh" size="small">重置搜索</el-button>
     </el-form>
     <el-table
       v-loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
       border
-      fit
       highlight-current-row
     >
       <el-table-column type="index" align="center" label="序号" width="50"></el-table-column>
@@ -308,7 +307,7 @@ export default {
       this.temp.mobile = undefined
     },
     //重置搜索
-    clearSearch() {
+    reSearch() {
       this.listQuery.tenantName = undefined
       this.listQuery.address = undefined
       this.listQuery.manager = undefined

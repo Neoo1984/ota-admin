@@ -41,7 +41,7 @@
                 <el-input v-model="statusData.deviceName"></el-input>
               </el-form-item>
               <el-form-item label="OTA状态">
-                <el-input v-model="statusData.deviceName"></el-input>
+                <el-input v-model="statusData.otaStatus"></el-input>
               </el-form-item>
               <el-form-item label="OTA版本">
                 <el-input v-model="statusData.otaSoftVersion"></el-input>
@@ -164,7 +164,6 @@ export default {
       deviceInfo: JSON.parse(sessionStorage.getItem('infoQuery')),
       //格口数据
       cpData: undefined,
-      bigData: undefined,
       refreshLoading: false,
       //电池
       icon_battery_exist: false,
@@ -213,26 +212,27 @@ export default {
         this.dataTime = renderTime(res.data.data.dataTime)
         //电池
         this.cpData = Object.values(res.data.data.cpAndBatteryData)
-        this.bigData = res.data.data.cabinetDataRecordVo
         this.itemWidth = 100 / (Math.ceil(this.cpData.length / 4))
         this.cpData.forEach((item, index, arr) => {
           let res = iconBattery(item)
-
-          this.icon_battery_route[index] = res.route
-          this.showSoc[index] = res.soc
-          this.disableCheck[index] = res.check
-          // this.iconError.push(batteryError(item))
-          this.iconIsLocked[index] = isLocked(item)
-          this.hasStatus[index] = item.batteryDataRecord === null;
+          if (res !== undefined) {
+            this.icon_battery_route[index] = res.route
+            this.showSoc[index] = res.soc
+            this.disableCheck[index] = res.check
+            // this.iconError.push(batteryError(item))
+            this.iconIsLocked[index] = isLocked(item)
+            this.hasStatus[index] = item.batteryDataRecord === null;
+          }
         })
+        loading.close()
       } else {
+        loading.close()
         this.$message({
           showClose: true,
           message: '获取失败: ' + res.data.message,
           type: 'error'
         })
       }
-      loading.close()
     },
 
     //刷新数据

@@ -26,7 +26,7 @@
       </el-form-item>
       <el-button type="primary" @click="getList" icon="el-icon-search" size="small">查询</el-button>
       <el-button type="primary" @click="handleCreate" icon="el-icon-plus" size="small">新增</el-button>
-      <el-button type="primary" @click="clearSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
+      <el-button type="success" @click="reSearch" icon="el-icon-refresh" size="small">重置搜索</el-button>
 
     </el-form>
     <el-table
@@ -40,7 +40,7 @@
     >
       <el-table-column type="index" align="center" label="序号" width="50" fixed="left"></el-table-column>
 
-      <el-table-column label="产品型号" align="center" width="120" fixed="left">
+      <el-table-column label="产品型号" align="center" fixed="left">
         <template slot-scope="scope">
           <span>{{ scope.row.productModel }}</span>
         </template>
@@ -66,17 +66,15 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="软件详情" type="expand" width="150">
+      <el-table-column label="软件详情" type="expand" width="100">
         <template slot-scope="props">
           <div class="form-line">
             <span class="form-line-label">http下载地址</span>
-            <span>/南都电源/ECB1000/V2.0/V2.0_v1.0.38R/20210607140532ScManager_20210531_HMXS_V2.0_v1.0.38R_psigned.apk/南都电源/ECB1000/V2.0/V2.0_v1.0.38R/20210607140532ScManager_20210531_HMXS_V2.0_v1.0.38R_psigned.apk</span>
-<!--            <span>{{ props.row.storeUrlPath }}</span>-->
+            <span>{{ props.row.storeUrlPath }}</span>
           </div>
           <div class="form-line">
             <span class="form-line-label">ftp地址</span>
-            <span>/南都电源/ECB1000/V2.0/V2.0_v1.0.38R/20210607140532ScManager_20210531_HMXS_V2.0_v1.0.38R_psigned.apk</span>
-<!--            <span>{{ props.row.storeFtpPath }}</span>-->
+            <span>{{ props.row.storeFtpPath }}</span>
           </div>
           <div class="form-line">
             <span class="form-line-label">升级包md5</span>
@@ -90,28 +88,6 @@
             <span class="form-line-label">分包单元</span>
             <span>{{ props.row.splitLength }}</span>
           </div>
-<!--          <el-form size="mini" label-position="left" class="fix-table-expand" label-width="100px">
-
-            <el-form-item label="http下载地址">
-              <div>{{ props.row.storeUrlPath }}</div>
-            </el-form-item>
-            <el-col span="20">
-              <el-form-item label="ftp地址">
-                <p>"/南都电源/ECB1000/V2.0/V2.0_v1.0.38R/20210607140532ScManager_20210531_HMXS_V2.0_v1.0.38R_psigned.apk"</p>
-              </el-form-item>
-            </el-col>
-
-
-            <el-form-item label="升级包md5">
-              <div>{{ props.row.fileMd5 }}</div>
-            </el-form-item>
-            <el-form-item label="分包数">
-              <div>{{ props.row.splitNums }}</div>
-            </el-form-item>
-            <el-form-item label="分包单元">
-              <div>{{ props.row.splitLength }}</div>
-            </el-form-item>
-          </el-form>-->
         </template>
       </el-table-column>
 
@@ -621,7 +597,7 @@ export default {
       this.getList()
     },
     //重置搜索
-    clearSearch() {
+    reSearch() {
       this.listQuery.factoryName = undefined
       this.listQuery.hardVersion = undefined
       this.listQuery.productModel = undefined

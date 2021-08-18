@@ -143,8 +143,8 @@ export function renderIsOnline(row, column, cellValue) {
 7：设备固件更新失败
 8：设备固件更新部分成功
 9：设备固件更新成功*/
-export function renderOtaStatus(row, column, cellValue) {
-  switch (row.otaStatus) {
+export function renderOtaStatus(status) {
+  switch (status) {
     case '1':
       return 'ota指令下发中'
     case '2':
@@ -166,7 +166,7 @@ export function renderOtaStatus(row, column, cellValue) {
     case '10':
       return 'ota超时'
     default:
-      return '无数据'
+      return '--'
   }
 }
 
@@ -436,6 +436,10 @@ export function iconBattery(item) {
       res.check = true
       return res
     case com.batCommOk === 0 && com.batSwOff === 0:
+      res.route = require('@/assets/battery/empty.svg')
+      res.check = true
+      return res
+    default:
       res.route = require('@/assets/battery/empty.svg')
       res.check = true
       return res

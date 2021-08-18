@@ -13,8 +13,9 @@
       </el-form-item>
 
       <el-button type="primary" @click="search" icon="el-icon-search" size="small">查询</el-button>
-      <el-button type="primary" @click="clearSearch" icon="el-icon-refresh-left" size="small">重置查询</el-button>
       <el-button type="primary" @click="handleCreate" icon="el-icon-plus" size="small">新增</el-button>
+      <el-button type="success" @click="reSearch" icon="el-icon-refresh" size="small">重置搜索</el-button>
+
     </el-form>
     <el-table
       v-loading="listLoading"
@@ -30,7 +31,7 @@
           <span>{{ scope.row.productName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产品类型" align="center">
+      <el-table-column label="产品类型" align="center" width="100">
         <template slot-scope="scope">
           <el-tag effect="dark" :type="renderType(scope.row.productType,true)">
             {{ renderType(scope.row.productType, false) }}
@@ -48,7 +49,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="硬件版本" align="left" header-align="center" >
+      <el-table-column label="硬件版本" align="left" header-align="center" width="300">
         <template slot-scope="scope">
           <el-tag v-for="(item,index) in listHardVersion(scope.row.hardVersion)" type="success">
             {{ item }}
@@ -559,7 +560,7 @@ export default {
       this.temp.productType = undefined
     },
     //重置搜索
-    clearSearch() {
+    reSearch() {
       this.listQuery.factoryName = undefined
       this.listQuery.productModel = undefined
       this.getList()

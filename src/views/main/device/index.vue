@@ -77,12 +77,12 @@
           </el-input>
 
         </el-form-item>
-
+        <el-button type="success" @click="reSearch" icon="el-icon-refresh" size="small">重置搜索</el-button>
         <el-button type="primary" @click="handleMainCreate" icon="el-icon-plus" size="small">新建主设备</el-button>
-        <el-button type="primary" @click="handleSlaveCreate" icon="el-icon-plus" size="small">新建从设备</el-button>
-        <el-button type="primary" @click="handleUploadMain" icon="el-icon-document-add" size="small">批量导入</el-button>
+        <el-button type="primary" @click="handleSlaveCreate" icon="el-icon-plus" size="small" plain>新建从设备</el-button>
+        <el-button type="success" @click="handleUploadMain" icon="el-icon-upload2" size="small">批量导入</el-button>
         <el-tooltip class="item" effect="dark" content="请选择相同设备类型，厂家，硬件和产品型号的主设备！" placement="bottom-start">
-          <el-button type="primary" @click="handleOta" icon="el-icon-thumb" size="small">批量OTA</el-button>
+          <el-button type="warning" @click="handleOta" icon="el-icon-thumb" size="small">批量OTA</el-button>
         </el-tooltip>
       </el-form>
     </div>
@@ -93,7 +93,6 @@
       :data="list"
       element-loading-text="加载中..."
       border
-      fit
       highlight-current-row
     >
       <el-table-column
@@ -103,12 +102,12 @@
       </el-table-column>
       <el-table-column type="index" align="center" label="序号" width="50" fixed="left"></el-table-column>
 
-      <el-table-column label="设备编号" align="center" fixed="left" width="150">
+      <el-table-column label="设备编号" align="center" fixed="left">
         <template slot-scope="scope">
           <span>{{ scope.row.deviceName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="设备类型" align="center" prop="deviceType">
+      <el-table-column label="设备类型" align="center" prop="deviceType" width="120">
         <template slot-scope="scope">
           <el-tag effect="dark" :type="renderType(scope.row.deviceType,true)">
             {{ renderType(scope.row.deviceType, false) }}
@@ -136,7 +135,7 @@
           {{ scope.row.softVersion || '--' }}
         </template>
       </el-table-column>
-      <el-table-column label="主设备" align="center" width="150">
+      <el-table-column label="主设备" align="center" width="200">
         <template slot-scope="scope">
           {{ scope.row.mainDeviceName || '--' }}
         </template>
@@ -839,6 +838,10 @@ export default {
           })
         }
       })
+    },
+    //刷新
+    reSearch() {
+
     },
 //过滤表格
 

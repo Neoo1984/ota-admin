@@ -213,21 +213,6 @@ export default {
       this.mainTemp.hardVersion = this.infoQuery.hardVersion
       this.mainTemp.deviceName = this.infoQuery.deviceName
     },
-    renderOnlineTime(row) {
-      return renderTime(row.onlineTime)
-    },
-    renderOfflineTime(row) {
-      return renderTime(row.offlineTime)
-    },
-    renderRefreshTime(row) {
-      return renderTime(row.refreshTime)
-    },
-    renderUpdateProgress(row) {
-      return renderProgress(row)
-    },
-    renderDownloadProgress(row) {
-      return renderProgress(row)
-    }
   }
 }
 </script>

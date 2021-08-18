@@ -104,14 +104,16 @@ export default {
             })
           }
         }
+        loading.close()
+
       } else {
+        loading.close()
         this.$message({
           showClose: true,
           message: '获取失败: ' + res.data.message,
           type: 'error'
         })
       }
-      loading.close()
 
     },
 

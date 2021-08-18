@@ -18,7 +18,6 @@
       :data="list"
       element-loading-text="加载中..."
       border
-      fit
       highlight-current-row
     >
       <el-table-column type="index" align="center" label="序号" width="50" fixed="left"></el-table-column>
@@ -27,7 +26,7 @@
           {{ scope.row.userName }}
         </template>
       </el-table-column>
-      <el-table-column label="用户角色" align="center">
+      <el-table-column label="用户角色" align="center" width="130">
         <template slot-scope="scope">
           <el-tag effect="dark" :type="renderRole(scope.row.userRole,true)">
             {{ renderRole(scope.row.userRole, false) }}
@@ -44,7 +43,7 @@
           {{ scope.row.email }}
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center">
+      <el-table-column label="状态" align="center" width="100">
         <template slot-scope="scope">
           <el-tag effect="dark" :type="renderDelete(scope.row.isDelete,true)">
             {{ renderDelete(scope.row.isDelete, false) }}
@@ -257,10 +256,9 @@ export default {
       this.listLoading = true
       getUser(this.listQuery).then(res => {
         if (res.data.data !== null) {
-          this.listLoading = false
           this.list = res.data.data.records
           this.total = res.data.data.total
-
+          this.listLoading = false
         } else {
           this.listLoading = false
         }
