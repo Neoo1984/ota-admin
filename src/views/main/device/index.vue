@@ -92,7 +92,6 @@
       v-loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
-      border
       highlight-current-row
     >
       <el-table-column

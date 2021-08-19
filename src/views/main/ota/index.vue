@@ -75,7 +75,6 @@
       v-loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
-      border
       :default-sort="{prop: 'date', order: 'descending'}"
       highlight-current-row
     >
@@ -447,8 +446,6 @@
           @select-all="selectMain"
           element-loading-text="加载中..."
           highlight-current-row
-          border
-          fit
           class="detail-table"
         >
           <el-table-column
@@ -513,8 +510,6 @@
             @select-all="selectChosen"
             element-loading-text="加载中..."
             highlight-current-row
-            border
-            fit
             class="detail-table"
           >
             <el-table-column
@@ -713,7 +708,6 @@
           v-loading="exLoading"
           :data="exData"
           element-loading-text="加载中..."
-          border
           highlight-current-row
           class="detail-table"
         >
@@ -806,8 +800,6 @@
             v-loading="detailLoading"
             :data="detailData"
             element-loading-text="加载中..."
-            border
-            fit
             highlight-current-row
             class="detail-table"
           >

@@ -21,8 +21,6 @@
       v-loading="listLoading"
       :data="list"
       element-loading-text="加载中..."
-      border
-      fit
       highlight-current-row
     >
       <el-table-column type="index" align="center" label="序号" width="50"></el-table-column>
