@@ -67,7 +67,6 @@
         <el-button type="primary" @click="handleOtaCreate" icon="el-icon-plus" size="small">新建OTA任务</el-button>
         <el-button type="success" @click="reSearch" icon="el-icon-refresh" size="small">重置搜索</el-button>
 
-
       </el-form>
     </div>
     <el-table
@@ -88,7 +87,7 @@
             trigger="click"
           >
             <span>{{ scope.row.taskId }}</span>
-            <el-tag slot="reference">查 看</el-tag>
+            <el-tag style="cursor: pointer" slot="reference">查 看</el-tag>
           </el-popover>
         </template>
       </el-table-column>
@@ -99,7 +98,7 @@
       </el-table-column>
       <el-table-column label="设备类型" align="center" prop="deviceType" width="100">
         <template slot-scope="scope">
-          <el-tag effect="dark" :type="renderType(scope.row.deviceType,true)">
+          <el-tag effect="plain" :type="renderType(scope.row.deviceType,true)">
             {{ renderType(scope.row.deviceType, false) }}
           </el-tag>
         </template>
@@ -120,19 +119,19 @@
           {{ scope.row.upSoftVersion }}
         </template>
       </el-table-column>
-      <el-table-column label="任务状态" align="center" width="100">
+      <el-table-column label="任务状态" align="center" width="100" :filters="otaState" :filter-method="filterState">
         <template slot-scope="scope">
-          <el-tag effect="dark" :type="renderTaskStatus(scope.row.taskStatus,true)">
+          <el-tag effect="plain" :type="renderTaskStatus(scope.row.taskStatus,true)">
             {{ renderTaskStatus(scope.row.taskStatus, false) }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="任务开始时间" align="center" width="180">
+      <el-table-column label="任务开始时间" align="center" width="180" sortable>
         <template slot-scope="scope">
           {{ renderTime(scope.row.beginTime) }}
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" width="180">
+      <el-table-column label="创建时间" align="center" width="180" sortable>
         <template slot-scope="scope">
           {{ renderTime(scope.row.createTime) }}
         </template>
@@ -938,7 +937,7 @@ import {
   renderTime,
   renderType
 } from '@/utils'
-import { global } from '@/common'
+import {filterTaskState } from '@/common/global'
 
 export default {
   name: 'Ota',
@@ -989,6 +988,7 @@ export default {
       renderProgress: renderProgress,
       renderTime: renderTime,
       renderTaskStatus: renderTaskStatus,
+      otaState: filterTaskState,
       //OTA任务
       creatingTask: false, //新建OTA任务
       otaDialogVisible: false,
@@ -1141,6 +1141,9 @@ export default {
 
         }
       })
+    },
+    filterState(value , row ) {
+      return row.taskStatus === value
     },
     //获取厂商
     getFactoryName() {

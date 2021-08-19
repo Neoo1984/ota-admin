@@ -55,6 +55,54 @@ export const userRole = [
   }
 ]
 /*
+* 筛选用户角色
+* */
+export const filterUserRole = [
+  {
+    text: '超级管理员',
+    value: '1'
+  },
+  {
+    text: '一般管理员',
+    value: '2'
+  },
+  {
+    text: '用户',
+    value: '3'
+  }
+]
+/*
+* 筛选用户角色
+* */
+export const filterUserState = [
+  {
+    text: '正常',
+    value: '0'
+  },
+  {
+    text: '已注销',
+    value: '1'
+  },
+]
+/*
+* ota任务状态
+* */
+export const filterTaskState = [
+  {
+    text: '执行中',
+    value: 1
+  },
+  {
+    text: '已中止',
+    value: 2
+  },
+  {
+    text: '已结束',
+    value: 3
+  },
+
+]
+/*
 * 设备是否在线
 * */
 export const isOnline = [
@@ -145,12 +193,6 @@ export const splitLength = [
 ]
 /*
 *任务状态
-*     case 1:
-      return '执行中'
-    case 2:
-      return '已中止'
-    case 3:
-      return '已结束'
 *  */
 export const taskStatus = [
   {

@@ -31,7 +31,7 @@
       </el-table-column>
       <el-table-column label="产品类型" align="center" width="100">
         <template slot-scope="scope">
-          <el-tag effect="dark" :type="renderType(scope.row.productType,true)">
+          <el-tag effect="plain" :type="renderType(scope.row.productType,true)">
             {{ renderType(scope.row.productType, false) }}
           </el-tag>
         </template>

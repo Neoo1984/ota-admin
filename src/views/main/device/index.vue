@@ -77,17 +77,16 @@
           </el-input>
 
         </el-form-item>
-        <el-button type="success" @click="reSearch" icon="el-icon-refresh" size="small">重置搜索</el-button>
-        <el-button type="primary" @click="handleMainCreate" icon="el-icon-plus" size="small">新建主设备</el-button>
+        <el-button @click="reSearch" type="success" icon="el-icon-refresh" size="small" >重置搜索</el-button>
+        <el-button type="primary" @click="handleMainCreate" icon="el-icon-plus" size="small" >新建主设备</el-button>
         <el-button type="primary" @click="handleSlaveCreate" icon="el-icon-plus" size="small" plain>新建从设备</el-button>
-        <el-button type="success" @click="handleUploadMain" icon="el-icon-upload2" size="small">批量导入</el-button>
+        <el-button type="success" @click="handleUploadMain" icon="el-icon-upload2" size="small" plain>批量导入</el-button>
         <el-tooltip class="item" effect="dark" content="请选择相同设备类型，厂家，硬件和产品型号的主设备！" placement="bottom-start">
-          <el-button type="warning" @click="handleOta" icon="el-icon-thumb" size="small">批量OTA</el-button>
+          <el-button type="warning" @click="handleOta" icon="el-icon-thumb" size="small" plain>批量OTA</el-button>
         </el-tooltip>
       </el-form>
     </div>
     <el-table
-      ref="multipleTable"
       @select="selectOta"
       v-loading="listLoading"
       :data="list"
@@ -96,7 +95,7 @@
     >
       <el-table-column
         type="selection"
-        width="40"
+        width="50"
       >
       </el-table-column>
       <el-table-column type="index" align="center" label="序号" width="50" fixed="left"></el-table-column>
@@ -108,7 +107,7 @@
       </el-table-column>
       <el-table-column label="设备类型" align="center" prop="deviceType" width="120">
         <template slot-scope="scope">
-          <el-tag effect="dark" :type="renderType(scope.row.deviceType,true)">
+          <el-tag effect="plain" :type="renderType(scope.row.deviceType,true)">
             {{ renderType(scope.row.deviceType, false) }}
           </el-tag>
         </template>
@@ -149,7 +148,6 @@
           </el-button>
           <el-button
             size="mini"
-            style="color: #E6A23C"
             type="text"
             @click="handleDetail(scope.$index, scope.row)"
             v-if="scope.row.deviceType === '2'"
@@ -840,7 +838,13 @@ export default {
     },
     //刷新
     reSearch() {
-
+      this.listQuery.deviceType = undefined
+      this.listQuery.factoryName = undefined
+      this.listQuery.hardVersion = undefined
+      this.listQuery.productModel = undefined
+      this.listQuery.isOnline = undefined
+      this.listQuery.deviceName = undefined
+      this.getList()
     },
 //过滤表格
 

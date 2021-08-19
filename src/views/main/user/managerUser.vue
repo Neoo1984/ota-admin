@@ -18,6 +18,7 @@
       :data="list"
       element-loading-text="加载中..."
       highlight-current-row
+
     >
       <el-table-column type="index" align="center" label="序号" width="50" fixed="left"></el-table-column>
       <el-table-column label="用户名" align="center">
@@ -25,9 +26,9 @@
           {{ scope.row.userName }}
         </template>
       </el-table-column>
-      <el-table-column label="用户角色" align="center" width="130">
+      <el-table-column label="用户角色" align="center" width="130" :filters="userRole" :filter-method="filterHandler">
         <template slot-scope="scope">
-          <el-tag effect="dark" :type="renderRole(scope.row.userRole,true)">
+          <el-tag effect="plain" :type="renderRole(scope.row.userRole,true)">
             {{ renderRole(scope.row.userRole, false) }}
           </el-tag>
         </template>
@@ -42,9 +43,9 @@
           {{ scope.row.email }}
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" width="100">
+      <el-table-column label="状态" align="center" width="100" :filters="userState" :filter-method="filterState">
         <template slot-scope="scope">
-          <el-tag effect="dark" :type="renderDelete(scope.row.isDelete,true)">
+          <el-tag effect="plain" :type="renderDelete(scope.row.isDelete,true)">
             {{ renderDelete(scope.row.isDelete, false) }}
           </el-tag>
         </template>
@@ -54,13 +55,21 @@
           {{ scope.row.createUserName || '--' }}
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" :formatter="renderCreateTime"></el-table-column>
+      <el-table-column label="创建时间" align="center" prop="createTime" sortable>
+        <template slot-scope="scope">
+          {{ renderTime(scope.row.createTime)}}
+        </template>
+      </el-table-column>
       <el-table-column label="更新人" align="center">
         <template slot-scope="scope">
           {{ scope.row.updateUserName || '--' }}
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" align="center" :formatter="renderUpdateTime"></el-table-column>
+      <el-table-column label="更新时间" align="center" prop='updateTime' sortable>
+        <template slot-scope="scope">
+          {{ renderTime(scope.row.updateTime)}}
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="操作" width="140">
         <template slot-scope="scope">
           <el-button
@@ -72,7 +81,6 @@
           <el-button
             size="mini"
             type="text"
-            style="color: #E6A23C"
             @click="changePassword(scope.row.$index, scope.row)"
           >密码
           </el-button>
@@ -185,11 +193,10 @@ import Pagination from '@/components/Pagination'
 import { addUser, operateUser, updateUser } from '@/api/operation'
 import { renderDelete, renderTime, renderRole } from '@/utils'
 import { isEmail, validatePhone } from '@/utils/validate'
-import { changePasswordType, userRole } from '@/common/global'
+import { changePasswordType, filterUserRole, filterUserState, userRole } from '@/common/global'
 import { Base64 } from 'js-base64'
 import { changePassword } from '@/api/user'
 import { MessageBox } from 'element-ui'
-
 export default {
   name: 'ManagerUser',
   components: { Pagination },
@@ -206,7 +213,9 @@ export default {
       isEmail: isEmail,
       renderDelete: renderDelete,
       renderRole: renderRole,
-      userRole: userRole,
+      renderTime:renderTime,
+      userRole: filterUserRole,
+      userState: filterUserState,
       textMap: {
         create: '新增',
         update: '编辑'
@@ -264,6 +273,12 @@ export default {
       })
 
     },
+    filterHandler(value , row ) {
+      return row.userRole === value
+    },
+    filterState(value , row ) {
+      return row.isDelete === value
+    },
     confirmText(isDelete, isText) {
       if (isText) {
         return isDelete === '0' ? '注销' : '恢复'
@@ -271,12 +286,7 @@ export default {
         return isDelete === '0' ? '确认注销？' : '确认恢复？'
       }
     },
-    renderCreateTime(row) {
-      return renderTime(row.createTime)
-    },
-    renderUpdateTime(row) {
-      return renderTime(row.updateTime)
-    },
+
     handleDetail(index, row) {
       this.dialogStatus = 'update'
       this.temp.userName = row.userName
@@ -458,12 +468,7 @@ export default {
       this.temp.email = undefined
       this.temp.userRole = undefined
       this.temp.password = undefined
-
     },
-    //重置搜索
-    clearSearch() {
-      this.listQuery.keyWord = undefined
-    }
   }
 
 }

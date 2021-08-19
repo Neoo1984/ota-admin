@@ -23,9 +23,9 @@
       >选择所有格口
       </el-checkbox>
     </div>
-    <div class="box-main">
+    <div class="box-main" v-loading="refreshLoading" element-loading-text="刷新中...">
 
-      <div class="box-content">
+      <div class="box-content" >
         <div v-for="(item,index) in cpData" class="box-item" :style="`width:${itemWidth}%;`">
           <el-checkbox-group v-model="checkList" @change="handleCheckedBox">
             <el-checkbox :disabled="disableCheck[index]" :label="index+1" :key="index" class="check-list"></el-checkbox>
@@ -143,7 +143,6 @@ export default {
       otaDialogVisible: false,
       direction: 'rtl',
       itemWidth: 100,
-      formInline: {},
       isIndeterminate: true,
       dataTime: '',
       checkList: [], //选中的list
@@ -262,7 +261,6 @@ export default {
               commandResult(messageId).then(res => {
                 if (res.data.data !== null) {
                   if (res.data.data.cmdStatus === '2') {
-                    console.log(res.data.data.cmdStatus)
                     that.refreshLoading = false
                     clearInterval(interval)
                     that.getList()
