@@ -129,8 +129,8 @@ export function renderTime(date) {
 }
 
 //设备是否在线 isOnline: 0：离线 1：上线
-export function renderIsOnline(row, column, cellValue) {
-  return row.isOnline === '1' ? '在线' : '离线'
+export function renderIsOnline(isOnline) {
+  return isOnline === '1' ? '在线' : '离线'
 }
 
 /*ota状态 otaStatus:

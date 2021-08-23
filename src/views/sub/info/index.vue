@@ -90,7 +90,10 @@
             {{ scope.row.deviceName }}
           </template>
         </el-table-column>
-        <el-table-column label="是否在线" align="center" :formatter="renderIsOnline">
+        <el-table-column label="是否在线" align="center">
+          <template slot-scope="scope">
+            {{ renderIsOnline(scope.row.isOnline) }}
+          </template>
         </el-table-column>
         <el-table-column label="最后在线时间" align="center">
           <template slot-scope="scope">

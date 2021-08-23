@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <el-backtop></el-backtop>
     <el-form :inline="true" size="small">
       <el-form-item label="厂商名称">
         <el-input clearable v-model="listQuery.factoryName" placeholder="厂商名称" style="width: 200px"

@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <el-backtop></el-backtop>
     <el-form :inline="true" class="demo-form-inline" size="small">
       <el-form-item>
         <el-input
@@ -57,7 +58,7 @@
       </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" sortable>
         <template slot-scope="scope">
-          {{ renderTime(scope.row.createTime)}}
+          {{ renderTime(scope.row.createTime) }}
         </template>
       </el-table-column>
       <el-table-column label="更新人" align="center">
@@ -65,9 +66,9 @@
           {{ scope.row.updateUserName || '--' }}
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" align="center" prop='updateTime' sortable>
+      <el-table-column label="更新时间" align="center" prop="updateTime" sortable>
         <template slot-scope="scope">
-          {{ renderTime(scope.row.updateTime)}}
+          {{ renderTime(scope.row.updateTime) }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="140">
@@ -165,8 +166,8 @@
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       :show-close="false"
-      >
-      <el-form   class="demo-form-inline" size="small">
+    >
+      <el-form class="demo-form-inline" size="small">
         <el-form-item>
           <el-input
             v-model="password.newPassword"
@@ -197,6 +198,7 @@ import { changePasswordType, filterUserRole, filterUserState, userRole } from '@
 import { Base64 } from 'js-base64'
 import { changePassword } from '@/api/user'
 import { MessageBox } from 'element-ui'
+
 export default {
   name: 'ManagerUser',
   components: { Pagination },
@@ -213,7 +215,7 @@ export default {
       isEmail: isEmail,
       renderDelete: renderDelete,
       renderRole: renderRole,
-      renderTime:renderTime,
+      renderTime: renderTime,
       userRole: filterUserRole,
       userState: filterUserState,
       textMap: {
@@ -248,8 +250,8 @@ export default {
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
         email: [{ required: true, message: '请输入电子邮箱', trigger: 'blur', validator: isEmail }]
       },
-      changePasswordVisible:false,
-      password:{
+      changePasswordVisible: false,
+      password: {
         mobile: '',
         newPassword: '',
         changeType: changePasswordType.admin
@@ -273,10 +275,10 @@ export default {
       })
 
     },
-    filterHandler(value , row ) {
+    filterHandler(value, row) {
       return row.userRole === value
     },
-    filterState(value , row ) {
+    filterState(value, row) {
       return row.isDelete === value
     },
     confirmText(isDelete, isText) {
@@ -422,7 +424,7 @@ export default {
       })
     },
     //修改密码
-    changePassword(index,row) {
+    changePassword(index, row) {
       this.password.newPassword = undefined
       this.password.mobile = row.mobile
       this.changePasswordVisible = true
@@ -468,7 +470,7 @@ export default {
       this.temp.email = undefined
       this.temp.userRole = undefined
       this.temp.password = undefined
-    },
+    }
   }
 
 }
@@ -479,6 +481,7 @@ export default {
   margin-left: 10px;
   color: #F56C6C;
 }
+
 .text-green {
   margin-left: 10px;
   color: #67C23A;

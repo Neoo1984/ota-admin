@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <el-backtop></el-backtop>
     <el-form :inline="true" class="demo-form-inline" size="small">
       <el-form-item label="商户名称">
         <el-input clearable v-model="listQuery.tenantName" placeholder="商户名称" style="width: 200px" class="filter-item"

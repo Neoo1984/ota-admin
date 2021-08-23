@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <el-backtop></el-backtop>
     <div class="filter-container">
       <el-form :inline="true" class="demo-form-inline" size="small">
         <el-form-item label="设备类型">

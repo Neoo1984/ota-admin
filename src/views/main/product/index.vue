@@ -1,10 +1,20 @@
 <template>
   <div class="app-container">
+    <el-backtop></el-backtop>
     <el-form :inline="true" class="demo-form-inline" size="small">
       <el-form-item label="厂商名称">
-        <el-input clearable v-model="listQuery.factoryName" placeholder="厂商名称" style="width: 200px"
-                  class="filter-item"
-        ></el-input>
+        <el-select filterable @focus="getFactoryName" @change="getList" v-model="listQuery.factoryName"
+                   placeholder="请选择厂商名称"
+                   style="width: 200px" class="filter-item"
+        >
+          <el-option
+            v-for="item in listFactoryName"
+            :key="item.index"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="产品型号">
         <el-input clearable v-model="listQuery.productModel" placeholder="产品型号" style="width: 200px"
@@ -47,14 +57,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="硬件版本" align="left" header-align="center" width="300">
+      <el-table-column label="硬件版本" align="center" header-align="center" width="300">
         <template slot-scope="scope">
-          <el-tag v-for="(item,index) in listHardVersion(scope.row.hardVersion)" type="success">
+          <el-tag v-for="(item,index) in listHardVersion(scope.row.hardVersion)" :key="index" type="success">
             {{ item }}
           </el-tag>
         </template>
       </el-table-column>
-
       <el-table-column label="型号描述" align="center">
         <template slot-scope="scope">
           {{ scope.row.details }}
@@ -133,7 +142,7 @@
           <el-input clearable v-model="temp.productModel" placeholder="请输入产品型号" style="width: 80%" class="filter-item"
           ></el-input>
         </el-form-item>
-        <el-form-item label="硬件版本" prop="hardVersion">
+        <el-form-item label="硬件版本" prop="hardValue">
           <el-tag
             :key="tag"
             v-for="tag in hardVersion"
@@ -202,7 +211,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="硬件版本" prop="hardVersion" label-width="25%">
+        <el-form-item label="硬件版本" prop="hardValue" label-width="25%">
           <el-tag
             :key="tag"
             v-for="tag in hardVersion"
@@ -254,6 +263,7 @@ export default {
   components: { Pagination },
   data() {
     const validateHardVersion = (rule, value, callback) => {
+      console.log(value)
       if (this.hardVersion.length === 0) {
         callback('硬件版本不可为空')
       } else if (this.hardVersion.indexOf(this.hardValue) !== -1) {
@@ -280,6 +290,12 @@ export default {
         factoryName: undefined,
         productModel: undefined
       },
+      listFactoryName: [
+        {
+          label: '全部',
+          value: undefined
+        }
+      ],
       dialogVisible: false,
       updateDialogVisible: false,
       hardTagVisible: false,
@@ -292,7 +308,7 @@ export default {
       temp: {
         productName: undefined,
         factoryName: undefined,
-        hardVersion: undefined,
+        hardVersion: null,
         productModel: undefined,
         details: undefined,
         productType: undefined
@@ -311,7 +327,7 @@ export default {
         productName: [{ required: true, message: '请输入产品名称', trigger: 'blur' }],
         productModel: [{ required: true, message: '请输入产品型号', trigger: 'blur' }],
         productType: [{ required: true, message: '请选择产品类型', trigger: 'blur' }],
-        hardVersion: [{ required: true, validator: validateHardVersion, trigger: 'change' }],
+        hardValue: [{ required: true, validator: validateHardVersion, trigger: 'blur' }],
         details: [{ required: true, message: '请输入产品型号描述', trigger: 'blur' }]
       },
       updateRules: {
@@ -320,7 +336,7 @@ export default {
         productModel: [{ required: true, message: '请输入产品型号', trigger: 'blur' }],
         productType: [{ required: true, message: '请选择产品类型', trigger: 'blur' }],
         details: [{ required: true, message: '请输入产品型号描述', trigger: 'blur' }],
-        hardVersion: [{ required: true, validator: validateHardVersion, trigger: 'change' }]
+        hardValue: [{ required: true, validator: validateHardVersion, trigger: 'blur' }]
       }
     }
   },
@@ -345,6 +361,41 @@ export default {
           })
         }
 
+      })
+
+    },
+    getFactoryName() {
+      this.factoryName = []
+      this.listFactoryName = [
+        {
+          label: '全部',
+          value: undefined
+        }
+      ]
+      getFactoryNameList().then(res => {
+        if (res.data.success) {
+          if (res.data.data.length !== 0) {
+            let data = res.data.data
+            if (this.dialogVisible || this.updateDialogVisible) {
+              data.forEach((item, index) => {
+                this.factoryName.push({ value: item, label: item })
+              })
+            } else {
+              data.forEach((item, index) => {
+                this.listFactoryName.push({ value: item, label: item })
+              })
+            }
+
+          } else {
+            console.error(res.data.message)
+          }
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.data.message,
+            type: 'error'
+          })
+        }
       })
 
     },
@@ -392,11 +443,12 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.submitLoading = true
+          this.temp.hardVersion = ''
           this.hardVersion.forEach((item, index) => {
             this.temp.hardVersion += item + ','
           })
           this.temp.hardVersion = this.temp.hardVersion.substring(0, this.temp.hardVersion.lastIndexOf(','))
-          this.submitLoading = true
           createProduct(this.temp).then(res => {
             const message = res.data.message
             if (res.data.success) {
@@ -521,6 +573,7 @@ export default {
       if (hardValue) {
         this.hardVersion.push(hardValue)
       }
+      console.log(this.hardVersion)
       this.hardTagVisible = false
       this.hardValue = ''
     },

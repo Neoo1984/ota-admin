@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <el-backtop></el-backtop>
     <el-form :inline="true" class="demo-form-inline" size="small">
       <el-form-item label="厂商">
         <el-select filterable @focus="getFactoryName" @change="getList" v-model="listQuery.factoryName"

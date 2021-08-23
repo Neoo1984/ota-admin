@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <el-backtop></el-backtop>
     <div class="filter-container">
       <el-form :inline="true" class="demo-form-inline" size="small">
         <el-form-item label="设备类型">
@@ -73,12 +74,12 @@
                     style="width: 90%"
 
           >
-            <el-button slot="append"  @click="getList" icon="el-icon-search"></el-button>
+            <el-button slot="append" @click="getList" icon="el-icon-search"></el-button>
           </el-input>
 
         </el-form-item>
-        <el-button @click="reSearch" type="success" icon="el-icon-refresh" size="small" >重置搜索</el-button>
-        <el-button type="primary" @click="handleMainCreate" icon="el-icon-plus" size="small" >新建主设备</el-button>
+        <el-button @click="reSearch" type="success" icon="el-icon-refresh" size="small">重置搜索</el-button>
+        <el-button type="primary" @click="handleMainCreate" icon="el-icon-plus" size="small">新建主设备</el-button>
         <el-button type="primary" @click="handleSlaveCreate" icon="el-icon-plus" size="small" plain>新建从设备</el-button>
         <el-button type="success" @click="handleUploadMain" icon="el-icon-upload2" size="small" plain>批量导入</el-button>
         <el-tooltip class="item" effect="dark" content="请选择相同设备类型，厂家，硬件和产品型号的主设备！" placement="bottom-start">
@@ -138,6 +139,7 @@
           {{ scope.row.mainDeviceName || '--' }}
         </template>
       </el-table-column>
+
       <el-table-column align="center" label="操作" fixed="right" width="120">
         <template slot-scope="scope">
           <el-button
@@ -146,13 +148,45 @@
             @click="handleUpdate(scope.$index, scope.row)"
           >编辑
           </el-button>
-          <el-button
-            size="mini"
-            type="text"
-            @click="handleDetail(scope.$index, scope.row)"
-            v-if="scope.row.deviceType === '2'"
-          >详情
-          </el-button>
+          <el-popover
+            :ref="`popover-${scope.$index}`"
+            placement="right"
+            width="400"
+            trigger="click"
+          >
+            <el-form :label-position="labelPosition" :model="statusData" label-width="120px" size="mini">
+              <el-form-item label="设备编号">
+                <el-input v-model="statusData.deviceName"></el-input>
+              </el-form-item>
+              <el-form-item label="OTA状态">
+                <el-input v-model="statusData.otaStatus"></el-input>
+              </el-form-item>
+              <el-form-item label="OTA版本">
+                <el-input v-model="statusData.otaSoftVersion"></el-input>
+              </el-form-item>
+              <el-form-item label="是否在线">
+                <el-input v-model="statusData.isOnline"></el-input>
+              </el-form-item>
+              <el-form-item label="下载进度">
+                <el-input v-model="statusData.downloadProgress"></el-input>
+              </el-form-item>
+              <el-form-item label="安装进度">
+                <el-input v-model="statusData.updateProgress"></el-input>
+              </el-form-item>
+              <el-form-item label="最后在线时间">
+                <el-input v-model="statusData.onlineTime"></el-input>
+              </el-form-item>
+              <el-form-item label="最后离线时间">
+                <el-input v-model="statusData.offlineTime"></el-input>
+              </el-form-item>
+              <el-form-item label="刷新时间">
+                <el-input v-model="statusData.refreshTime"></el-input>
+              </el-form-item>
+            </el-form>
+            <el-button type="text" size="mini" slot="reference" style="margin-left: 10px;" @click="showDeviceStatus(scope.$index, scope.row)">详情</el-button>
+
+          </el-popover>
+
           <!--          <el-button
                       size="mini"
                       type="text"
@@ -243,7 +277,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="硬件版本" prop="hardVersion" v-if="mainTemp.factoryName && mainTemp.deviceType">
-          <el-select v-model="mainTemp.hardVersion" @focus="getFormHard" placeholder="请选择硬件版本" style="width: 80%" class="filter-item">
+          <el-select v-model="mainTemp.hardVersion" @focus="getFormHard" placeholder="请选择硬件版本" style="width: 80%"
+                     class="filter-item"
+          >
             <el-option
               v-for="item in tempHardVersion"
               :key="item.index"
@@ -464,12 +500,12 @@ import {
   downloadFile,
   getFactoryNameList,
   massSave,
-  otaSend,
+  otaSend, queryDeviceStatus,
   queryProductModelList,
   querySoftVersion,
   updateDevice
 } from '@/api/operation'
-import { renderCmdType, renderType } from '@/utils'
+import { renderCmdType, renderIsOnline, renderOtaStatus, renderProgress, renderTime, renderType } from '@/utils'
 import { global } from '@/common'
 
 export default {
@@ -499,6 +535,7 @@ export default {
       listDeviceType: global.tempDeviceType,
       deviceType: global.deviceType,
       isOnline: global.isOnline,
+      statusLoading:false,
       factoryNameFilter: [],
       dialogStatus: '',
       listQuery: {
@@ -530,6 +567,10 @@ export default {
       updateType: global.updateType,
       renderCmdType: renderCmdType,
       renderType: renderType,
+      renderIsOnline: renderIsOnline,
+      renderOtaStatus: renderOtaStatus,
+      renderTime:renderTime,
+      renderProgress:renderProgress,
       deviceNames: [],
       listProductModel: [
         {
@@ -576,8 +617,8 @@ export default {
         productModel: undefined,
         hardVersion: undefined,
         softVersion: undefined,
-        manufactoryCode: '',
-        excelFile: undefined
+        excelFile: undefined,
+        deviceId:undefined,
       },
       rules: {
         deviceName: [{ required: true, message: '请输入设备编号', trigger: 'blur' }],
@@ -592,7 +633,18 @@ export default {
       uploadFile: '',
       isDownload: false,
       downloadUrl: '',
-      fileName: ''
+      fileName: '',
+      statusData: {
+        deviceName:'',
+        downloadProgress:'',
+        isOnline:'',
+        offlineTime:'',
+        onlineTime:'',
+        otaSoftVersion:'',
+        otaStatus:'',
+        refreshTime:'',
+        updateProgress:'',
+      },
     }
   },
 
@@ -613,7 +665,7 @@ export default {
         this.mainTemp.productKey = this.tempProductKey[keyIndex]
       }
     },
-    'mainTemp.deviceType' : function(e) {
+    'mainTemp.deviceType': function(e) {
       e === '1' ? this.isSlave = true : this.isSlave = false
     }
   },
@@ -904,7 +956,6 @@ export default {
           })
         }
       } else {
-        console.log(this.listHardVersion)
         this.listHardVersion = [
           {
             label: '全部',
@@ -1038,13 +1089,22 @@ export default {
     handleUpdate(index, row) {
       this.resetMainTemp()
       this.dialogStatus = 'update'
-      this.mainTemp = Object.assign({}, row)
+      row.mainDeviceName !== null ? this.mainTemp.mainDeviceName = row.mainDeviceName : this.mainTemp.mainDeviceName = undefined
+      this.mainTemp.deviceName = row.deviceName
+      this.mainTemp.deviceType = row.deviceType
+      this.mainTemp.factoryName = row.factoryName
+      this.mainTemp.productModel = row.productModel
+      this.mainTemp.hardVersion = row.hardVersion
+      this.mainTemp.softVersion = row.softVersion
+      this.mainTemp.deviceId = row.deviceId
+      this.mainTemp.productKey = row.productKey
       delete this.mainTemp['extentsInfo']
       this.deviceType.forEach((item, index) => {
         if (item.value.toString() === row.deviceType) {
           this.mainTemp.deviceType = item.value
         }
       })
+
       this.mainDialogVisible = true
       this.$nextTick(() => {
         this.$refs['mainDataForm'].clearValidate()
@@ -1077,9 +1137,20 @@ export default {
       })
     },
     updateData() {
+      let query = {
+        mainDeviceName: this.mainTemp.mainDeviceName,
+        deviceName: this.mainTemp.deviceName,
+        deviceType: this.mainTemp.deviceType,
+        factoryName: this.mainTemp.factoryName,
+        productKey: this.mainTemp.productKey,
+        deviceId:this.mainTemp.deviceId,
+        productModel: this.mainTemp.productModel,
+        hardVersion: this.mainTemp.hardVersion,
+        softVersion: this.mainTemp.softVersion,
+      }
       this.$refs['mainDataForm'].validate((valid) => {
         if (valid) {
-          updateDevice(this.mainTemp).then(res => {
+          updateDevice(query).then(res => {
             const message = res.data.message
             if (res.data.success) {
               this.mainDialogVisible = false
@@ -1371,7 +1442,6 @@ export default {
 
     //删除
     handleDelete(index, row) {
-      console.log(1)
       deleteDevice(row.deviceId).then(res => {
         const message = res.data.message
         if (res.data.success) {
@@ -1389,19 +1459,52 @@ export default {
       })
     },
     handleDetail(index, row) {
-      const { href } = this.$router.resolve({
-        name: 'Info',
-        path: '/info',
-        query: {
+
+    },
+    showDeviceStatus(index, row) {
+      if (row.deviceType === '1'){
+        const query = {
           deviceName: row.deviceName,
-          factoryName: row.factoryName,
           deviceType: row.deviceType,
+          factoryName: row.factoryName,
           hardVersion: row.hardVersion,
           productModel: row.productModel
         }
-      })
-      window.open(href, '_blank')
-    }
+
+        this.statusLoading = true
+        queryDeviceStatus(query).then(res => {
+          if (res.data.success) {
+            this.statusLoading = false
+            if (res.data.data !== null) {
+              this.statusLoading = false
+              this.statusData = res.data.data
+              this.statusData.offlineTime = renderTime(this.statusData.offlineTime)
+              this.statusData.updateProgress = renderProgress(this.statusData.updateProgress)
+              this.statusData.otaStatus = renderOtaStatus(this.statusData.otaStatus)
+              this.statusData.isOnline = renderIsOnline(this.statusData.isOnline)
+              this.statusData.downloadProgress = renderProgress(this.statusData.downloadProgress)
+              this.statusData.onlineTime = renderTime(this.statusData.onlineTime)
+              this.statusData.refreshTime = renderTime(this.statusData.refreshTime)
+            }
+          }
+        })
+      }else {
+        const { href } = this.$router.resolve({
+          name: 'Info',
+          path: '/info',
+          query: {
+            deviceName: row.deviceName,
+            factoryName: row.factoryName,
+            deviceType: row.deviceType,
+            hardVersion: row.hardVersion,
+            productModel: row.productModel
+          }
+        })
+        window.open(href, '_blank')
+      }
+
+
+    },
   }
 }
 </script>

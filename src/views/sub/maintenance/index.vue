@@ -444,6 +444,7 @@ export default {
             if (res.data.success) {
               this.statusLoading = false
               if (res.data.data !== null) {
+                this.statusLoading = false
                 this.statusData = res.data.data
                 this.statusData.offlineTime = renderTime(this.statusData.offlineTime)
                 this.statusData.updateProgress = renderProgress(this.statusData.updateProgress)
